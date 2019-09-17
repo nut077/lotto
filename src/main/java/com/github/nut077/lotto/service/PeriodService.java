@@ -2,18 +2,15 @@ package com.github.nut077.lotto.service;
 
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.repository.PeriodRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
-public class PeriodService {
+public class PeriodService extends BaseService<Period, Long> {
 
   private final PeriodRepository periodRepository;
 
-  public List<Period> findAll() {
-    return periodRepository.findAll();
+  public PeriodService(PeriodRepository periodRepository) {
+    super(periodRepository);
+    this.periodRepository = periodRepository;
   }
 }
