@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+  compression:
+    #ทำการ compress เมื่อ response มี size มากว่า 1 KB
+    enabled: true
+    min-response-size: 5KB
+
+  http2:
+    #บอก spring boot ให้ เปิด http2
+    enabled: true
+
+  undertow:
+    accesslog:
+      #ให้ undertow เขียน log เมื่อมีการยิง request เข้ามาตามที่อยู่นี้
+      dir: undertow-accesslog
+      #log pattern
+      pattern: '%t %I %r %s %b %D'
+
+  servlet:
+    context-path: /
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    password: secretkey
+
+spring:
+  datasource:
+    #url: jdbc:mysql://schooldb:3306/lotto
+    url: jdbc:mysql://localhost:3304/lotto
+    username: freedom
+    password: ENC(j2Dr5jtMPE89o3mizMJOzA==)
+    #password: 123
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update #create-drop สร้าง schema ต่างๆที่เราได้ทำใน entity และจำ destroy schema เมื่อทำการปิด project #สร้าง schema แต่ไม่ destroy
+    properties:
+      hibernate.format_sql: false #ให้ format อยู่ในรูปที่อ่านง่ายขึ้น default = false
+      hibernate.generate_statistics: false #วิเคราะได้ว่า query นี้ทำการเปิด ปิด connect เท่าไร จำนวนเวลา
+      hibernate.query.immutable_entity_update_query_handling_mode: exception  #(warning | exception) default is warning
+
+    #for handle 404 exception
+  mvc:
+    throw-exception-if-no-handler-found: true
+    log-resolved-exception: false
+  resources:
+    add-mappings: false
