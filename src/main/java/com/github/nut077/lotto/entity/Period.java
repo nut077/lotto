@@ -41,6 +41,14 @@ public class Period {
   @Column(length = 2)
   private String twoDown;
 
+  private int payThreeOn;
+  private int payTwoOn;
+  private int payThreeDown1;
+  private int payThreeDown2;
+  private int payThreeDown3;
+  private int payThreeDown4;
+  private int payTwoDown;
+
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
   private List<User> user;
 }
