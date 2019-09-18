@@ -16,8 +16,7 @@ public class UserService extends BaseService<User, Long> {
     this.userRepository = userRepository;
   }
 
-  public List<User> getWinnerLotto(Long periodId, String threeOn, String twoOn, String threeDown1, String threeDown2,
-                                   String threeDown3, String threeDown4, String twoDown, List<String> tote) {
-    return userRepository.queryWinnerLotto(periodId, threeOn, twoOn, threeDown1, threeDown2, threeDown3, threeDown4, twoDown, tote);
+  public List<User> getWinnerLotto(Long periodId, List<String> numberOfWinner) {
+    return userRepository.queryWinnerLotto(periodId, numberOfWinner);
   }
 }

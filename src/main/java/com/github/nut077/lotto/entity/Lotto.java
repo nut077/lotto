@@ -19,6 +19,11 @@ public class Lotto {
   @Column(length = 3)
   private String numberLotto;
 
+  private Integer buyOn;
+  private Integer buyDown;
+  private Integer buyTote;
+  private Integer buyTotal;
+
   private Integer payOn;
   private Integer payDown;
   private Integer payTote;
