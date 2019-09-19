@@ -1,15 +1,18 @@
 package com.github.nut077.lotto.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity(name = "periods")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @SequenceGenerator(name = "period_seq")
 public class Period {
 
@@ -18,7 +21,7 @@ public class Period {
   private Long id;
 
   @Column(unique = true)
-  private OffsetDateTime periodDate;
+  private LocalDate periodDate;
 
   @Column(length = 3)
   private String threeOn;
@@ -42,8 +45,12 @@ public class Period {
   private String twoDown;
 
   private int payThreeOn;
-  private int payTwoOnDown;
-  private int payThreeDown;
+  private int payTwoOn;
+  private int payThreeDown1;
+  private int payThreeDown2;
+  private int payThreeDown3;
+  private int payThreeDown4;
+  private int payTwoDown;
   private int payTote;
 
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)

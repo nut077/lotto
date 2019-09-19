@@ -7,9 +7,7 @@ import com.github.nut077.lotto.utility.NumberUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,22 +46,28 @@ public class CalLottoService {
             result.setPayOn(periodResult.getPayThreeOn() * result.getBuyOn());
           }
           if (numberUtility.getInt(result.getBuyOn()) > 0 && result.getNumberLotto().equals(twoOn)) {
-            result.setPayOn(periodResult.getPayTwoOnDown() * result.getBuyOn());
+            result.setPayOn(periodResult.getPayTwoOn() * result.getBuyOn());
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown1)
-                  || result.getNumberLotto().equals(threeDown2) || result.getNumberLotto().equals(threeDown3)
-                  || result.getNumberLotto().equals(threeDown4)) {
-            result.setPayDown(periodResult.getPayThreeDown() * result.getBuyDown());
+          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown1)) {
+            result.setPayDown(periodResult.getPayThreeDown1() * result.getBuyDown());
+          }
+          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown2)) {
+            result.setPayDown(periodResult.getPayThreeDown2() * result.getBuyDown());
+          }
+          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown3)) {
+            result.setPayDown(periodResult.getPayThreeDown3() * result.getBuyDown());
+          }
+          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown4)) {
+            result.setPayDown(periodResult.getPayThreeDown4() * result.getBuyDown());
           }
           if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(twoDown)) {
-            result.setPayOn(periodResult.getPayTwoOnDown() * result.getBuyDown());
+            result.setPayDown(periodResult.getPayTwoDown() * result.getBuyDown());
           }
-          for (String t : toteList) {
-            if (numberUtility.getInt(result.getBuyTote()) > 0 && result.getNumberLotto().equals(t)) {
-              result.setPayTote(periodResult.getPayTote() * result.getBuyTote());
-              break;
-            }
+
+          if (numberUtility.getInt(result.getBuyTote()) > 0 && toteList.contains(result.getNumberLotto())) {
+            result.setPayTote(periodResult.getPayTote() * result.getBuyTote());
           }
+
           result.setPayTotal(result.getPayOn() + result.getPayDown() + result.getPayTote());
           pay += result.getPayTotal();
         }
@@ -92,14 +96,14 @@ public class CalLottoService {
   }
 
   private ArrayList<Byte[]> getPredicateTote() {
-    ArrayList<Byte[]> arrayList = new ArrayList<>();
-    arrayList.add(new Byte[]{0, 1, 2});
-    arrayList.add(new Byte[]{0, 2, 1});
-    arrayList.add(new Byte[]{1, 0, 2});
-    arrayList.add(new Byte[]{1, 2, 0});
-    arrayList.add(new Byte[]{2, 1, 0});
-    arrayList.add(new Byte[]{2, 0, 1});
-    return arrayList;
+    ArrayList<Byte[]> list = new ArrayList<>();
+    list.add(new Byte[]{0, 1, 2});
+    list.add(new Byte[]{0, 2, 1});
+    list.add(new Byte[]{1, 0, 2});
+    list.add(new Byte[]{1, 2, 0});
+    list.add(new Byte[]{2, 1, 0});
+    list.add(new Byte[]{2, 0, 1});
+    return list;
   }
 
 }
