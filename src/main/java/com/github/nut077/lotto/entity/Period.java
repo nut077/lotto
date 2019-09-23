@@ -53,6 +53,9 @@ public class Period {
   private int payTwoDown;
   private int payTote;
 
+  private int buyTotal;
+  private int payTotal;
+
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
   private List<User> user;
 }

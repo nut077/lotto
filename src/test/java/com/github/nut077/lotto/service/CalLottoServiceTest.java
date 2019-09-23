@@ -1,11 +1,11 @@
 package com.github.nut077.lotto.service;
 
+import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.repository.PeriodRepository;
 import com.github.nut077.lotto.repository.UserRepository;
 import com.github.nut077.lotto.utility.NumberUtility;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,20 +16,23 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 @DisplayName("Test cal lotto service")
 @ExtendWith({MockitoExtension.class})
 @Execution(ExecutionMode.CONCURRENT)
 class CalLottoServiceTest {
 
-  private PeriodService periodService;
-  private UserService userService;
-  private NumberUtility numberUtility;
+  private CalLottoService service;
 
   @Mock
   private PeriodRepository periodRepository;
@@ -39,14 +42,16 @@ class CalLottoServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.periodService = new PeriodService(periodRepository);
-    this.userService = new UserService(userRepository);
-    this.numberUtility = new NumberUtility();
+    PeriodService periodService = new PeriodService(periodRepository);
+    UserService userService = new UserService(userRepository);
+    NumberUtility numberUtility = new NumberUtility();
+    service = new CalLottoService(periodService, userService, numberUtility);
   }
 
   @Test
   void calLotto() {
     // given
+
     Period period = Period.builder()
             .id(1L)
             .periodDate(LocalDate.now())
@@ -66,8 +71,104 @@ class CalLottoServiceTest {
             .payTwoDown(60)
             .payTote(90)
             .build();
+
+    User user = User.builder()
+            .id(1L)
+            .name("freedom")
+            .buy(150)
+            .period(period)
+            .build();
+
+    User user2 = User.builder()
+            .id(2L)
+            .name("eiei")
+            .buy(300)
+            .period(period)
+            .lotto(Collections.singletonList(Lotto.builder()
+                    .id(1L).numberLotto("356").buyOn(100).buyDown(100).buyTote(100).buyTotal(300)
+                    .build()))
+            .build();
+
+    List<Lotto> lottoList = Arrays.asList(
+            Lotto.builder().id(1L).numberLotto("365")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(2L).numberLotto("113")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(3L).numberLotto("974")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(4L).numberLotto("251")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(5L).numberLotto("776")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(6L).numberLotto("998")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTote(10)
+                    .buyTotal(30)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(7L).numberLotto("65")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTotal(20)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(8L).numberLotto("74")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTotal(20)
+                    .user(user)
+                    .build(),
+            Lotto.builder().id(9L).numberLotto("32")
+                    .buyOn(10)
+                    .buyDown(10)
+                    .buyTotal(20)
+                    .user(user)
+                    .build()
+    );
+
+    user.setLotto(lottoList);
+    List<User> userList = Arrays.asList(user, user2);
+    period.setUser(userList);
+
+    given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
+    given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user2));
+
     // when
+    List<User> actual = service.calLotto(1L);
 
     // then
+    assertThat(actual, hasSize(2));
+    assertThat(actual.get(0), hasProperty("buy", is(240)));
+    assertThat(actual.get(0), hasProperty("pay", is(11100)));
+    assertThat(actual.get(1), hasProperty("buy", is(300)));
+    assertThat(actual.get(1), hasProperty("pay", is(9000)));
   }
 }

@@ -1,14 +1,16 @@
 package com.github.nut077.lotto.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity(name = "lottos")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @SequenceGenerator(name = "lotto_seq")
 public class Lotto {
 

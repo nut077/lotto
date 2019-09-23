@@ -37,45 +37,66 @@ public class CalLottoService {
     numberOfWinner.add(twoDown);
     List<User> userWinnerLotto = userService.getWinnerLotto(id, numberOfWinner);
     for (User user : userWinnerLotto) {
-      List<Lotto> lotto = user.getLotto();
+      List<Lotto> lottoList = user.getLotto();
       Period periodResult = user.getPeriod();
       int pay = 0;
-      if (lotto != null) {
-        for (Lotto result : lotto) {
-          if (numberUtility.getInt(result.getBuyOn()) > 0 && result.getNumberLotto().equals(threeOn)) {
-            result.setPayOn(periodResult.getPayThreeOn() * result.getBuyOn());
+      int buy = 0;
+      if (lottoList != null) {
+        for (Lotto lotto : lottoList) {
+          int buyOn = numberUtility.getInt(lotto.getBuyOn());
+          int buyDown = numberUtility.getInt(lotto.getBuyOn());
+          int buyTote = numberUtility.getInt(lotto.getBuyTote());
+          String numberLotto = lotto.getNumberLotto();
+
+          if (buyOn > 0 && numberLotto.equals(threeOn)) {
+            lotto.setPayOn(periodResult.getPayThreeOn() * buyOn);
           }
-          if (numberUtility.getInt(result.getBuyOn()) > 0 && result.getNumberLotto().equals(twoOn)) {
-            result.setPayOn(periodResult.getPayTwoOn() * result.getBuyOn());
+          if (buyOn > 0 && numberLotto.equals(twoOn)) {
+            lotto.setPayOn(periodResult.getPayTwoOn() * buyOn);
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown1)) {
-            result.setPayDown(periodResult.getPayThreeDown1() * result.getBuyDown());
+          if (buyDown > 0 && numberLotto.equals(threeDown1)) {
+            lotto.setPayDown(periodResult.getPayThreeDown1() * buyDown);
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown2)) {
-            result.setPayDown(periodResult.getPayThreeDown2() * result.getBuyDown());
+          if (buyDown > 0 && numberLotto.equals(threeDown2)) {
+            lotto.setPayDown(periodResult.getPayThreeDown2() * buyDown);
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown3)) {
-            result.setPayDown(periodResult.getPayThreeDown3() * result.getBuyDown());
+          if (buyDown > 0 && numberLotto.equals(threeDown3)) {
+            lotto.setPayDown(periodResult.getPayThreeDown3() * buyDown);
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(threeDown4)) {
-            result.setPayDown(periodResult.getPayThreeDown4() * result.getBuyDown());
+          if (buyDown > 0 && numberLotto.equals(threeDown4)) {
+            lotto.setPayDown(periodResult.getPayThreeDown4() * buyDown);
           }
-          if (numberUtility.getInt(result.getBuyDown()) > 0 && result.getNumberLotto().equals(twoDown)) {
-            result.setPayDown(periodResult.getPayTwoDown() * result.getBuyDown());
+          if (buyDown > 0 && numberLotto.equals(twoDown)) {
+            lotto.setPayDown(periodResult.getPayTwoDown() * buyDown);
+          }
+          if (buyTote > 0 && toteList.contains(numberLotto)) {
+            lotto.setPayTote(periodResult.getPayTote() * buyTote);
           }
 
-          if (numberUtility.getInt(result.getBuyTote()) > 0 && toteList.contains(result.getNumberLotto())) {
-            result.setPayTote(periodResult.getPayTote() * result.getBuyTote());
-          }
-
-          result.setPayTotal(result.getPayOn() + result.getPayDown() + result.getPayTote());
-          pay += result.getPayTotal();
+          buy += lotto.getBuyTotal();
+          lotto.setPayTotal(numberUtility.getInt(lotto.getPayOn()) + numberUtility.getInt(lotto.getPayDown()) + numberUtility.getInt(lotto.getPayTote()));
+          pay += lotto.getPayTotal();
         }
       }
+      user.setBuy(buy);
       user.setPay(pay);
       userService.update(user.getId(), user);
     }
-    return userService.getWinnerLotto(id, numberOfWinner);
+    List<User> userList = userService.getWinnerLotto(id, numberOfWinner);
+    updatePeriodBuyAndPay(period, userList);
+    return userList;
+  }
+
+  private void updatePeriodBuyAndPay(Period period, List<User> userList) {
+    int buy = 0;
+    int pay = 0;
+    for (User user : userList) {
+      buy += user.getBuy();
+      pay += user.getPay();
+    }
+    period.setBuyTotal(buy);
+    period.setPayTotal(pay);
+    periodService.update(period.getId(), period);
   }
 
   private ArrayList<String> getTote(String tote) {

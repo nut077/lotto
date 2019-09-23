@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Period</title>
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}"/>
-  <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
-  <script th:src="@{/webjars/popper.js/1.15.0/umd/popper.js}"></script>
-  <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Period')}">
 <body>
-  <div class="container">
-    555
-  </div>
+  <table class="table table-bordered">
+    <thead class="thead-dark">
+    <tr>
+      <th class="text-center">วันที่</th>
+      <th class="text-center">ยอดซื้อ</th>
+      <th class="text-center">ยอดจ่าย</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="period: ${periods}">
+      <td th:text="${period.periodDate}"></td>
+      <td th:text="${period.buyTotal}"></td>
+      <td th:text="${period.payTotal}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <a th:href="@{/createPeriod}" class="btn btn-primary">สร้างงวดวันที่</a>
 </body>
 </html>

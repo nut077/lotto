@@ -1,8 +1,7 @@
 package com.github.nut077.lotto.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,6 +9,9 @@ import java.util.List;
 @Entity(name = "users")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @SequenceGenerator(name = "user_seq")
 public class User {
 

@@ -37,7 +37,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop #create-drop สร้าง schema ต่างๆที่เราได้ทำใน entity และจำ destroy schema เมื่อทำการปิด project #สร้าง schema แต่ไม่ destroy
+      ddl-auto: update #create-drop สร้าง schema ต่างๆที่เราได้ทำใน entity และจำ destroy schema เมื่อทำการปิด project #สร้าง schema แต่ไม่ destroy
     properties:
       hibernate.format_sql: false #ให้ format อยู่ในรูปที่อ่านง่ายขึ้น default = false
       hibernate.generate_statistics: false #วิเคราะได้ว่า query นี้ทำการเปิด ปิด connect เท่าไร จำนวนเวลา
