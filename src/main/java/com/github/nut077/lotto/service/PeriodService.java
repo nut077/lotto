@@ -1,16 +1,43 @@
 package com.github.nut077.lotto.service;
 
+import com.github.nut077.lotto.dto.PeriodCreateDto;
+import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
 import com.github.nut077.lotto.entity.Period;
+import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.PeriodRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class PeriodService extends BaseService<Period, Long> {
+@RequiredArgsConstructor
+public class PeriodService {
 
   private final PeriodRepository periodRepository;
+  private final PeriodCreateMapper mapper;
 
-  public PeriodService(PeriodRepository periodRepository) {
-    super(periodRepository);
-    this.periodRepository = periodRepository;
+  public List<Period> findAll() {
+    return periodRepository.findAll();
+  }
+
+  public Period findById(Long id) {
+    return periodRepository.findById(id).orElseThrow(() -> new NotFoundException("Period id: " + id + " -->> Not Found"));
+  }
+
+  public PeriodCreateDto createForm(PeriodCreateDto dto) {
+    return mapper.mapToDto(periodRepository.save(mapper.mapToEntity(dto)));
+  }
+
+  public PeriodCreateDto updateUpdateForm(Long id, PeriodCreateDto dto) {
+    findById(id);
+    dto.setId(id);
+    return createForm(dto);
+  }
+
+  public Period update(Long id, Period period) {
+    findById(id);
+    period.setId(id);
+    return periodRepository.save(period);
   }
 }

@@ -11,12 +11,17 @@
     </thead>
     <tbody>
     <tr th:each="period: ${periods}">
-      <td th:text="${period.periodDate}"></td>
+      <td>
+        <form action="#" th:action="@{/lotto-detail}" method="post">
+          <input type="hidden" th:value="${period.id}"/>
+          <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" style="border-style: none; background: none"></button>
+        </form>
+      </td>
       <td th:text="${period.buyTotal}"></td>
       <td th:text="${period.payTotal}"></td>
     </tr>
     </tbody>
   </table>
-  <a th:href="@{/createPeriod}" class="btn btn-primary">สร้างงวดวันที่</a>
+  <a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
 </body>
 </html>

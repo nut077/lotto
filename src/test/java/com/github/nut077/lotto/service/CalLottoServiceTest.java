@@ -1,5 +1,6 @@
 package com.github.nut077.lotto.service;
 
+import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
@@ -40,9 +41,11 @@ class CalLottoServiceTest {
   @Mock
   private UserRepository userRepository;
 
+  private PeriodCreateMapper mapper;
+
   @BeforeEach
   void setUp() {
-    PeriodService periodService = new PeriodService(periodRepository);
+    PeriodService periodService = new PeriodService(periodRepository, mapper);
     UserService userService = new UserService(userRepository);
     NumberUtility numberUtility = new NumberUtility();
     service = new CalLottoService(periodService, userService, numberUtility);

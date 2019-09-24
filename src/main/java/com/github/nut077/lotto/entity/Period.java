@@ -1,10 +1,10 @@
 package com.github.nut077.lotto.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity(name = "periods")
@@ -20,7 +20,8 @@ public class Period {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "period_seq")
   private Long id;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
+  @DateTimeFormat(pattern = "dd-MM-yyyy")
   private LocalDate periodDate;
 
   @Column(length = 3)
