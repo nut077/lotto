@@ -6,6 +6,7 @@ import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.PeriodRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class PeriodService {
   private final PeriodCreateMapper mapper;
 
   public List<Period> findAll() {
-    return periodRepository.findAll();
+    return periodRepository.findAll(Sort.by(Sort.Direction.DESC, "periodDate"));
   }
 
   public Period findById(Long id) {
@@ -26,7 +27,7 @@ public class PeriodService {
   }
 
   public PeriodCreateDto createForm(PeriodCreateDto dto) {
-    return mapper.mapToDto(periodRepository.save(mapper.mapToEntity(dto)));
+    return mapper.mapToDto(periodRepository.saveAndFlush(mapper.mapToEntity(dto)));
   }
 
   public PeriodCreateDto updateUpdateForm(Long id, PeriodCreateDto dto) {

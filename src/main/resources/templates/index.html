@@ -7,18 +7,25 @@
       <th class="text-center">วันที่</th>
       <th class="text-center">ยอดซื้อ</th>
       <th class="text-center">ยอดจ่าย</th>
+      <th class="text-center">สถานะ</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="period: ${periods}">
       <td>
         <form action="#" th:action="@{/lotto-detail}" method="post">
-          <input type="hidden" th:value="${period.id}"/>
-          <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" style="border-style: none; background: none"></button>
+          <input type="hidden" name="id" th:value="${period.id}"/>
+          <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" class="btn btn-link"></button>
         </form>
       </td>
       <td th:text="${period.buyTotal}"></td>
       <td th:text="${period.payTotal}"></td>
+      <td>
+        <form action="#" th:action="@{/update-period}" method="post">
+          <input type="hidden" name="id" th:value="${period.id}"/>
+          <button type="submit" th:href="@{/update-period}" class="btn btn-dark btn-sm">แก้ไข</button>
+        </form>
+      </td>
     </tr>
     </tbody>
   </table>

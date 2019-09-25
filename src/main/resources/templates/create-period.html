@@ -6,9 +6,10 @@
 <script th:src="@{/public/js/messages/messages.th-th.min.js}"></script>
 <br>
 <div class="row justify-content-md-center">
-  <div class="col-sm-12">
+  <div class="col-sm-8">
     <h2>งวดวันที่</h2><hr/>
     <form action="#" th:action="@{/create-period}" th:object="${period}" method="post">
+      <input type="hidden" th:field="*{id}"/>
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Configuration
+//@Configuration
 public class JacksonConfig {
 
     @Bean
