@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("Test cal lotto service")
-@ExtendWith({MockitoExtension.class})
+@ExtendWith({MockitoExtension.class, StopwatchExtension.class})
 @Execution(ExecutionMode.CONCURRENT)
 class CalLottoServiceTest {
 
