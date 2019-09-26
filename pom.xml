@@ -204,6 +204,37 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.4</version>
+				<configuration>
+					<excludes>
+						<exclude>com/github/nut077/lotto/*.class</exclude>
+						<exclude>com/github/nut077/**/config/**</exclude>
+						<exclude>com/github/nut077/**/controller/**</exclude>
+						<exclude>com/github/nut077/**/dto/**</exclude>
+						<exclude>com/github/nut077/**/entity/**</exclude>
+						<exclude>com/github/nut077/**/exception/**</exclude>
+						<exclude>com/github/nut077/**/repository/**</exclude>
+						<exclude>com/github/nut077/**/utility/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

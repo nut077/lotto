@@ -48,28 +48,28 @@ public class CalLottoService {
           int buyTote = numberUtility.getInt(lotto.getBuyTote());
           String numberLotto = lotto.getNumberLotto();
 
-          if (buyOn > 0 && numberLotto.equals(threeOn)) {
+          if (numberLotto.equals(threeOn)) {
             lotto.setPayOn(periodResult.getPayThreeOn() * buyOn);
           }
-          if (buyOn > 0 && numberLotto.equals(twoOn)) {
+          if (numberLotto.equals(twoOn)) {
             lotto.setPayOn(periodResult.getPayTwoOn() * buyOn);
           }
-          if (buyDown > 0 && numberLotto.equals(threeDown1)) {
+          if (numberLotto.equals(threeDown1)) {
             lotto.setPayDown(periodResult.getPayThreeDown1() * buyDown);
           }
-          if (buyDown > 0 && numberLotto.equals(threeDown2)) {
+          if (numberLotto.equals(threeDown2)) {
             lotto.setPayDown(periodResult.getPayThreeDown2() * buyDown);
           }
-          if (buyDown > 0 && numberLotto.equals(threeDown3)) {
+          if (numberLotto.equals(threeDown3)) {
             lotto.setPayDown(periodResult.getPayThreeDown3() * buyDown);
           }
-          if (buyDown > 0 && numberLotto.equals(threeDown4)) {
+          if (numberLotto.equals(threeDown4)) {
             lotto.setPayDown(periodResult.getPayThreeDown4() * buyDown);
           }
-          if (buyDown > 0 && numberLotto.equals(twoDown)) {
+          if (numberLotto.equals(twoDown)) {
             lotto.setPayDown(periodResult.getPayTwoDown() * buyDown);
           }
-          if (buyTote > 0 && toteList.contains(numberLotto)) {
+          if (toteList.contains(numberLotto)) {
             lotto.setPayTote(periodResult.getPayTote() * buyTote);
           }
 

@@ -25,6 +25,11 @@
           <input type="hidden" name="id" th:value="${period.id}"/>
           <button type="submit" th:href="@{/update-period}" class="btn btn-dark btn-sm">แก้ไข</button>
         </form>
+        <form action="#" th:action="@{/delete-period}" method="post">
+          <input type="hidden" name="id" th:value="${period.id}"/>
+          <button type="submit" th:href="@{/delete-period}" class="btn btn-danger btn-sm"
+          onclick="if(!(confirm('คุณต้องการลบงวดวันที่ใช่หรือไม่'))) return false">ลบ</button>
+        </form>
       </td>
     </tr>
     </tbody>

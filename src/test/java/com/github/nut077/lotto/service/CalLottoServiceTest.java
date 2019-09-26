@@ -52,9 +52,8 @@ class CalLottoServiceTest {
   }
 
   @Test
-  void calLotto() {
+  void should_success_when_valid_value_call_calLotto() {
     // given
-
     Period period = Period.builder()
             .id(1L)
             .periodDate(LocalDate.now())
@@ -173,5 +172,52 @@ class CalLottoServiceTest {
     assertThat(actual.get(0), hasProperty("pay", is(11100)));
     assertThat(actual.get(1), hasProperty("buy", is(300)));
     assertThat(actual.get(1), hasProperty("pay", is(9000)));
+  }
+
+  @Test
+  void should_success_and_return_value_is_zero_when_not_lotto_value_call_calLotto() {
+    // given
+    Period period = Period.builder()
+            .id(1L)
+            .periodDate(LocalDate.now())
+            .threeOn("365")
+            .twoOn("65")
+            .threeDown1("113")
+            .threeDown2("974")
+            .threeDown3("251")
+            .threeDown4("776")
+            .twoDown("74")
+            .payThreeOn(500)
+            .payTwoOn(60)
+            .payThreeDown1(100)
+            .payThreeDown2(100)
+            .payThreeDown3(100)
+            .payThreeDown4(100)
+            .payTwoDown(60)
+            .payTote(90)
+            .build();
+
+    User user = User.builder()
+            .id(1L)
+            .name("freedom")
+            .buy(150)
+            .period(period)
+            .build();
+
+    user.setLotto(null);
+    List<User> userList = Collections.singletonList(user);
+    period.setUser(userList);
+
+    given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
+    given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+
+    // when
+    List<User> actual = service.calLotto(1L);
+
+    // then
+    assertThat(actual, hasSize(1));
+    assertThat(actual.get(0), hasProperty("buy", is(0)));
+    assertThat(actual.get(0), hasProperty("pay", is(0)));
   }
 }
