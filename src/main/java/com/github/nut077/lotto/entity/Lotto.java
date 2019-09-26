@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @SequenceGenerator(name = "lotto_seq")
-public class Lotto {
+public class Lotto extends Common {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lotto_seq")

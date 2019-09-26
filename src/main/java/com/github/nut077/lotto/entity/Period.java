@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SequenceGenerator(name = "period_seq")
-public class Period {
+public class Period extends Common {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "period_seq")

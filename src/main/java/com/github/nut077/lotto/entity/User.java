@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @SequenceGenerator(name = "user_seq")
-public class User {
+public class User extends Common {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
