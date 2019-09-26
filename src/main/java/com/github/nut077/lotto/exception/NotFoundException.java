@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 @Setter
 public class NotFoundException extends CommonException {
 
-    private final HttpStatus status = HttpStatus.NOT_FOUND;
-    private final String code = "404";
-
     public NotFoundException(String message) {
-        super(message);
+        super(HttpStatus.NOT_FOUND, "404", message);
     }
 }
