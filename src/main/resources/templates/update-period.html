@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Period Form')}">
+<body>
+<link th:href="@{/public/css/gijgo.min.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/public/js/gijgo.min.js}"></script>
+<script th:src="@{/public/js/messages/messages.th-th.min.js}"></script>
+<br>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <h2>งวดวันที่</h2><hr/>
+    <form action="#" th:action="@{/update-period}" th:object="${period}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="periodDate">วันที่:</label>
+                <input id="periodDate" th:field="*{periodDate}" th:value="*{periodDate}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="row">
+        <div class="col-sm-12"><h4>ผลรางวัล</h4></div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-3">
+                <label for="threeOn">3 ตัวบน</label>
+                <input type="text" id="threeOn" th:field="*{threeOn}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="twoOn">2 ตัวบน</label>
+                <input type="text" id="twoOn" th:field="*{twoOn}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="twoDown">2 ตัวล่าง</label>
+                <input type="text" id="twoDown" th:field="*{twoDown}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-3">
+                <label for="threeDown1">3 ตัวล่าง ครั้งที่ 1</label>
+                <input type="text" id="threeDown1" th:field="*{threeDown1}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="threeDown2">3 ตัวล่าง ครั้งที่ 2</label>
+                <input type="text" id="threeDown2" th:field="*{threeDown2}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="threeDown3">3 ตัวล่าง ครั้งที่ 3</label>
+                <input type="text" id="threeDown3" th:field="*{threeDown3}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="threeDown4">3 ตัวล่าง ครั้งที่ 4</label>
+                <input type="text" id="threeDown4" th:field="*{threeDown4}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12"><h4>จำนวนเงินรางวัล</h4></div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-3">
+                <label for="payThreeOn">3 ตัวบน</label>
+                <input type="text" id="payThreeOn" th:field="*{payThreeOn}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="payTwoOn">2 ตัวบน</label>
+                <input type="text" id="payTwoOn" th:field="*{payTwoOn}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="payTwoDown">2 ตัวล่าง</label>
+                <input type="text" id="payTwoDown" th:field="*{payTwoDown}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-3">
+                <label for="payThreeDown1">3 ตัวล่าง ครั้งที่ 1</label>
+                <input type="text" id="payThreeDown1" th:field="*{payThreeDown1}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="payThreeDown2">3 ตัวล่าง ครั้งที่ 2</label>
+                <input type="text" id="payThreeDown2" th:field="*{payThreeDown2}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="payThreeDown3">3 ตัวล่าง ครั้งที่ 3</label>
+                <input type="text" id="payThreeDown3" th:field="*{payThreeDown3}" class="form-control"/>
+              </div>
+              <div class="col-sm-3">
+                <label for="payThreeDown4">3 ตัวล่าง ครั้งที่ 4</label>
+                <input type="text" id="payThreeDown4" th:field="*{payThreeDown4}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>-->
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let config = {
+    locale: 'th-th',
+    uiLibrary: 'bootstrap4',
+    format: 'dd-mm-yyyy'
+  };
+
+  $(function () {
+    $('#periodDate').datepicker(config);
+  });
+
+</script>
+</body>
+</html>

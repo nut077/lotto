@@ -21,19 +21,32 @@
       <td th:text="${period.buyTotal}"></td>
       <td th:text="${period.payTotal}"></td>
       <td>
-        <form action="#" th:action="@{/update-period}" method="post">
-          <input type="hidden" name="id" th:value="${period.id}"/>
-          <button type="submit" th:href="@{/update-period}" class="btn btn-dark btn-sm">แก้ไข</button>
-        </form>
-        <form action="#" th:action="@{/delete-period}" method="post">
-          <input type="hidden" name="id" th:value="${period.id}"/>
-          <button type="submit" th:href="@{/delete-period}" class="btn btn-danger btn-sm"
-          onclick="if(!(confirm('คุณต้องการลบงวดวันที่ใช่หรือไม่'))) return false">ลบ</button>
-        </form>
+        <div class="row">
+          <div class="col-sm-6 text-right">
+            <form action="#" th:action="@{/show-update-period}" method="post">
+              <input type="hidden" name="id" th:value="${period.id}"/>
+              <button type="submit" class="btn btn-dark btn-sm">แก้ไข</button>
+            </form>
+          </div>
+          <div class="col-sm-6">
+            <form name="formDelete" action="#" th:action="@{/delete-period}" method="post">
+              <input type="hidden" name="id" th:value="${period.id}"/>
+              <button type="button" class="btn btn-danger btn-sm"
+                      th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ</button>
+            </form>
+          </div>
+        </div>
       </td>
     </tr>
     </tbody>
   </table>
   <a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
+  <script>
+    function deletePeriod(periodDate, field) {
+      if (confirm('คุณต้องการลบงวดวันที่ ' + periodDate + ' ใช่หรือไม่')) {
+        jQuery(field).closest('form').submit();
+      }
+    }
+  </script>
 </body>
 </html>

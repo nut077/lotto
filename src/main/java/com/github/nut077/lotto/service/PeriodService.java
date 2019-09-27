@@ -26,19 +26,24 @@ public class PeriodService {
     return periodRepository.findById(id).orElseThrow(() -> new NotFoundException("Period id: " + id + " -->> Not Found"));
   }
 
-  public PeriodCreateDto createForm(PeriodCreateDto dto) {
-    return mapper.mapToDto(periodRepository.saveAndFlush(mapper.mapToEntity(dto)));
+  public void createForm(PeriodCreateDto dto) {
+    periodRepository.save(mapper.mapToEntity(dto));
   }
 
-  public PeriodCreateDto updateUpdateForm(Long id, PeriodCreateDto dto) {
-    findById(id);
-    dto.setId(id);
-    return createForm(dto);
+  public void updateUpdateForm(Long id, PeriodCreateDto dto) {
+    Period period = findById(id);
+    period.setPeriodDate(dto.getPeriodDate());
+    periodRepository.save(period);
   }
 
   public Period update(Long id, Period period) {
     findById(id);
     period.setId(id);
     return periodRepository.save(period);
+  }
+
+  public void delete(Long id) {
+    findById(id);
+    periodRepository.deleteById(id);
   }
 }

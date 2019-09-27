@@ -30,14 +30,26 @@ public class PeriodController {
   }
 
   @PostMapping("/create-period")
-  public String save(@ModelAttribute("period") PeriodCreateDto period) {
-    periodService.createForm(period);
+  public String save(@ModelAttribute("period") PeriodCreateDto dto) {
+    periodService.createForm(dto);
     return "redirect:/";
   }
 
-  @PostMapping("/update-period")
-  public String update(@RequestParam Long id, Model model) {
+  @PostMapping("/show-update-period")
+  public String showUpdate(@RequestParam Long id, Model model) {
     model.addAttribute("period", periodService.findById(id));
-    return "create-period";
+    return "update-period";
+  }
+
+  @PostMapping("/update-period")
+  public String update(@RequestParam Long id, PeriodCreateDto dto) {
+    periodService.updateUpdateForm(id, dto);
+    return "redirect:/";
+  }
+
+  @PostMapping("/delete-period")
+  public String delete(@RequestParam Long id) {
+    periodService.delete(id);
+    return "redirect:/";
   }
 }
