@@ -13,7 +13,7 @@
     <tbody>
     <tr th:each="period: ${periods}">
       <td>
-        <form action="#" th:action="@{/lotto-detail}" method="post">
+        <form action="#" th:action="@{/users-lotto}" method="post">
           <input type="hidden" name="id" th:value="${period.id}"/>
           <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" class="btn btn-link"></button>
         </form>

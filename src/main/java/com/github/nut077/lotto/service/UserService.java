@@ -1,5 +1,7 @@
 package com.github.nut077.lotto.service;
 
+import com.github.nut077.lotto.dto.UserCreateDto;
+import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.UserRepository;
@@ -13,6 +15,12 @@ import java.util.List;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PeriodService periodService;
+  private final UserCreateMapper mapper;
+
+  public List<User> findByPeriod(Long id) {
+    return userRepository.findByPeriod(periodService.findById(id));
+  }
 
   public User findById(Long id) {
     return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User id: " + id + " -->> Not Found"));
@@ -26,5 +34,9 @@ public class UserService {
     findById(id);
     user.setId(id);
     return userRepository.save(user);
+  }
+
+  public void createForm(UserCreateDto dto) {
+    userRepository.save(mapper.mapToEntity(dto));
   }
 }

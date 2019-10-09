@@ -46,7 +46,7 @@ class CalLottoServiceTest {
   @BeforeEach
   void setUp() {
     PeriodService periodService = new PeriodService(periodRepository, mapper);
-    UserService userService = new UserService(userRepository);
+    UserService userService = new UserService(userRepository, periodService);
     NumberUtility numberUtility = new NumberUtility();
     service = new CalLottoService(periodService, userService, numberUtility);
   }

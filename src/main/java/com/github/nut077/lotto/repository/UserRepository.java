@@ -1,5 +1,6 @@
 package com.github.nut077.lotto.repository;
 
+import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                   " (l.number_lotto in(:numberOfWinner))" +
                   " and u.period_id=:periodId)")
   List<User> queryWinnerLotto(@Param("periodId") Long periodId, @Param("numberOfWinner") List<String> numberOfWinner);
+
+  List<User> findByPeriod(Period period);
 }
