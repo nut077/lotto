@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Users period')}">
 <body>
-<div class="card">
-  <div class="card-header bg-primary text-white">Header</div>
+<div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
+  <div class="card-header bg-info text-white" th:text="${user.name}"></div>
   <div class="card-body">
     <table class="table table-bordered">
+      <thead>
       <tr>
-        <td>sss</td>
-        <td>sss</td>
-        <td>sss</td>
+        <th scope="col">ตัวเลข</th>
+        <th scope="col">บน</th>
+        <th scope="col">ล่าง</th>
+        <th scope="col">โต๊ด</th>
       </tr>
+      </thead>
       <tr>
+        <td>sss</td>
         <td>sss</td>
         <td>sss</td>
         <td>sss</td>
       </tr>
     </table>
+    <div class="row">
+      <div class="col-sm-12">
+        <div style="float: left">
+          <form action="#" th:action="@{/show-update-user/} + ${period}" method="post">
+            <input type="hidden" name="id" th:value="${period}"/>
+            <button type="submit" class="btn btn-dark btn-sm">เพิ่ม/แก้ไขหวย</button>
+          </form>
+        </div>
+        <div style="float: left;padding-left: 1rem">
+          <form name="formDelete" action="#" th:action="@{/show-update-user}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}"/>
+            <button type="submit" class="btn btn-secondary btn-sm">แก้ไขชื่อ</button>
+          </form>
+        </div>
+        <div style="float: left;padding-left: 1rem">
+          <form name="formDelete" action="#" th:action="@{/delete-user/} + ${period}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}"/>
+            <button type="button" class="btn btn-danger btn-sm"
+                    th:onclick="deleteUser([[${user.name}]], this)">ลบ
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="card-footer">Footer</div>
 </div>
-<a th:href="@{/create-user}" class="btn btn-primary">สร้างรายชื่อ</a>
+<a th:href="@{/create-user?id=} + ${period}" class="btn btn-primary">สร้างรายชื่อ</a>
+<script>
+  function deleteUser(name, field) {
+    if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {
+      jQuery(field).closest('form').submit();
+    }
+  }
+
+</script>
 </body>
 </html>

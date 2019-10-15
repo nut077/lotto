@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Period Form')}">
+<body>
+<link th:href="@{/public/css/gijgo.min.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/public/js/gijgo.min.js}"></script>
+<script th:src="@{/public/js/messages/messages.th-th.min.js}"></script>
+<br>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <h2>สร้างรายชื่อ</h2><hr/>
+    <form action="#" th:action="@{/create-user/} + ${period}" th:object="${user}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="name">ชื่อ:</label>
+                <input id="name" th:field="*{name}" th:value="*{name}" class="form-control"/>
+                <small id="nameHelp" class="form-text text-muted">ไม่สามารถใช้ชื่อซ้ำกันได้ในแต่ละงวด</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
