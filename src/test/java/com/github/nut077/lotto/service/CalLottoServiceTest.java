@@ -5,6 +5,7 @@ import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
+import com.github.nut077.lotto.repository.LottoRepository;
 import com.github.nut077.lotto.repository.PeriodRepository;
 import com.github.nut077.lotto.repository.UserRepository;
 import com.github.nut077.lotto.utility.NumberUtility;
@@ -36,11 +37,9 @@ class CalLottoServiceTest {
 
   private CalLottoService service;
 
-  @Mock
-  private PeriodRepository periodRepository;
-
-  @Mock
-  private UserRepository userRepository;
+  @Mock private PeriodRepository periodRepository;
+  @Mock private UserRepository userRepository;
+  @Mock private LottoRepository lottoRepository;
 
   private PeriodCreateMapper periodCreateMapper;
   private UserCreateMapper userCreateMapper;
@@ -48,7 +47,7 @@ class CalLottoServiceTest {
   @BeforeEach
   void setUp() {
     PeriodService periodService = new PeriodService(periodRepository, periodCreateMapper);
-    UserService userService = new UserService(userRepository, periodService, userCreateMapper, periodCreateMapper);
+    UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodCreateMapper);
     NumberUtility numberUtility = new NumberUtility();
     service = new CalLottoService(periodService, userService, numberUtility);
   }
@@ -88,7 +87,7 @@ class CalLottoServiceTest {
             .name("eiei")
             .buy(300)
             .period(period)
-            .lotto(Collections.singletonList(Lotto.builder()
+            .lottos(Collections.singletonList(Lotto.builder()
                     .id(1L).numberLotto("356").buyOn(100).buyDown(100).buyTote(100).buyTotal(300)
                     .build()))
             .build();
@@ -156,9 +155,9 @@ class CalLottoServiceTest {
                     .build()
     );
 
-    user.setLotto(lottoList);
+    user.setLottos(lottoList);
     List<User> userList = Arrays.asList(user, user2);
-    period.setUser(userList);
+    period.setUsers(userList);
 
     given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
     given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
@@ -206,9 +205,9 @@ class CalLottoServiceTest {
             .period(period)
             .build();
 
-    user.setLotto(null);
+    user.setLottos(null);
     List<User> userList = Collections.singletonList(user);
-    period.setUser(userList);
+    period.setUsers(userList);
 
     given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
     given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);

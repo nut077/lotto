@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Lotto')}">
+<body>
+<form id="lotto" name="lotto" th:action="@{/lotto-detail/} + ${user.id}" method="post">
+  <div class="card" th:object="${user}">
+    <div class="card-header bg-info text-white" th:text="${user.name}"></div>
+    <div class="card-body">
+      <table id="tbDetail" class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">ตัวเลข</th>
+          <th scope="col">บน</th>
+          <th scope="col">ล่าง</th>
+          <th scope="col">โต๊ด</th>
+          <th scope="col">จำนวนเงิน</th>
+        </tr>
+        </thead>
+        <tr id="trDetail" th:each="lotto : ${user.lottos}">
+          <td th:text="${lotto.numberLotto}"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <br/>
+  <button type="button" class="btn btn-primary" onclick="addRow()">สร้างเลข</button>
+  <button type="button" class="btn btn-primary" onclick="save()">บันทึก</button>
+  <input type="hidden" id="detail" name="detail">
+  <input type="hidden" id="line" name="line">
+  <input type="text" id="buyTotal" name="buyTotal">
+</form>
+<script>
+
+  function addRow() {
+    let num = 0;
+    addRow = function() {
+      num++;
+      $('#tbDetail').append('<tr>' +
+        '<td><input type="number" name="numberLotto' + num + '"></td>' +
+        '<td><input type="number" name="buyOn' + num + '"></td>' +
+        '<td><input type="number" name="buyDown' + num + '"></td>' +
+        '<td><input type="number" name="buyTote' + num + '"></td>' +
+        '<td><input type="number" name="buyTotal' + num + '"></td>' +
+        '</tr>');
+      $('#line').val(num);
+    };
+    addRow();
+  }
+
+  function save() {
+    $("#detail").val($("form").serialize());
+    $('#lotto').submit();
+  }
+
+  function deleteUser(name, field) {
+    if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {
+      jQuery(field).closest('form').submit();
+    }
+  }
+
+</script>
+</body>
+</html>

@@ -13,11 +13,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@SequenceGenerator(name = "period_seq")
 public class Period extends Common {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "period_seq")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(unique = true, nullable = false)
@@ -58,5 +57,5 @@ public class Period extends Common {
   private int payTotal;
 
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
-  private List<User> user;
+  private List<User> users;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "users")
@@ -12,11 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SequenceGenerator(name = "user_seq")
 public class User extends Common {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(unique = true)
@@ -29,6 +29,18 @@ public class User extends Common {
   @JsonIgnore
   private Period period;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<Lotto> lotto;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Lotto> lottos = new ArrayList<>();
+
+  public void setLottos(List<Lotto> lottos) {
+    if (lottos != null) {
+      lottos.forEach(lotto -> lotto.setUser(this));
+    }
+    this.lottos = lottos;
+  }
+
+  public void addLotto(Lotto lotto) {
+    lotto.setUser(this);
+    this.lottos.add(lotto);
+  }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Users period')}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Users Lotto')}">
 <body>
 <div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
   <div class="card-header bg-info text-white" th:text="${user.name}"></div>
@@ -23,10 +23,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div style="float: left">
-          <form action="#" th:action="@{/show-update-user/} + ${period}" method="post">
-            <input type="hidden" name="id" th:value="${period}"/>
-            <button type="submit" class="btn btn-dark btn-sm">เพิ่ม/แก้ไขหวย</button>
-          </form>
+          <a th:href="@{/lotto-detail/} + ${user.id}" class="btn btn-dark btn-sm">เพิ่ม/แก้ไขหวย</a>
         </div>
         <div style="float: left;padding-left: 1rem">
           <form name="formDelete" action="#" th:action="@{/show-update-user}" method="post">

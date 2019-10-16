@@ -37,7 +37,7 @@ public class CalLottoService {
     numberOfWinner.add(twoDown);
     List<User> userWinnerLotto = userService.getWinnerLotto(id, numberOfWinner);
     for (User user : userWinnerLotto) {
-      List<Lotto> lottoList = user.getLotto();
+      List<Lotto> lottoList = user.getLottos();
       Period periodResult = user.getPeriod();
       int pay = 0;
       int buy = 0;
