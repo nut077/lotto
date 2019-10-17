@@ -38,14 +38,14 @@ public class UserService {
     return userRepository.queryWinnerLotto(periodId, numberOfWinner);
   }
 
-  public User update(Long id, User user) {
+  public User createLotto(Long id, User user) {
     findById(id);
     user.setId(id);
     return userRepository.save(user);
   }
 
   @Transactional
-  public User update(Long id, String detail, String line) {
+  public User createLotto(Long id, String detail, String line) {
     User user = findById(id);
     lottoRepository.deleteLottoById(id);
     Map<String, String> hm = getDetail(detail);
@@ -61,13 +61,14 @@ public class UserService {
         .build();
       user.addLotto(lotto);
     }
-    user.setBuy(map.getInt("buyTotal"));
+    user.setBuy(map.getInt("buyAll"));
     return userRepository.saveAndFlush(user);
   }
 
-  public void createForm(Long periodId, UserCreateDto dto) {
+  public UserCreateDto create(Long periodId, UserCreateDto dto) {
     dto.setPeriod(periodCreateMapper.mapToDto(periodService.findById(periodId)));
-    userRepository.save(userCreateMapper.mapToEntity(dto));
+    User user = userRepository.save(userCreateMapper.mapToEntity(dto));
+    return userCreateMapper.mapToDto(user);
   }
 
   public void delete(Long id) {
@@ -90,9 +91,4 @@ public class UserService {
     }
     return hm;
   }
-
-  /*public static void main(String[] args) {
-    String a = "99%2C1%2C2";
-
-  }*/
 }

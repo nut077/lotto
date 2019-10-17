@@ -80,7 +80,7 @@ public class CalLottoService {
       }
       user.setBuy(buy);
       user.setPay(pay);
-      userService.update(user.getId(), user);
+      userService.createLotto(user.getId(), user);
     }
     List<User> userList = userService.getWinnerLotto(id, numberOfWinner);
     updatePeriodBuyAndPay(period, userList);

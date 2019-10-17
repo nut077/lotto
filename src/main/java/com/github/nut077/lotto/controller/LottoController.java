@@ -34,7 +34,7 @@ public class LottoController {
 
   @PostMapping("/lotto-detail/{userId}")
   public String saveLottoDetail(@PathVariable Long userId, @RequestParam String detail, @RequestParam String line) {
-    User user = userService.update(userId, detail, line);
+    User user = userService.createLotto(userId, detail, line);
     return "redirect:/users-lotto?id=" + user.getPeriod().getId();
   }
 }

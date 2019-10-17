@@ -51,8 +51,8 @@ public class UserController {
 
   @PostMapping("/create-user/{periodId}")
   public String save(@PathVariable Long periodId, @ModelAttribute("user") UserCreateDto dto) {
-    userService.createForm(periodId, dto);
-    return "redirect:/users-lotto?id=" + periodId;
+    UserCreateDto user = userService.create(periodId, dto);
+    return "redirect:/lotto-detail/" + user.getId();
   }
 
   @PostMapping("/delete-user/{periodId}")
