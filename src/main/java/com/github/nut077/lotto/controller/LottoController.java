@@ -1,5 +1,6 @@
 package com.github.nut077.lotto.controller;
 
+import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,16 @@ public class LottoController {
 
   @GetMapping("/lotto-detail/{userId}")
   public String lottoDetail(@PathVariable Long userId, Model model) {
+    User user = userService.findById(userId);
+    long maxId = user.getLottos().stream().mapToLong(Lotto::getId).max().orElse(0);
     model.addAttribute("user", userService.findById(userId));
+    model.addAttribute("maxId", maxId);
     return "lotto-detail";
   }
 
   @PostMapping("/lotto-detail/{userId}")
-  public String saveLottoDetail(@PathVariable Long userId, @RequestParam String detail) {
-    User user = userService.update(userId, detail);
+  public String saveLottoDetail(@PathVariable Long userId, @RequestParam String detail, @RequestParam String line) {
+    User user = userService.update(userId, detail, line);
     return "redirect:/users-lotto?id=" + user.getPeriod().getId();
   }
 }

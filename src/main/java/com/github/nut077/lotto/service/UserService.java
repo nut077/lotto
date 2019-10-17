@@ -45,13 +45,13 @@ public class UserService {
   }
 
   @Transactional
-  public User update(Long id, String detail) {
+  public User update(Long id, String detail, String line) {
     User user = findById(id);
     lottoRepository.deleteLottoById(id);
     Map<String, String> hm = getDetail(detail);
     MapFreedom map = new MapFreedom(hm);
-    int line = map.getInt("line");
-    for (int i = 1; i <= line; i++) {
+    String[] spLine = line.split(",");
+    for (String i : spLine) {
       Lotto lotto = Lotto.builder()
         .numberLotto(map.getString("numberLotto" + i))
         .buyOn(map.getInt("buyOn" + i))
@@ -90,4 +90,9 @@ public class UserService {
     }
     return hm;
   }
+
+  /*public static void main(String[] args) {
+    String a = "99%2C1%2C2";
+
+  }*/
 }

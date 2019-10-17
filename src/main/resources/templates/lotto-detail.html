@@ -16,38 +16,52 @@
         </tr>
         </thead>
         <tr id="trDetail" th:each="lotto : ${user.lottos}">
-          <td th:text="${lotto.numberLotto}"></td>
+          <td>
+            <input type="number" th:name="numberLotto + ${lotto.id}" th:value="${lotto.numberLotto}" maxlength="3">
+            <input type="hidden" th:name="lottoId + ${lotto.id}" th:value="${lotto.id}">
+          </td>
+          <td><input type="number" th:name="buyOn + ${lotto.id}" th:value="${lotto.buyOn}"></td>
+          <td><input type="number" th:name="buyDown + ${lotto.id}" th:value="${lotto.buyDown}"></td>
+          <td><input type="number" th:name="buyTote + ${lotto.id}" th:value="${lotto.buyTote}"></td>
+          <td><input type="number" th:name="buyTotal + ${lotto.id}" th:value="${lotto.buyTotal}"></td>
         </tr>
       </table>
     </div>
   </div>
   <br/>
+  <input type="hidden" id="maxId" name="maxId" th:value="${maxId}"/>
   <button type="button" class="btn btn-primary" onclick="addRow()">สร้างเลข</button>
   <button type="button" class="btn btn-primary" onclick="save()">บันทึก</button>
   <input type="hidden" id="detail" name="detail">
-  <input type="hidden" id="line" name="line">
+  <input type="text" id="line" name="line">
   <input type="text" id="buyTotal" name="buyTotal">
 </form>
 <script>
 
   function addRow() {
-    let num = 0;
+    let num = Number($('#maxId').val());
     addRow = function() {
       num++;
       $('#tbDetail').append('<tr>' +
-        '<td><input type="number" name="numberLotto' + num + '"></td>' +
+        '<td><input type="number" name="numberLotto' + num + '" maxlength="3"></td>' +
         '<td><input type="number" name="buyOn' + num + '"></td>' +
         '<td><input type="number" name="buyDown' + num + '"></td>' +
         '<td><input type="number" name="buyTote' + num + '"></td>' +
         '<td><input type="number" name="buyTotal' + num + '"></td>' +
         '</tr>');
-      $('#line').val(num);
     };
     addRow();
   }
 
   function save() {
     $("#detail").val($("form").serialize());
+    let arr = [];
+    $('#tbDetail').find('tr').not('tr:eq(0)').each(function () {
+      let name = $(this).find('td:eq(0)').find('input[name^="numberLotto"]').attr('name');
+      let line = name.slice(11);
+      arr.push(line);
+    });
+    $('#line').val(arr.join());
     $('#lotto').submit();
   }
 

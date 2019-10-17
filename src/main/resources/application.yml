@@ -26,6 +26,8 @@ jasypt:
     password: secretkey
 
 spring:
+  main:
+    lazy-initialization: true
   datasource:
     #url: jdbc:mysql://schooldb:3306/lotto
     url: jdbc:mysql://localhost:3304/lotto
