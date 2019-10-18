@@ -12,7 +12,7 @@ server:
 
   undertow:
     accesslog:
-      #ให้ undertow เขียน log เมื่อมีการยิง request เข้ามาตามที่อยู่นี้
+      enabled: true # เขียน log เมื่อมีการยิง request เข้ามา
       dir: undertow-accesslog
       #log pattern
       pattern: '%t %I %r %s %b %D'
