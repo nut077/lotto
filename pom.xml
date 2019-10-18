@@ -142,7 +142,7 @@
 
 	<build>
 		<defaultGoal>package</defaultGoal>
-		<finalName>docker-school</finalName>
+		<finalName>lotto</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
