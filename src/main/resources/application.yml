@@ -51,3 +51,9 @@ spring:
     log-resolved-exception: false
   resources:
     add-mappings: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
