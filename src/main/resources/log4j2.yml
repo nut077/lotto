@@ -10,9 +10,9 @@ Configutation:
       - name: file-name
         value: application.log
       - name: console-pattern
-        value: "%highlight{[%-5p]} %d %X{c-id} %c{1} > %m%n%ex{short}"
+        value: "%highlight{[%-5p]} %d %X{c-id} %c{1} > %m%n%ex{full}"
       - name: file-pattern
-        value: "[%-5p] %d %X{c-id} %c{1} > %m%n%ex{short}"
+        value: "[%-5p] %d %X{c-id} %c{1} > %m%n%ex{full}"
 
   # จะให้ log เราไปออกที่ไหนบ้าง
   Appenders:

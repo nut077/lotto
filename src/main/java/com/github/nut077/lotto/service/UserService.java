@@ -8,13 +8,13 @@ import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.LottoRepository;
 import com.github.nut077.lotto.repository.UserRepository;
-import com.nutfreedom.utilities.MapFreedom;
-import com.nutfreedom.utilities.SplitFreedom;
+import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,23 +45,23 @@ public class UserService {
   }
 
   @Transactional
-  public User createLotto(Long id, String detail, String line) {
+  public User createLotto(Long id, HttpServletRequest request) {
+    ParseNumberFreedom parse = new ParseNumberFreedom();
     User user = findById(id);
     lottoRepository.deleteLottoById(id);
-    Map<String, String> hm = getDetail(detail);
-    MapFreedom map = new MapFreedom(hm);
+    String line = request.getParameter("line");
     String[] spLine = line.split(",");
     for (String i : spLine) {
       Lotto lotto = Lotto.builder()
-        .numberLotto(map.getString("numberLotto" + i))
-        .buyOn(map.getInt("buyOn" + i))
-        .buyDown(map.getInt("buyDown" + i))
-        .buyTote(map.getInt("buyTote" + i))
-        .buyTotal(map.getInt("buyTotal" + i))
+        .numberLotto(request.getParameter("numberLotto" + i))
+        .buyOn(parse.parseInt(request.getParameter("buyOn" + i)))
+        .buyDown(parse.parseInt(request.getParameter("buyDown" + i)))
+        .buyTote(parse.parseInt(request.getParameter("buyTote" + i)))
+        .buyTotal(parse.parseInt(request.getParameter("buyTotal" + i)))
         .build();
       user.addLotto(lotto);
     }
-    user.setBuy(map.getInt("buyAll"));
+    user.setBuy(parse.parseInt(request.getParameter("buyAll")));
     return userRepository.saveAndFlush(user);
   }
 
@@ -80,15 +80,5 @@ public class UserService {
     User user = findById(id);
     user.setName(dto.getName());
     userRepository.save(user);
-  }
-
-  private Map<String, String> getDetail(String detail) {
-    SplitFreedom split = new SplitFreedom();
-    Map<String, String> hm = new LinkedHashMap<>();
-    String[] sp = detail.split("&");
-    for (String s : sp) {
-      hm.put(split.splitByIndex(s, "=", 0), split.splitByIndex(s, "=", 1));
-    }
-    return hm;
   }
 }

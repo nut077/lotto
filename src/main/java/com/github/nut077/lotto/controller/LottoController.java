@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 public class LottoController {
@@ -33,8 +35,8 @@ public class LottoController {
   }
 
   @PostMapping("/lotto-detail/{userId}")
-  public String saveLottoDetail(@PathVariable Long userId, @RequestParam String detail, @RequestParam String line) {
-    User user = userService.createLotto(userId, detail, line);
+  public String saveLottoDetail(@PathVariable Long userId, HttpServletRequest request) {
+    User user = userService.createLotto(userId, request);
     return "redirect:/users-lotto?id=" + user.getPeriod().getId();
   }
 }
