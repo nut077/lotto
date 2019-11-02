@@ -4,6 +4,7 @@ import com.github.nut077.lotto.dto.UserCreateDto;
 import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
 import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
+import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.LottoRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +60,7 @@ public class UserService {
         .buyDown(parse.parseInt(request.getParameter("buyDown" + i)))
         .buyTote(parse.parseInt(request.getParameter("buyTote" + i)))
         .buyTotal(parse.parseInt(request.getParameter("buyTotal" + i)))
+        .percent(Lotto.Percent.codeToPercent(request.getParameter("percent" + i)))
         .build();
       user.addLotto(lotto);
     }
@@ -80,5 +83,11 @@ public class UserService {
     User user = findById(id);
     user.setName(dto.getName());
     userRepository.save(user);
+  }
+
+  public boolean checkDuplicateName(Long periodId, String name) {
+    Period period = periodService.findById(periodId);
+    Optional<User> user = period.getUsers().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst();
+    return user.isPresent();
   }
 }

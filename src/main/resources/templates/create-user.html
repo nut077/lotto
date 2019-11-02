@@ -8,7 +8,7 @@
 <div class="row justify-content-md-center">
   <div class="col-sm-8">
     <h2>สร้างรายชื่อ</h2><hr/>
-    <form action="#" th:action="@{/create-user/} + ${period}" th:object="${user}" method="post">
+    <form id="userForm" action="#" th:action="@{/create-user/} + ${period}" th:object="${user}" method="post">
       <input type="hidden" th:field="*{id}"/>
       <div class="row">
         <div class="col-sm-12">
@@ -23,9 +23,30 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <input type="hidden" id="periodId" name="periodId" th:value="${period}">
+      <button type="button" class="btn btn-primary" onclick="save()">Submit</button>
     </form>
   </div>
 </div>
+<script>
+  function save() {
+    let $name = $("#name");
+    if ($name.val() === '') {
+      $name.focus();
+      alert('กรุณาใส่ชื่อ');
+    } else {
+      $.post('http://localhost:8080/checkDuplicateName', {
+        'name': $name.val(),
+        'periodId': $('#periodId').val()
+      }, function (data) {
+        if (data === 'true') {
+          alert(`ชื่อ ${$name.val()} มีอยู่แล้วในงวดนี้ ไม่สามารถสร้างชื่อนี้ซ้ำกันได้ กรุณาใช้ชื่อใหม่`)
+        } else {
+          $('#userForm').submit();
+        }
+      });
+    }
+  }
+</script>
 </body>
 </html>

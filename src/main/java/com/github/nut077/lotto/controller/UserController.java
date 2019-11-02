@@ -61,4 +61,9 @@ public class UserController {
     return "redirect:/users-lotto?id=" + periodId;
   }
 
+  @PostMapping("/checkDuplicateName")
+  public @ResponseBody String checkDuplicateName(@RequestParam Long periodId, @RequestParam String name) {
+    return String.valueOf(userService.checkDuplicateName(periodId, name));
+  }
+
 }
