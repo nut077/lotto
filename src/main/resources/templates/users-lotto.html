@@ -11,23 +11,23 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th scope="col" style="width: 20%">ตัวเลข</th>
-        <th scope="col" style="width: 20%">บน</th>
-        <th scope="col" style="width: 20%">ล่าง</th>
-        <th scope="col" style="width: 20%">โต๊ด</th>
-        <th scope="col" style="width: 20%">จำนวนเงิน</th>
+        <th scope="col" style="width: 20%; text-align: right">ตัวเลข</th>
+        <th scope="col" style="width: 20%; text-align: right">บน</th>
+        <th scope="col" style="width: 20%; text-align: right">ล่าง</th>
+        <th scope="col" style="width: 20%; text-align: right">โต๊ด</th>
+        <th scope="col" style="width: 20%; text-align: right">จำนวนเงิน</th>
       </tr>
       </thead>
       <tr th:each="lotto : ${user.lottos}">
-        <td th:text="${lotto.numberLotto}"></td>
-        <td th:text="${lotto.buyOn}"></td>
-        <td th:text="${lotto.buyDown}"></td>
-        <td th:text="${lotto.buyTote}"></td>
-        <td th:text="${lotto.buyTotal}"></td>
+        <td class="text-right" th:text="${lotto.numberLotto}"></td>
+        <td class="text-right" th:text="${lotto.buyOn}"></td>
+        <td class="text-right" th:text="${lotto.buyDown}"></td>
+        <td class="text-right" th:text="${lotto.buyTote}"></td>
+        <td class="text-right" th:text="${lotto.buyTotal}"></td>
       </tr>
       <tr>
         <td colspan="4" class="text-right font-weight-bold">รวม</td>
-        <td th:text="${user.buy}" class="font-weight-bold"></td>
+        <td th:text="${user.buy}" class="font-weight-bold text-right"></td>
       </tr>
     </table>
     <div class="row">

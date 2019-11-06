@@ -42,6 +42,10 @@ public class PeriodService {
     return periodRepository.save(period);
   }
 
+  public Period update(Period period) {
+    return periodRepository.save(period);
+  }
+
   public void delete(Long id) {
     findById(id);
     periodRepository.deleteById(id);

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Check Lotto')}">
+<body>
+<br>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <h2>ผลรางวัล</h2>
+    <hr/>
+    <form action="#" th:action="@{/show-check-lotto/} + ${period}" th:object="${period}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <table class="table table-bordered table-responsive-sm">
+                <thead class="thead-dark">
+                <tr>
+                  <th></th>
+                  <th class="text-center">เลขที่ออก</th>
+                </tr>
+                </thead>
+                <tr>
+                  <td>3 ตัวบน</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3 ตัวล่าง ครั้งที่ 1</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3 ตัวล่าง ครั้งที่ 2</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3 ตัวล่าง ครั้งที่ 3</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>3 ตัวล่าง ครั้งที่ 4</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>2 ตัวล่าง</td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">ตรวจผลรางวัล</button>
+      <a th:href="@{/users-lotto?id=} + ${period}" class="btn btn-danger">ย้อนกลับ</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>

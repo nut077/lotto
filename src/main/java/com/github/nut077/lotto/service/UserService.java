@@ -65,7 +65,17 @@ public class UserService {
       user.addLotto(lotto);
     }
     user.setBuy(parse.parseInt(request.getParameter("buyAll")));
-    return userRepository.saveAndFlush(user);
+    User userSaved = userRepository.saveAndFlush(user);
+    updateBuyPeriod(userSaved);
+    return userSaved;
+  }
+
+  private void updateBuyPeriod(User user) {
+    Long periodId = user.getPeriod().getId();
+    Period period = periodService.findById(periodId);
+    int sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+    period.setBuyTotal(sumBuy);
+    periodService.update(period);
   }
 
   public UserCreateDto create(Long periodId, UserCreateDto dto) {

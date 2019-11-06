@@ -17,8 +17,8 @@ public class CalLottoService {
   private final UserService userService;
   private final NumberUtility numberUtility;
 
-  public List<User> calLotto(Long id) {
-    Period period = periodService.findById(id);
+  public List<User> calLotto(Long periodId) {
+    Period period = periodService.findById(periodId);
     String threeOn = period.getThreeOn();
     String twoOn = period.getTwoOn();
     String threeDown1 = period.getThreeDown1();
@@ -35,7 +35,7 @@ public class CalLottoService {
     numberOfWinner.add(threeDown3);
     numberOfWinner.add(threeDown4);
     numberOfWinner.add(twoDown);
-    List<User> userWinnerLotto = userService.getWinnerLotto(id, numberOfWinner);
+    List<User> userWinnerLotto = userService.getWinnerLotto(periodId, numberOfWinner);
     for (User user : userWinnerLotto) {
       List<Lotto> lottoList = user.getLottos();
       Period periodResult = user.getPeriod();
@@ -82,7 +82,7 @@ public class CalLottoService {
       user.setPay(pay);
       userService.createLotto(user.getId(), user);
     }
-    List<User> userList = userService.getWinnerLotto(id, numberOfWinner);
+    List<User> userList = userService.getWinnerLotto(periodId, numberOfWinner);
     updatePeriodBuyAndPay(period, userList);
     return userList;
   }

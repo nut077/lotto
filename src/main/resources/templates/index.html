@@ -18,21 +18,27 @@
           <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" class="btn btn-link"></button>
         </form>
       </td>
-      <td th:text="${period.buyTotal}"></td>
-      <td th:text="${period.payTotal}"></td>
+      <td class="text-right" th:text="${period.buyTotal}"></td>
+      <td class="text-right" th:text="${period.payTotal}"></td>
       <td>
         <div class="row">
-          <div class="col-sm-6 text-right">
+          <div class="col-sm-4 text-right">
             <form action="#" th:action="@{/show-update-period}" method="post">
               <input type="hidden" name="id" th:value="${period.id}"/>
               <button type="submit" class="btn btn-dark btn-sm">แก้ไข</button>
             </form>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4 text-center">
             <form name="formDelete" action="#" th:action="@{/delete-period}" method="post">
               <input type="hidden" name="id" th:value="${period.id}"/>
               <button type="button" class="btn btn-danger btn-sm"
                       th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ</button>
+            </form>
+          </div>
+          <div class="col-sm-4 text-left">
+            <form name="formDelete" action="#" th:action="@{/check-lotto}" method="post">
+              <input type="hidden" name="id" th:value="${period.id}"/>
+              <button type="submit" class="btn btn-success btn-sm">ตรวจหวย</button>
             </form>
           </div>
         </div>
