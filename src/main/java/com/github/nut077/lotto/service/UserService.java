@@ -66,12 +66,11 @@ public class UserService {
     }
     user.setBuy(parse.parseInt(request.getParameter("buyAll")));
     User userSaved = userRepository.saveAndFlush(user);
-    updateBuyPeriod(userSaved);
+    updateBuyPeriod(userSaved.getPeriod().getId());
     return userSaved;
   }
 
-  private void updateBuyPeriod(User user) {
-    Long periodId = user.getPeriod().getId();
+  private void updateBuyPeriod(Long periodId) {
     Period period = periodService.findById(periodId);
     int sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
     period.setBuyTotal(sumBuy);
@@ -85,8 +84,9 @@ public class UserService {
   }
 
   public void delete(Long id) {
-    findById(id);
+    User user = findById(id);
     userRepository.deleteById(id);
+    updateBuyPeriod(user.getPeriod().getId());
   }
 
   public void updateUpdateForm(Long id, UserCreateDto dto) {
