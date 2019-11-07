@@ -24,7 +24,11 @@
         </div>
       </div>
       <input type="hidden" id="periodId" name="periodId" th:value="${period}">
-      <button type="button" class="btn btn-primary" onclick="save()">Submit</button>
+    </form>
+    <form action="#" th:action="@{/users-lotto}" method="post">
+      <input type="hidden" name="id" th:value="${period}">
+      <button type="button" class="btn btn-primary" onclick="save()">บันทึก</button>
+      <button type="submit" class="btn btn-danger">ย้อนกลับ</button>
     </form>
   </div>
 </div>
