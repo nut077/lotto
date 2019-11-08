@@ -44,7 +44,7 @@ public class LottoController {
 
   @PostMapping("/show-check-lotto")
   public String showCheckLotto(@ModelAttribute PeriodResultDto dto, Model model) {
-    model.addAttribute("user", calLottoService.calLotto(dto));
+    model.addAttribute("users", calLottoService.calLotto(dto));
     return "show-lotto";
   }
 }

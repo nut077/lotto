@@ -21,15 +21,15 @@ public class Lotto extends Common {
   @Column(length = 3)
   private String numberLotto;
 
-  private Integer buyOn;
-  private Integer buyDown;
-  private Integer buyTote;
-  private Integer buyTotal;
+  private int buyOn;
+  private int buyDown;
+  private int buyTote;
+  private int buyTotal;
 
-  private Integer payOn;
-  private Integer payDown;
-  private Integer payTote;
-  private Integer payTotal;
+  private int payOn;
+  private int payDown;
+  private int payTote;
+  private int payTotal;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")

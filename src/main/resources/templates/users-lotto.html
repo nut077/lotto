@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Users Lotto')}">
 <body>
 <br>
-<a th:href="@{/create-user?id=} + ${period}" class="btn btn-primary">สร้างรายชื่อ</a>&nbsp;&nbsp;
-<a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
-<br><br>
 <div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
   <div class="card-header bg-info text-white" th:text="${user.name}"></div>
   <div class="card-body">
@@ -53,6 +50,8 @@
     </div>
   </div>
 </div>
+<a th:href="@{/create-user?id=} + ${period}" class="btn btn-primary">สร้างรายชื่อ</a>&nbsp;&nbsp;
+<a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
 <script>
   function deleteUser(name, field) {
     if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {

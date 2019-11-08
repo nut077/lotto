@@ -19,10 +19,9 @@ public class User extends Common {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(unique = true)
   private String name;
-  private Integer buy;
-  private Integer pay;
+  private int buy;
+  private int pay;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "period_id")

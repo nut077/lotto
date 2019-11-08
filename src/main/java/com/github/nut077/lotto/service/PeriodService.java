@@ -26,8 +26,8 @@ public class PeriodService {
     return periodRepository.findById(id).orElseThrow(() -> new NotFoundException("Period id: " + id + " -->> Not Found"));
   }
 
-  public void createForm(PeriodCreateDto dto) {
-    periodRepository.save(mapper.mapToEntity(dto));
+  public Period createForm(PeriodCreateDto dto) {
+    return periodRepository.save(mapper.mapToEntity(dto));
   }
 
   public void updateUpdateForm(Long id, PeriodCreateDto dto) {

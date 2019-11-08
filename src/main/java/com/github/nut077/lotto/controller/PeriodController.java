@@ -31,8 +31,8 @@ public class PeriodController {
 
   @PostMapping("/create-period")
   public String save(@ModelAttribute("period") PeriodCreateDto dto) {
-    periodService.createForm(dto);
-    return "redirect:/";
+    Period period = periodService.createForm(dto);
+    return "redirect:/users-lotto?id=" + period.getId();
   }
 
   @PostMapping("/show-update-period")

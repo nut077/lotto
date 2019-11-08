@@ -9,7 +9,10 @@ import com.github.nut077.lotto.utility.NumberUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -103,6 +106,10 @@ public class CalLottoService {
     }
     List<User> userList = userService.getWinnerLotto(period.getId(), numberOfWinner);
     updatePeriodBuyAndPay(period, userList);
+    userList.forEach(user -> {
+      List<Lotto> lottoSuccess = user.getLottos().stream().filter(lotto -> lotto.getPayTotal() > 0).collect(Collectors.toList());
+      user.setLottos(lottoSuccess);
+    });
     return userList;
   }
 
