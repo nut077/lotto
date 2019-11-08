@@ -1,5 +1,6 @@
 package com.github.nut077.lotto.controller;
 
+import com.github.nut077.lotto.dto.PeriodResultDto;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.service.CalLottoService;
@@ -8,10 +9,7 @@ import com.github.nut077.lotto.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,8 +43,8 @@ public class LottoController {
   }
 
   @PostMapping("/show-check-lotto")
-  public String showCheckLotto(@RequestParam("id") Long periodId, Model model) {
-    model.addAttribute("user", calLottoService.calLotto(periodId));
+  public String showCheckLotto(@ModelAttribute PeriodResultDto dto, Model model) {
+    model.addAttribute("user", calLottoService.calLotto(dto));
     return "show-lotto";
   }
 }

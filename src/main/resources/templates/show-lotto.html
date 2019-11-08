@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Show Lotto')}">
+<body>
+<br>
+<a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
+<br><br>
+<div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
+  <div class="card-header bg-info text-white" th:text="${user.name}"></div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" style="width: 20%; text-align: right">ตัวเลข</th>
+        <th scope="col" style="width: 20%; text-align: right">บน</th>
+        <th scope="col" style="width: 20%; text-align: right">ล่าง</th>
+        <th scope="col" style="width: 20%; text-align: right">โต๊ด</th>
+        <th scope="col" style="width: 20%; text-align: right">จำนวนเงิน</th>
+      </tr>
+      </thead>
+      <tr th:each="lotto : ${user.lottos}">
+        <td class="text-right" th:text="${lotto.numberLotto}"></td>
+        <td class="text-right" th:text="${lotto.buyOn}"></td>
+        <td class="text-right" th:text="${lotto.buyDown}"></td>
+        <td class="text-right" th:text="${lotto.buyTote}"></td>
+        <td class="text-right" th:text="${lotto.buyTotal}"></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="text-right font-weight-bold">รวม</td>
+        <td th:text="${user.buy}" class="font-weight-bold text-right"></td>
+      </tr>
+    </table>
+    <div class="row">
+      <div class="col-sm-12">
+        <div style="float: left">
+          <a th:href="@{/lotto-detail/} + ${user.id}" class="btn btn-success btn-sm">เพิ่ม/แก้ไขหวย</a>
+        </div>
+        <div style="float: left;padding-left: 1rem">
+          <form name="formDelete" action="#" th:action="@{/show-update-user}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}"/>
+            <button type="submit" class="btn btn-secondary btn-sm">แก้ไขชื่อ</button>
+          </form>
+        </div>
+        <div style="float: left;padding-left: 1rem">
+          <form name="formDelete" action="#" th:action="@{/delete-user/} + ${period}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}"/>
+            <button type="button" class="btn btn-danger btn-sm"
+                    th:onclick="deleteUser([[${user.name}]], this)">ลบ
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function deleteUser(name, field) {
+    if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {
+      jQuery(field).closest('form').submit();
+    }
+  }
+
+</script>
+</body>
+</html>

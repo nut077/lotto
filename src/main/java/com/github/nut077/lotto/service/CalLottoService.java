@@ -1,5 +1,7 @@
 package com.github.nut077.lotto.service;
 
+import com.github.nut077.lotto.dto.PeriodResultDto;
+import com.github.nut077.lotto.dto.mapper.PeriodResultMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
@@ -16,9 +18,27 @@ public class CalLottoService {
   private final PeriodService periodService;
   private final UserService userService;
   private final NumberUtility numberUtility;
+  private final PeriodResultMapper mapper;
 
-  public List<User> calLotto(Long periodId) {
-    Period period = periodService.findById(periodId);
+  public List<User> calLotto(PeriodResultDto dto) {
+    Period period = periodService.findById(dto.getId());
+    period.setThreeOn(dto.getThreeOn());
+    period.setTwoOn(dto.getTwoOn());
+    period.setThreeDown1(dto.getThreeDown1());
+    period.setThreeDown2(dto.getThreeDown2());
+    period.setThreeDown3(dto.getThreeDown3());
+    period.setThreeDown4(dto.getThreeDown4());
+    period.setTwoDown(dto.getTwoDown());
+
+    period.setPayThreeOn(dto.getPayThreeOn());
+    period.setPayTote(dto.getPayTote());
+    period.setTwoOn(dto.getTwoOn());
+    period.setPayThreeDown1(dto.getPayThreeDown1());
+    period.setPayThreeDown2(dto.getPayThreeDown2());
+    period.setPayThreeDown3(dto.getPayThreeDown3());
+    period.setPayThreeDown4(dto.getPayThreeDown4());
+    period.setPayTwoDown(dto.getPayTwoDown());
+
     String threeOn = period.getThreeOn();
     String twoOn = period.getTwoOn();
     String threeDown1 = period.getThreeDown1();
@@ -35,10 +55,9 @@ public class CalLottoService {
     numberOfWinner.add(threeDown3);
     numberOfWinner.add(threeDown4);
     numberOfWinner.add(twoDown);
-    List<User> userWinnerLotto = userService.getWinnerLotto(periodId, numberOfWinner);
+    List<User> userWinnerLotto = userService.getWinnerLotto(period.getId(), numberOfWinner);
     for (User user : userWinnerLotto) {
       List<Lotto> lottoList = user.getLottos();
-      Period periodResult = user.getPeriod();
       int pay = 0;
       int buy = 0;
       if (lottoList != null) {
@@ -49,28 +68,28 @@ public class CalLottoService {
           String numberLotto = lotto.getNumberLotto();
 
           if (numberLotto.equals(threeOn)) {
-            lotto.setPayOn(periodResult.getPayThreeOn() * buyOn);
+            lotto.setPayOn(period.getPayThreeOn() * buyOn);
           }
           if (numberLotto.equals(twoOn)) {
-            lotto.setPayOn(periodResult.getPayTwoOn() * buyOn);
+            lotto.setPayOn(period.getPayTwoOn() * buyOn);
           }
           if (numberLotto.equals(threeDown1)) {
-            lotto.setPayDown(periodResult.getPayThreeDown1() * buyDown);
+            lotto.setPayDown(period.getPayThreeDown1() * buyDown);
           }
           if (numberLotto.equals(threeDown2)) {
-            lotto.setPayDown(periodResult.getPayThreeDown2() * buyDown);
+            lotto.setPayDown(period.getPayThreeDown2() * buyDown);
           }
           if (numberLotto.equals(threeDown3)) {
-            lotto.setPayDown(periodResult.getPayThreeDown3() * buyDown);
+            lotto.setPayDown(period.getPayThreeDown3() * buyDown);
           }
           if (numberLotto.equals(threeDown4)) {
-            lotto.setPayDown(periodResult.getPayThreeDown4() * buyDown);
+            lotto.setPayDown(period.getPayThreeDown4() * buyDown);
           }
           if (numberLotto.equals(twoDown)) {
-            lotto.setPayDown(periodResult.getPayTwoDown() * buyDown);
+            lotto.setPayDown(period.getPayTwoDown() * buyDown);
           }
           if (toteList.contains(numberLotto)) {
-            lotto.setPayTote(periodResult.getPayTote() * buyTote);
+            lotto.setPayTote(period.getPayTote() * buyTote);
           }
 
           buy += lotto.getBuyTotal();
@@ -82,7 +101,7 @@ public class CalLottoService {
       user.setPay(pay);
       userService.createLotto(user.getId(), user);
     }
-    List<User> userList = userService.getWinnerLotto(periodId, numberOfWinner);
+    List<User> userList = userService.getWinnerLotto(period.getId(), numberOfWinner);
     updatePeriodBuyAndPay(period, userList);
     return userList;
   }
@@ -96,7 +115,7 @@ public class CalLottoService {
     }
     period.setBuyTotal(buy);
     period.setPayTotal(pay);
-    periodService.update(period.getId(), period);
+    periodService.update(period);
   }
 
   private ArrayList<String> getTote(String tote) {

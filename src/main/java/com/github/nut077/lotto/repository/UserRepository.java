@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query(nativeQuery = true,
-          value = "select u.* from users u where u.user_id in(select l.user_id from lottos l where" +
+          value = "select u.* from users u where u.id in(select l.user_id from lottos l where" +
                   " (l.number_lotto in(:numberOfWinner))" +
                   " and u.period_id=:periodId)")
   List<User> queryWinnerLotto(@Param("periodId") Long periodId, @Param("numberOfWinner") List<String> numberOfWinner);

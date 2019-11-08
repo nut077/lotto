@@ -6,7 +6,7 @@
   <div class="col-sm-8">
     <h2>ผลรางวัล</h2>
     <hr/>
-    <form action="#" th:action="@{/show-check-lotto/} + ${period}" th:object="${period}" method="post">
+    <form action="#" th:action="@{/show-check-lotto}" th:object="${period}" method="post">
       <input type="hidden" th:field="*{id}"/>
       <div class="row">
         <div class="col-sm-12">
@@ -17,31 +17,48 @@
                 <tr>
                   <th></th>
                   <th class="text-center">เลขที่ออก</th>
+                  <th class="text-center">รางวัล บาทละ</th>
                 </tr>
                 </thead>
                 <tr>
                   <td>3 ตัวบน</td>
+                  <td><input type="number" class="form-control text-right" th:field="*{threeOn}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payThreeOn}"></td>
+                </tr>
+                <tr>
+                  <td>โต๊ด</td>
                   <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payTote}"></td>
+                </tr>
+                <tr>
+                  <td>2 ตัวบน</td>
+                  <td><input type="number" class="form-control text-right" th:field="*{twoOn}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payTwoOn}"></td>
                 </tr>
                 <tr>
                   <td>3 ตัวล่าง ครั้งที่ 1</td>
-                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{threeDown1}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payThreeDown1}"></td>
                 </tr>
                 <tr>
                   <td>3 ตัวล่าง ครั้งที่ 2</td>
-                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{threeDown2}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payThreeDown2}"></td>
                 </tr>
                 <tr>
                   <td>3 ตัวล่าง ครั้งที่ 3</td>
-                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{threeDown3}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payThreeDown3}"></td>
                 </tr>
                 <tr>
                   <td>3 ตัวล่าง ครั้งที่ 4</td>
-                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{threeDown4}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payThreeDown4}"></td>
                 </tr>
                 <tr>
                   <td>2 ตัวล่าง</td>
-                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{twoDown}"></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payTwoDown}"></td>
                 </tr>
               </table>
             </div>
@@ -49,9 +66,25 @@
         </div>
       </div>
       <button type="submit" class="btn btn-primary">ตรวจผลรางวัล</button>
-      <a th:href="@{/users-lotto?id=} + ${period}" class="btn btn-danger">ย้อนกลับ</a>
+      <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
     </form>
   </div>
 </div>
+<script>
+
+  function chkInteger() {
+    $("input[type='number']").keydown(function (e) {
+      const keycode = e.keyCode;
+      if (keycode === 69 || keycode === 107 || keycode === 109 || e.key === '-') {
+        e.preventDefault();
+      }
+    });
+  }
+
+  $(function () {
+    chkInteger();
+  });
+
+</script>
 </body>
 </html>

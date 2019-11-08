@@ -1,6 +1,5 @@
 package com.github.nut077.lotto.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,7 @@ import javax.persistence.Version;
 import java.time.OffsetDateTime;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter
 @MappedSuperclass
 @EntityListeners(value = Listeners.class)
 public class Common {

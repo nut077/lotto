@@ -1,6 +1,8 @@
 package com.github.nut077.lotto.service;
 
 import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
+import com.github.nut077.lotto.dto.mapper.PeriodResultMapper;
+import com.github.nut077.lotto.dto.mapper.PeriodResultMapperImpl;
 import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
@@ -9,6 +11,7 @@ import com.github.nut077.lotto.repository.LottoRepository;
 import com.github.nut077.lotto.repository.PeriodRepository;
 import com.github.nut077.lotto.repository.UserRepository;
 import com.github.nut077.lotto.utility.NumberUtility;
+import info.solidsoft.mockito.java8.api.WithBDDMockito;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,14 +29,11 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 
 @DisplayName("Test cal lotto service")
 @ExtendWith({MockitoExtension.class, StopwatchExtension.class})
 @Execution(ExecutionMode.CONCURRENT)
-class CalLottoServiceTest {
+class CalLottoServiceTest implements WithBDDMockito {
 
   private CalLottoService service;
 
@@ -43,13 +43,15 @@ class CalLottoServiceTest {
 
   private PeriodCreateMapper periodCreateMapper;
   private UserCreateMapper userCreateMapper;
+  private PeriodResultMapper periodResultMapper;
 
   @BeforeEach
   void setUp() {
+    periodResultMapper = new PeriodResultMapperImpl();
     PeriodService periodService = new PeriodService(periodRepository, periodCreateMapper);
     UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodCreateMapper);
     NumberUtility numberUtility = new NumberUtility();
-    service = new CalLottoService(periodService, userService, numberUtility);
+    service = new CalLottoService(periodService, userService, numberUtility, periodResultMapper);
   }
 
   @Test
@@ -159,13 +161,14 @@ class CalLottoServiceTest {
     List<User> userList = Arrays.asList(user, user2);
     period.setUsers(userList);
 
+    given(periodRepository.save(any(Period.class))).willReturn(period);
     given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
     given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user2));
 
     // when
-    List<User> actual = service.calLotto(1L);
+    List<User> actual = service.calLotto(periodResultMapper.mapToDto(period));
 
     // then
     assertThat(actual, hasSize(2));
@@ -209,12 +212,13 @@ class CalLottoServiceTest {
     List<User> userList = Collections.singletonList(user);
     period.setUsers(userList);
 
+    given(periodRepository.save(any(Period.class))).willReturn(period);
     given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
     given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
     // when
-    List<User> actual = service.calLotto(1L);
+    List<User> actual = service.calLotto(periodResultMapper.mapToDto(period));
 
     // then
     assertThat(actual, hasSize(1));
