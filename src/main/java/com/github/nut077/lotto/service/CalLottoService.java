@@ -35,7 +35,7 @@ public class CalLottoService {
 
     period.setPayThreeOn(dto.getPayThreeOn());
     period.setPayTote(dto.getPayTote());
-    period.setTwoOn(dto.getTwoOn());
+    period.setPayTwoOn(dto.getPayTwoOn());
     period.setPayThreeDown1(dto.getPayThreeDown1());
     period.setPayThreeDown2(dto.getPayThreeDown2());
     period.setPayThreeDown3(dto.getPayThreeDown3());

@@ -6,7 +6,7 @@
   <div class="col-sm-8">
     <h2>ผลรางวัล</h2>
     <hr/>
-    <form action="#" th:action="@{/show-check-lotto}" th:object="${period}" method="post">
+    <form action="#" id="formSubmit" th:action="@{/show-check-lotto}" th:object="${period}" method="post">
       <input type="hidden" th:field="*{id}"/>
       <div class="row">
         <div class="col-sm-12">
@@ -65,12 +65,15 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">ตรวจผลรางวัล</button>
+      <button type="button" class="btn btn-primary" onclick="bfSubmit()">ตรวจผลรางวัล</button>
       <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
     </form>
   </div>
 </div>
 <script>
+
+  var require = ['threeOn', 'twoOn', 'threeDown1', 'threeDown2', 'threeDown3', 'threeDown4', 'twoDown'];
+  var requireFormat = [3, 2, 3, 3, 3, 3, 2];
 
   function chkInteger() {
     $("input[type='number']").keydown(function (e) {
@@ -79,6 +82,41 @@
         e.preventDefault();
       }
     });
+  }
+
+  function bfSubmit() {
+    if (chkFieldBlank() && chkFormatLotto()) {
+      $('#formSubmit').submit();
+    }
+  }
+
+  function chkFieldBlank() {
+    let result = true;
+    for (let field of require) {
+      let $fieldLottoNumber = $("input[type='number'][name='" + field + "']");
+      if ($fieldLottoNumber.val() === '') {
+        alert('กรุณาใส่ผลรางวัล');
+        $fieldLottoNumber.focus();
+        result = false;
+        break;
+      }
+    }
+    return result;
+  }
+
+  function chkFormatLotto() {
+    let result = true;
+    for (let index in require) {
+      let format = requireFormat[index];
+      let $fieldLottoNumber = $("input[type='number'][name='" + require[index] + "']");
+      if ($fieldLottoNumber.val().length !== format) {
+        result = false;
+        alert('คุณใส่จำนวนผลรางวัลไม่ถูกต้อง คุณต้องใส่ ' + format + ' ตัวเลข');
+        $fieldLottoNumber.focus();
+        break;
+      }
+    }
+    return result;
   }
 
   $(function () {

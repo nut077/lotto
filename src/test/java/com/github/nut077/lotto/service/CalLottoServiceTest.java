@@ -1,9 +1,6 @@
 package com.github.nut077.lotto.service;
 
-import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
-import com.github.nut077.lotto.dto.mapper.PeriodResultMapper;
-import com.github.nut077.lotto.dto.mapper.PeriodResultMapperImpl;
-import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
+import com.github.nut077.lotto.dto.mapper.*;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
@@ -41,12 +38,12 @@ class CalLottoServiceTest implements WithBDDMockito {
   @Mock private UserRepository userRepository;
   @Mock private LottoRepository lottoRepository;
 
-  private PeriodCreateMapper periodCreateMapper;
-  private UserCreateMapper userCreateMapper;
   private PeriodResultMapper periodResultMapper;
 
   @BeforeEach
   void setUp() {
+    PeriodCreateMapper periodCreateMapper = new PeriodCreateMapperImpl();
+    UserCreateMapper userCreateMapper = new UserCreateMapperImpl();
     periodResultMapper = new PeriodResultMapperImpl();
     PeriodService periodService = new PeriodService(periodRepository, periodCreateMapper);
     UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodCreateMapper);
@@ -176,53 +173,5 @@ class CalLottoServiceTest implements WithBDDMockito {
     assertThat(actual.get(0), hasProperty("pay", is(11100)));
     assertThat(actual.get(1), hasProperty("buy", is(300)));
     assertThat(actual.get(1), hasProperty("pay", is(9000)));
-  }
-
-  @Test
-  void should_success_and_return_value_is_zero_when_not_lotto_value_call_calLotto() {
-    // given
-    Period period = Period.builder()
-            .id(1L)
-            .periodDate(LocalDate.now())
-            .threeOn("365")
-            .twoOn("65")
-            .threeDown1("113")
-            .threeDown2("974")
-            .threeDown3("251")
-            .threeDown4("776")
-            .twoDown("74")
-            .payThreeOn(500)
-            .payTwoOn(60)
-            .payThreeDown1(100)
-            .payThreeDown2(100)
-            .payThreeDown3(100)
-            .payThreeDown4(100)
-            .payTwoDown(60)
-            .payTote(90)
-            .build();
-
-    User user = User.builder()
-            .id(1L)
-            .name("freedom")
-            .buy(150)
-            .period(period)
-            .build();
-
-    user.setLottos(null);
-    List<User> userList = Collections.singletonList(user);
-    period.setUsers(userList);
-
-    given(periodRepository.save(any(Period.class))).willReturn(period);
-    given(periodRepository.findById(anyLong())).willReturn(Optional.of(period));
-    given(userRepository.queryWinnerLotto(anyLong(), anyList())).willReturn(userList);
-    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
-    // when
-    List<User> actual = service.calLotto(periodResultMapper.mapToDto(period));
-
-    // then
-    assertThat(actual, hasSize(1));
-    assertThat(actual.get(0), hasProperty("buy", is(0)));
-    assertThat(actual.get(0), hasProperty("pay", is(0)));
   }
 }
