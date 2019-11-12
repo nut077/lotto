@@ -110,6 +110,7 @@ public class CalLottoService {
       List<Lotto> lottoSuccess = user.getLottos().stream().filter(lotto -> lotto.getPayTotal() > 0).collect(Collectors.toList());
       user.setLottos(lottoSuccess);
     });
+    userList = userList.stream().filter(user -> !user.getLottos().isEmpty()).collect(Collectors.toList());
     return userList;
   }
 
