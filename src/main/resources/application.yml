@@ -29,8 +29,8 @@ spring:
   main:
     lazy-initialization: true
   datasource:
-    #url: jdbc:mysql://schooldb:3306/lotto
-    url: jdbc:mysql://localhost:3304/lotto
+    url: jdbc:mysql://lottodb:3306/lotto?serverTimezone=UTC&useLegacyDatetimeCode=false
+    #url: jdbc:mysql://localhost:3306/lotto
     username: freedom
     password: ENC(j2Dr5jtMPE89o3mizMJOzA==)
     #password: 123
