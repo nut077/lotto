@@ -28,4 +28,6 @@ remove org.jasypt in pom<br>
 push to repository<br>
 docker tag docker-lotto nut077/lotto<br>
 docker push nut077/lotto<br>
-docker run --name lotto --network lotto-network -p 8080:8080 -d --restart=always nut077/lotto
+docker run --name lotto --network lotto-network -p 8080:8080 -d --restart=always nut077/lotto<br><br>
+run docker-compose<br>
+docker-compose run --rm start_dependencies

@@ -1,0 +1,41 @@
+version: "3"
+services:
+  lottodb:
+    image: mysql:8.0
+    container_name: lottodb
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: lotto
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: freedom
+      MYSQL_PASSWORD: 123
+      TZ: Asia/Bangkok
+    ports:
+      - "3306:3306"
+    networks:
+      - lotto-network
+    restart: always
+  lotto:
+    #build: . ถ้า build จากเครื่องตัวเอง
+    image: nut077/lotto
+    depends_on:
+      - lottodb
+    container_name: lotto
+    ports:
+      - 8080:8080
+    networks:
+      - lotto-network
+    restart: always
+
+  start_dependencies:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - lottodb
+      - lotto
+    command: lottodb lotto
+networks:
+  lotto-network:
+
+volumes:
+  db_data:
