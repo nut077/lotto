@@ -58,7 +58,8 @@
           <td></td>
         </tr>
       </table>
-      <button type="button" class="btn btn-success" onclick="addRow()">สร้างเลข</button>
+      <button type="button" class="btn btn-success" onclick="addRow()">สร้างเลขใหม่</button>
+      <button type="button" class="btn btn-success" onclick="addRowDuplicate()">สร้างเลขซ้ำ</button>
     </div>
   </div>
   <br/>
@@ -75,9 +76,9 @@
       num++;
       $('#tbDetail').find('tr:last').prev().after('<tr>' +
         '<td><input type="number" class="form-control text-right" name="numberLotto' + num + '" onblur="setInputTote(this);checkLength(this)"></td>' +
-        '<td><input type="number" class="form-control text-right" name="buyOn' + num + '" value="0" onblur="calRow(this)"></td>' +
-        '<td><input type="number" class="form-control text-right" name="buyDown' + num + '" value="0" onblur="calRow(this)"></td>' +
-        '<td><input type="number" class="form-control text-right" name="buyTote' + num + '" value="0" onblur="calRow(this)" readonly></td>' +
+        '<td><input type="number" class="form-control text-right" name="buyOn' + num + '" value="" onblur="calRow(this)"></td>' +
+        '<td><input type="number" class="form-control text-right" name="buyDown' + num + '" value="" onblur="calRow(this)"></td>' +
+        '<td><input type="number" class="form-control text-right" name="buyTote' + num + '" value="" onblur="calRow(this)" readonly></td>' +
         '<td>' +
         '<div class="form-check form-check-inline">' +
         '<input type="radio" name="percent' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
@@ -92,6 +93,11 @@
       chkInteger();
     };
     addRow();
+  }
+
+  function addRowDuplicate() {
+    addRow();
+
   }
 
   function save() {
