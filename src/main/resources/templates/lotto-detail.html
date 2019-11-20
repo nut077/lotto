@@ -97,7 +97,19 @@
 
   function addRowDuplicate() {
     addRow();
-
+    let $trBefore = $('#tbDetail').find('tbody').find('tr:last').prev().prev();
+    let $trCurrent = $('#tbDetail').find('tbody').find('tr:last').prev();
+    let numberLotto = $trBefore.find("input[name^='numberLotto']").val();
+    $trCurrent.find("input[name^='numberLotto']").val(numberLotto);
+    $trCurrent.find("input[name^='buyOn']").val($trBefore.find("input[name^='buyOn']").val());
+    $trCurrent.find("input[name^='buyDown']").val($trBefore.find("input[name^='buyDown']").val());
+    $trCurrent.find("input[name^='buyTote']").val($trBefore.find("input[name^='buyTote']").val());
+    $trCurrent.find("input[name^='percent'][value='" + $trBefore.find("input[name^='percent']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='buyTotal']").val($trBefore.find("input[name^='buyTotal']").val());
+    calAll();
+    if (numberLotto.length === 3) {
+      $trCurrent.find("input[name^='buyTote']").prop('readonly', false);
+    }
   }
 
   function save() {
