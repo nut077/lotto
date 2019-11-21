@@ -19,10 +19,10 @@ public class ExcelService {
     StringBuilder table = new StringBuilder();
     table.append("<table>");
     table.append("<tr>");
-    table.append("<td><background-color>grey_25_percent</background-color><width>15</width>เลข</td>");
-    table.append("<td><background-color>grey_25_percent</background-color><width>10</width>บน</td>");
-    table.append("<td><background-color>grey_25_percent</background-color><width>10</width>ล่าง</td>");
-    table.append("<td><background-color>grey_25_percent</background-color><width>10</width>โต๊ด</td>");
+    table.append("<td><background-color>grey_25_percent</background-color><width>15</width><format>border-right</format>เลข</td>");
+    table.append("<td><background-color>grey_25_percent</background-color><width>10</width><format>border-right</format>บน</td>");
+    table.append("<td><background-color>grey_25_percent</background-color><width>10</width><format>border-right</format>ล่าง</td>");
+    table.append("<td><background-color>grey_25_percent</background-color><width>10</width><format>border-right</format>โต๊ด</td>");
     table.append("</tr>");
     Period period = periodService.findById(id);
 

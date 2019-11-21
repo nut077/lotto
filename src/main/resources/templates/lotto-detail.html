@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Lotto')}">
 <body>
+<br>
 <form id="lotto" name="lotto" th:action="@{/lotto-detail/} + ${user.id}" method="post">
   <div class="card" th:object="${user}">
     <div class="card-header bg-info text-white" th:text="${user.name}"></div>
@@ -155,15 +156,6 @@
       $tr.remove();
       calAll();
     }
-  }
-
-  function chkInteger() {
-    $("input[type='number']").keydown(function (e) {
-      const keycode = e.keyCode;
-      if (keycode === 69 || keycode === 107 || keycode === 109 || e.key === '-') {
-        e.preventDefault();
-      }
-    });
   }
 
   function setInputTote(e) {

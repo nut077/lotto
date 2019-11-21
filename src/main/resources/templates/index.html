@@ -1,64 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Period')}">
 <body>
-  <table class="table table-bordered">
-    <thead class="thead-dark">
-    <tr>
-      <th class="text-center">วันที่</th>
-      <th class="text-center">ยอดซื้อ</th>
-      <th class="text-center">ยอดจ่าย</th>
-      <th class="text-center" style="width: 55%">สถานะ</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="period: ${periods}">
-      <td>
-        <form action="#" th:action="@{/users-lotto}" method="post">
-          <input type="hidden" name="id" th:value="${period.id}"/>
-          <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}" class="btn btn-link"></button>
-        </form>
-      </td>
-      <td class="text-right" th:text="${period.buyTotal}"></td>
-      <td class="text-right" th:text="${period.payTotal}"></td>
-      <td>
-        <div class="row">
-          <div class="col-sm-3 text-right">
-            <form action="#" th:action="@{/show-update-period}" method="post">
-              <input type="hidden" name="id" th:value="${period.id}"/>
-              <button type="submit" class="btn btn-dark btn-sm">แก้ไข</button>
-            </form>
-          </div>
-          <div class="col-sm-3 text-center">
-            <form name="formDelete" action="#" th:action="@{/delete-period}" method="post">
-              <input type="hidden" name="id" th:value="${period.id}"/>
-              <button type="button" class="btn btn-danger btn-sm"
-                      th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ</button>
-            </form>
-          </div>
-          <div class="col-sm-3 text-center">
-            <form name="formDelete" action="#" th:action="@{/download-excel}" method="post">
-              <input type="hidden" name="id" th:value="${period.id}"/>
-              <button type="submit" class="btn btn-info btn-sm">ดาวน์โหลด</button>
-            </form>
-          </div>
-          <div class="col-sm-3 text-left">
-            <form name="formDelete" action="#" th:action="@{/check-lotto}" method="post">
-              <input type="hidden" name="id" th:value="${period.id}"/>
-              <button type="submit" class="btn btn-success btn-sm">ตรวจหวย</button>
-            </form>
-          </div>
+<br>
+<table class="table table-bordered">
+  <thead class="thead-dark">
+  <tr>
+    <th class="text-center">วันที่</th>
+    <th class="text-center">ยอดซื้อ</th>
+    <th class="text-center">ยอดจ่าย</th>
+    <th class="text-center" style="width: 55%">สถานะ</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="period: ${periods}">
+    <td>
+      <form action="#" th:action="@{/users-lotto}" method="post">
+        <input type="hidden" name="id" th:value="${period.id}"/>
+        <button type="submit" th:text="${#temporals.format(period.periodDate, 'dd-MM-yyyy')}"
+                class="btn btn-link"></button>
+      </form>
+    </td>
+    <td class="text-right" th:text="${period.buyTotal}"></td>
+    <td class="text-right" th:text="${period.payTotal}"></td>
+    <td>
+      <div class="row">
+        <div class="col-sm-3 text-right">
+          <form action="#" th:action="@{/show-update-period}" method="post">
+            <input type="hidden" name="id" th:value="${period.id}"/>
+            <button type="submit" class="btn btn-dark btn-sm">แก้ไข</button>
+          </form>
         </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
-  <script>
-    function deletePeriod(periodDate, field) {
-      if (confirm('คุณต้องการลบงวดวันที่ ' + periodDate + ' ใช่หรือไม่')) {
-        jQuery(field).closest('form').submit();
-      }
+        <div class="col-sm-3 text-center">
+          <form name="formDelete" action="#" th:action="@{/delete-period}" method="post">
+            <input type="hidden" name="id" th:value="${period.id}"/>
+            <button type="button" class="btn btn-danger btn-sm"
+                    th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ
+            </button>
+          </form>
+        </div>
+        <div class="col-sm-3 text-center">
+          <form name="formDelete" action="#" th:action="@{/download-excel}" method="post">
+            <input type="hidden" name="id" th:value="${period.id}"/>
+            <button type="submit" class="btn btn-info btn-sm">ดาวน์โหลด</button>
+          </form>
+        </div>
+        <div class="col-sm-3 text-left">
+          <form name="formDelete" action="#" th:action="@{/check-lotto}" method="post">
+            <input type="hidden" name="id" th:value="${period.id}"/>
+            <button type="submit" class="btn btn-success btn-sm">ตรวจหวย</button>
+          </form>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
+<script>
+  function deletePeriod(periodDate, field) {
+    if (confirm('คุณต้องการลบงวดวันที่ ' + periodDate + ' ใช่หรือไม่')) {
+      jQuery(field).closest('form').submit();
     }
-  </script>
+  }
+</script>
 </body>
 </html>
