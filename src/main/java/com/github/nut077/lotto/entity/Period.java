@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "periods")
@@ -57,5 +58,5 @@ public class Period extends Common {
   private int payTotal;
 
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
-  private List<User> users;
+  private List<User> users = new ArrayList<>();
 }

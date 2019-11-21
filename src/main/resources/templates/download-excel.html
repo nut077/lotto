@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Download')}">
+<body>
+<br>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <form action="#" th:action="@{/}" method="post">
+      <input type="hidden" th:value="${periodId}"/>
+      <div class="row">
+        <div class="col-sm-12">
+          <a th:href="@{download/full/} + ${periodId}" class="btn btn-success">ดาวน์โหลดหวยทั้งหมด</a>
+        </div>
+      </div>
+      <br><br>
+      <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>

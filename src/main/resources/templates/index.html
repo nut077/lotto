@@ -7,7 +7,7 @@
       <th class="text-center">วันที่</th>
       <th class="text-center">ยอดซื้อ</th>
       <th class="text-center">ยอดจ่าย</th>
-      <th class="text-center">สถานะ</th>
+      <th class="text-center" style="width: 55%">สถานะ</th>
     </tr>
     </thead>
     <tbody>
@@ -22,20 +22,26 @@
       <td class="text-right" th:text="${period.payTotal}"></td>
       <td>
         <div class="row">
-          <div class="col-sm-4 text-right">
+          <div class="col-sm-3 text-right">
             <form action="#" th:action="@{/show-update-period}" method="post">
               <input type="hidden" name="id" th:value="${period.id}"/>
               <button type="submit" class="btn btn-dark btn-sm">แก้ไข</button>
             </form>
           </div>
-          <div class="col-sm-4 text-center">
+          <div class="col-sm-3 text-center">
             <form name="formDelete" action="#" th:action="@{/delete-period}" method="post">
               <input type="hidden" name="id" th:value="${period.id}"/>
               <button type="button" class="btn btn-danger btn-sm"
                       th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ</button>
             </form>
           </div>
-          <div class="col-sm-4 text-left">
+          <div class="col-sm-3 text-center">
+            <form name="formDelete" action="#" th:action="@{/download-excel}" method="post">
+              <input type="hidden" name="id" th:value="${period.id}"/>
+              <button type="submit" class="btn btn-info btn-sm">ดาวน์โหลด</button>
+            </form>
+          </div>
+          <div class="col-sm-3 text-left">
             <form name="formDelete" action="#" th:action="@{/check-lotto}" method="post">
               <input type="hidden" name="id" th:value="${period.id}"/>
               <button type="submit" class="btn btn-success btn-sm">ตรวจหวย</button>
