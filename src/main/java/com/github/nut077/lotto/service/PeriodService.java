@@ -47,7 +47,6 @@ public class PeriodService {
   }
 
   public void delete(Long id) {
-    findById(id);
     periodRepository.deleteById(id);
   }
 }

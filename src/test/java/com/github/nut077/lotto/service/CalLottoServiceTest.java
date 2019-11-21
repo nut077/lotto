@@ -34,9 +34,14 @@ class CalLottoServiceTest implements WithBDDMockito {
 
   private CalLottoService service;
 
-  @Mock private PeriodRepository periodRepository;
-  @Mock private UserRepository userRepository;
-  @Mock private LottoRepository lottoRepository;
+  @Mock
+  private PeriodRepository periodRepository;
+
+  @Mock
+  private UserRepository userRepository;
+
+  @Mock
+  private LottoRepository lottoRepository;
 
   private PeriodResultMapper periodResultMapper;
 
@@ -48,7 +53,7 @@ class CalLottoServiceTest implements WithBDDMockito {
     PeriodService periodService = new PeriodService(periodRepository, periodCreateMapper);
     UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodCreateMapper);
     NumberUtility numberUtility = new NumberUtility();
-    service = new CalLottoService(periodService, userService, numberUtility, periodResultMapper);
+    service = new CalLottoService(periodService, userService, numberUtility);
   }
 
   @Test
