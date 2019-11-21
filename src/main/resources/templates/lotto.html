@@ -67,6 +67,7 @@
       </div>
       <button type="button" class="btn btn-primary" onclick="bfSubmit()">ตรวจผลรางวัล</button>
       <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
+      <input type="hidden" id="version" name="version" th:value="${period.version}"/>
     </form>
   </div>
 </div>
@@ -121,6 +122,16 @@
 
   $(function () {
     chkInteger();
+    if ($('#version').val() === '0') {
+      $('#payThreeOn').val('500');
+      $('#payTote').val('90');
+      $('#payTwoOn').val('60');
+      $('#payThreeDown1').val('100');
+      $('#payThreeDown2').val('100');
+      $('#payThreeDown3').val('100');
+      $('#payThreeDown4').val('100');
+      $('#payTwoDown').val('60');
+    }
   });
 
 </script>
