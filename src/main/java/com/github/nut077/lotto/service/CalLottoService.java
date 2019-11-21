@@ -1,7 +1,6 @@
 package com.github.nut077.lotto.service;
 
 import com.github.nut077.lotto.dto.PeriodResultDto;
-import com.github.nut077.lotto.dto.mapper.PeriodResultMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
@@ -21,7 +20,6 @@ public class CalLottoService {
   private final PeriodService periodService;
   private final UserService userService;
   private final NumberUtility numberUtility;
-  private final PeriodResultMapper mapper;
 
   public List<User> calLotto(PeriodResultDto dto) {
     Period period = periodService.findById(dto.getId());
