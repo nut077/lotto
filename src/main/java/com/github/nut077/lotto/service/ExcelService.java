@@ -126,7 +126,7 @@ public class ExcelService {
     table.append("<td><colspan>3</colspan><format>border-center-middle</format><type>number</type>").append(sumMin).append("</td>");
     table.append("</tr>");
     table.append("</table>");
-    ExcelFreedom excelFreedom = new ExcelFreedom(response, null, "option", table.toString());
+    ExcelFreedom excelFreedom = new ExcelFreedom(response, "option", table.toString());
     excelFreedom.write();
   }
 }
