@@ -34,7 +34,7 @@ public class ExcelService {
     for (User user : period.getUsers()) {
       for (Lotto lotto : user.getLottos()) {
         table.append("<tr>");
-        table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getNumberLotto()).append("</td>");
+        table.append("<td><format>border-right-middle</format>").append(lotto.getNumberLotto()).append("</td>");
         table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyOn()).append("</td>");
         table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyDown()).append("</td>");
         table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyTote()).append("</td>");
@@ -92,7 +92,7 @@ public class ExcelService {
     int sumMax = listMax.stream().mapToInt(Lotto::getBuyTotal).sum();
     for (Lotto lotto : listMax) {
       table.append("<tr>");
-      table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getNumberLotto()).append("</td>");
+      table.append("<td><format>border-right-middle</format>").append(lotto.getNumberLotto()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyOn()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyDown()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyTote()).append("</td>");
@@ -115,7 +115,7 @@ public class ExcelService {
     int sumMin = listMin.stream().mapToInt(Lotto::getBuyTotal).sum();
     for (Lotto lotto : listMin) {
       table.append("<tr>");
-      table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getNumberLotto()).append("</td>");
+      table.append("<td><format>border-right-middle</format>").append(lotto.getNumberLotto()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyOn()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyDown()).append("</td>");
       table.append("<td><format>border-right-middle</format><type>number</type>").append(lotto.getBuyTote()).append("</td>");
