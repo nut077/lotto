@@ -16,12 +16,29 @@ services:
     networks:
       - lotto-network
     restart: always
-  lotto:
+
+  lottodb_admin:
+    image: phpmyadmin/phpmyadmin:4.8
+    depends_on:
+      - lottodb
+    container_name: lottodb_admin
+    restart: always
+    ports:
+      - '8082:80'
+    environment:
+      PMA_HOST: lottodb
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: freedom
+      MYSQL_PASSWORD: 123
+    networks:
+      - lotto-network
+
+  lotto_web:
     #build: . ถ้า build จากเครื่องตัวเอง
     image: nut077/lotto
     depends_on:
       - lottodb
-    container_name: lotto
+    container_name: lotto_web
     ports:
       - 8080:8080
     networks:
@@ -32,8 +49,9 @@ services:
     image: dadarek/wait-for-dependencies
     depends_on:
       - lottodb
-      - lotto
-    command: lottodb lotto
+      - lottodb_admin
+      - lotto_web
+    command: lottodb lottodb_admin lotto_web
 networks:
   lotto-network:
 

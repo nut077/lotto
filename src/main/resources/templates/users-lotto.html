@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Users Lotto')}">
 <body>
+<style>
+  .back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+}
+</style>
 <br>
 <a th:href="@{/create-user?id=} + ${period}" class="btn btn-primary">สร้างรายชื่อ</a>&nbsp;&nbsp;
 <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
@@ -28,6 +36,9 @@
       <tr>
         <td colspan="4" class="text-right font-weight-bold">รวม</td>
         <td th:text="${user.buy}" class="font-weight-bold text-right"></td>
+      </tr><tr>
+        <td colspan="4" class="text-right font-weight-bold">รวมเปอร์เซ็นต์</td>
+        <td th:text="${user.buyPercent}" class="font-weight-bold text-right"></td>
       </tr>
     </table>
     <div class="row">
@@ -53,12 +64,31 @@
     </div>
   </div>
 </div>
+<a id="back-to-top" href="#" class="back-to-top" role="button"><img th:src="@{/public/images/back-to-top.png}" style="width: 50px; height: 50px"></a>
 <script>
+
   function deleteUser(name, field) {
     if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {
       jQuery(field).closest('form').submit();
     }
   }
+
+  $(function () {
+    $(window).scroll(function () {
+			if ($(this).scrollTop() > 50) {
+				$('#back-to-top').fadeIn();
+			} else {
+				$('#back-to-top').fadeOut();
+			}
+		});
+		// scroll body to 0px on click
+		$('#back-to-top').click(function () {
+			$('body,html').animate({
+				scrollTop: 0
+			}, 400);
+			return false;
+		});
+  });
 
 </script>
 </body>
