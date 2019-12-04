@@ -22,6 +22,7 @@ public class User extends Common {
   private String name;
   private int buy;
   private int pay;
+  private int buyPercent;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "period_id")

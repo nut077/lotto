@@ -65,6 +65,7 @@ public class UserService {
       user.addLotto(lotto);
     }
     user.setBuy(parse.parseInt(request.getParameter("buyAll")));
+    user.setBuyPercent(parse.parseInt(request.getParameter("buyAllPercent")));
     User userSaved = userRepository.saveAndFlush(user);
     updateBuyPeriod(userSaved.getPeriod().getId());
     return userSaved;

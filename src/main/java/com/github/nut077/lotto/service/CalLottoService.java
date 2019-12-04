@@ -113,13 +113,10 @@ public class CalLottoService {
   }
 
   private void updatePeriodBuyAndPay(Period period, List<User> userList) {
-    int buy = 0;
     int pay = 0;
     for (User user : userList) {
-      buy += user.getBuy();
       pay += user.getPay();
     }
-    period.setBuyTotal(buy);
     period.setPayTotal(pay);
     periodService.update(period);
   }

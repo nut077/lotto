@@ -9,23 +9,14 @@
       <table class="table table-responsive-sm table-bordered">
         <thead class="thead-dark">
         <tr>
-          <th class="text-center">ทั้งหมด</th>
-          <th class="text-center">แบ่งจำนวนเงินขั้นต่ำ</th>
+          <th class="text-center" style="width: 50%">ทั้งหมด</th>
+          <th class="text-center" style="width: 50%">ทั้งหมด รวมเลขซ้ำ</th>
         </tr>
         </thead>
         <tbody>
         <tr>
           <td class="text-center"><a th:href="@{download/full/} + ${periodId}" class="btn btn-success">ดาวน์โหลด</a><br></td>
-          <td>
-            <div class="row">
-              <div class="col-sm-3">
-                <input type="number" id="money" name="money" class="form-control text-right" value="" onchange="chkInteger()">
-              </div>
-              <div class="col-sm-9">
-                <button type="button" class="btn btn-success" onclick="download()">ดาวน์โหลด</button>
-              </div>
-            </div>
-          </td>
+          <td class="text-center"><a th:href="@{download/fullsum/} + ${periodId}" class="btn btn-success">ดาวน์โหลด</a><br></td>
         </tr>
         </tbody>
       </table>
@@ -34,16 +25,5 @@
     </form>
   </div>
 </div>
-<script>
-  function download() {
-    let $money = $('#money');
-    if ($money.val() !== '' && Number($money.val()) > 0) {
-      window.open('download/option/' + $('#periodId').val() + '/' + $money.val() , '_self');
-    } else {
-      $money.focus();
-      alert('กรุณาใส่จำนวนเงินให้มากกว่า 0');
-    }
-  }
-</script>
 </body>
 </html>

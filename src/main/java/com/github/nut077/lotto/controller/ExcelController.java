@@ -29,9 +29,9 @@ public class ExcelController {
     return "redirect:/download-excel?id=" + id;
   }
 
-  @GetMapping("/download/option/{id}/{money}")
-  public String downloadOption(@PathVariable Long id, @PathVariable int money, HttpServletResponse response) {
-    excelService.getOptionLotto(id, money, response);
+  @GetMapping("/download/fullsum/{id}")
+  public String downloadFullsum(@PathVariable Long id, HttpServletResponse response) {
+    excelService.getFullSumLotto(id, response);
     return "redirect:/download-excel?id=" + id;
   }
 }
