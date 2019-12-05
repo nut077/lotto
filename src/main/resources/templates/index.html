@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Period')}">
 <body>
 <br>
+<a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
+<br><br>
 <table class="table table-bordered">
   <thead class="thead-dark">
   <tr>
@@ -59,7 +61,6 @@
   </tr>
   </tbody>
 </table>
-<a th:href="@{/create-period}" class="btn btn-primary">สร้างงวดวันที่</a>
 <script>
   function deletePeriod(periodDate, field) {
     if (confirm('คุณต้องการลบงวดวันที่ ' + periodDate + ' ใช่หรือไม่')) {
