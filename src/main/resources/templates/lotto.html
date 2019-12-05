@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                   <td>2 ตัวบน</td>
-                  <td><input type="number" class="form-control text-right" th:field="*{twoOn}"></td>
+                  <td></td>
                   <td><input type="number" class="form-control text-right" th:field="*{payTwoOn}"></td>
                 </tr>
                 <tr>
@@ -67,14 +67,14 @@
       </div>
       <button type="button" class="btn btn-primary" onclick="bfSubmit()">ตรวจผลรางวัล</button>
       <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
-      <input type="hidden" id="version" name="version" th:value="${period.version}"/>
+      <br><br>
     </form>
   </div>
 </div>
 <script>
 
-  var require = ['threeOn', 'twoOn', 'threeDown1', 'threeDown2', 'threeDown3', 'threeDown4', 'twoDown'];
-  var requireFormat = [3, 2, 3, 3, 3, 3, 2];
+  var require = ['threeOn', 'threeDown1', 'threeDown2', 'threeDown3', 'threeDown4', 'twoDown'];
+  var requireFormat = [3, 3, 3, 3, 3, 2];
 
   function bfSubmit() {
     if (chkFieldBlank() && chkFormatLotto()) {
@@ -113,7 +113,7 @@
 
   $(function () {
     chkInteger();
-    if ($('#version').val() === '0') {
+    if ($('#threeOn').val() === '') {
       $('#payThreeOn').val('500');
       $('#payTote').val('90');
       $('#payTwoOn').val('60');

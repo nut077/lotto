@@ -7,6 +7,7 @@
   <tr>
     <th class="text-center">วันที่</th>
     <th class="text-center">ยอดซื้อ</th>
+    <th class="text-center">ยอดซื้อรวมเปอร์เซ็นต์</th>
     <th class="text-center">ยอดจ่าย</th>
     <th class="text-center">สถานะ</th>
   </tr>
@@ -21,6 +22,7 @@
       </form>
     </td>
     <td class="text-right" th:text="${period.buyTotal}"></td>
+    <td class="text-right" th:text="${period.buyPercentTotal}"></td>
     <td class="text-right" th:text="${period.payTotal}"></td>
     <td>
       <table class="table table-borderless">

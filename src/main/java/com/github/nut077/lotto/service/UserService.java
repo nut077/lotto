@@ -12,6 +12,7 @@ import com.github.nut077.lotto.repository.UserRepository;
 import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -48,33 +49,43 @@ public class UserService {
 
   @Transactional
   public User createLotto(Long id, HttpServletRequest request) {
-    ParseNumberFreedom parse = new ParseNumberFreedom();
     User user = findById(id);
     lottoRepository.deleteLottoById(id);
     String line = request.getParameter("line");
-    String[] spLine = line.split(",");
-    for (String i : spLine) {
-      Lotto lotto = Lotto.builder()
-        .numberLotto(request.getParameter("numberLotto" + i))
-        .buyOn(parse.parseInt(request.getParameter("buyOn" + i)))
-        .buyDown(parse.parseInt(request.getParameter("buyDown" + i)))
-        .buyTote(parse.parseInt(request.getParameter("buyTote" + i)))
-        .buyTotal(parse.parseInt(request.getParameter("buyTotal" + i)))
-        .percent(Lotto.Percent.codeToPercent(request.getParameter("percent" + i)))
-        .build();
-      user.addLotto(lotto);
+    if (!StringUtils.isEmpty(line)) {
+      ParseNumberFreedom parse = new ParseNumberFreedom();
+      String[] spLine = line.split(",");
+      for (String i : spLine) {
+        Lotto lotto = Lotto.builder()
+          .numberLotto(request.getParameter("numberLotto" + i))
+          .buyOn(parse.parseInt(request.getParameter("buyOn" + i)))
+          .buyDown(parse.parseInt(request.getParameter("buyDown" + i)))
+          .buyTote(parse.parseInt(request.getParameter("buyTote" + i)))
+          .buyTotal(parse.parseInt(request.getParameter("buyTotal" + i)))
+          .percent(Lotto.Percent.codeToPercent(request.getParameter("percent" + i)))
+          .build();
+        user.addLotto(lotto);
+      }
+      user.setBuy(parse.parseInt(request.getParameter("buyAll")));
+      user.setBuyPercent(parse.parseInt(request.getParameter("buyAllPercent")));
+      User userSaved = userRepository.saveAndFlush(user);
+      updateBuyPeriod(userSaved.getPeriod().getId());
+      return userSaved;
+    } else {
+      user.setBuy(0);
+      user.setBuyPercent(0);
+      userRepository.saveAndFlush(user);
+      updateBuyPeriod(user.getPeriod().getId());
     }
-    user.setBuy(parse.parseInt(request.getParameter("buyAll")));
-    user.setBuyPercent(parse.parseInt(request.getParameter("buyAllPercent")));
-    User userSaved = userRepository.saveAndFlush(user);
-    updateBuyPeriod(userSaved.getPeriod().getId());
-    return userSaved;
+    return user;
   }
 
   private void updateBuyPeriod(Long periodId) {
     Period period = periodService.findById(periodId);
     int sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+    int sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
     period.setBuyTotal(sumBuy);
+    period.setBuyPercentTotal(sumBuyPercent);
     periodService.update(period);
   }
 

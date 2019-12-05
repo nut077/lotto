@@ -13,10 +13,37 @@
     <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
     <script th:src="@{/public/js/utility.js}"></script>
   </head>
+  <style>
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
+  <a id="back-to-top" href="#" class="back-to-top" role="button"><img th:src="@{/public/images/back-to-top.png}" style="width: 50px; height: 50px"></a>
   <th:block th:include="${template}"/>
 </div>
+<script>
+  $(function () {
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 50) {
+        $('#back-to-top').fadeIn();
+      } else {
+        $('#back-to-top').fadeOut();
+      }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+      $('body,html').animate({
+        scrollTop: 0
+      }, 400);
+      return false;
+    });
+  });
+</script>
 </body>
 </html>

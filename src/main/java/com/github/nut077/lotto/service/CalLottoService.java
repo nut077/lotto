@@ -23,8 +23,10 @@ public class CalLottoService {
 
   public List<User> calLotto(PeriodResultDto dto) {
     Period period = periodService.findById(dto.getId());
-    period.setThreeOn(dto.getThreeOn());
-    period.setTwoOn(dto.getTwoOn());
+    String threeOn1 = dto.getThreeOn();
+    String twoOn1 = threeOn1.substring(1, 3);
+    period.setThreeOn(threeOn1);
+    period.setTwoOn(twoOn1);
     period.setThreeDown1(dto.getThreeDown1());
     period.setThreeDown2(dto.getThreeDown2());
     period.setThreeDown3(dto.getThreeDown3());

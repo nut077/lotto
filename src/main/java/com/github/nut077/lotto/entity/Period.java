@@ -55,6 +55,7 @@ public class Period extends Common {
   private int payTote;
 
   private int buyTotal;
+  private int buyPercentTotal;
   private int payTotal;
 
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
