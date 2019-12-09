@@ -42,6 +42,9 @@
     </table>
   </div>
 </div>
+<div class="alert alert-danger" role="alert" th:if="${users.size() == 0}">
+  ไม่มีผู้ถูกรางวัลในงวดนี้
+</div><br>
 <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
 <br><br>
 </body>
