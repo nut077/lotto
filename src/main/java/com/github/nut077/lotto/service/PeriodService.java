@@ -49,4 +49,11 @@ public class PeriodService {
   public void delete(Long id) {
     periodRepository.deleteById(id);
   }
+
+  public void savedSendBoss(Period period) {
+    Period p = findById(period.getId());
+    p.setPayBoss(period.getPayBoss());
+    p.setPayReal(p.getBuyTotal() - p.getPayTotal() - period.getPayBoss());
+    update(period.getId(), p);
+  }
 }

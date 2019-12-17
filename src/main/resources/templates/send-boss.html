@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Send Boss Form')}">
+<body>
+<br>
+<div class="row justify-content-md-center">
+  <div class="col-sm-8">
+    <h2>ยอดส่งเจ้า</h2><hr/>
+    <form action="#" th:action="@{/send-boss}" th:object="${period}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="periodDate">ส่งเจ้า:</label>
+                <input id="periodDate" th:field="*{payBoss}" th:value="*{payBoss}" class="form-control"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">บันทึก</button>
+      <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

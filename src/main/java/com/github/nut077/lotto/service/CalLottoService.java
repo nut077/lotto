@@ -105,7 +105,8 @@ public class CalLottoService {
       userService.createLotto(user.getId(), user);
     }
     List<User> userList = userService.getWinnerLotto(period.getId(), numberOfWinner);
-    updatePeriodBuyAndPay(period, userList);
+    Period periodSaved = updatePeriodBuyAndPay(period, userList);
+    periodService.savedSendBoss(periodSaved);
     userList.forEach(user -> {
       List<Lotto> lottoSuccess = user.getLottos().stream().filter(lotto -> lotto.getPayTotal() > 0).collect(Collectors.toList());
       user.setLottos(lottoSuccess);
@@ -114,13 +115,13 @@ public class CalLottoService {
     return userList;
   }
 
-  private void updatePeriodBuyAndPay(Period period, List<User> userList) {
+  private Period updatePeriodBuyAndPay(Period period, List<User> userList) {
     int pay = 0;
     for (User user : userList) {
       pay += user.getPay();
     }
     period.setPayTotal(pay);
-    periodService.update(period);
+    return periodService.update(period);
   }
 
   private ArrayList<String> getTote(String tote) {

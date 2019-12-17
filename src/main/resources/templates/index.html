@@ -11,6 +11,8 @@
     <th class="text-center">ยอดซื้อ</th>
     <th class="text-center">ยอดซื้อรวมเปอร์เซ็นต์</th>
     <th class="text-center">ยอดจ่าย</th>
+    <th class="text-center">ส่งเจ้า</th>
+    <th class="text-center">ยอดจริง</th>
     <th class="text-center">สถานะ</th>
   </tr>
   </thead>
@@ -26,6 +28,8 @@
     <td class="text-right" th:text="${period.buyTotal}"></td>
     <td class="text-right" th:text="${period.buyPercentTotal}"></td>
     <td class="text-right" th:text="${period.payTotal}"></td>
+    <td class="text-right" th:text="${period.payBoss}"></td>
+    <td class="text-right" th:text="${period.payReal}"></td>
     <td>
       <table class="table table-borderless">
         <tr>
@@ -42,6 +46,12 @@
                     th:onclick="deletePeriod([[${#temporals.format(period.periodDate, 'dd-MM-yyyy')}]], this)">ลบ
             </button>
           </form>
+          </td>
+          <td>
+            <form action="#" th:action="@{/send-boss}" method="get">
+              <input type="hidden" name="id" th:value="${period.id}"/>
+              <button type="submit" class="btn btn-secondary btn-sm">ยอดส่งเจ้า</button>
+            </form>
           </td>
           <td>
             <form name="formDelete" action="#" th:action="@{/download-excel}" method="post">

@@ -57,6 +57,8 @@ public class Period extends Common {
   private int buyTotal;
   private int buyPercentTotal;
   private int payTotal;
+  private int payBoss;
+  private int payReal;
 
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
   private List<User> users = new ArrayList<>();
