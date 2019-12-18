@@ -60,6 +60,16 @@
                   <td><input type="number" class="form-control text-right" th:field="*{twoDown}"></td>
                   <td><input type="number" class="form-control text-right" th:field="*{payTwoDown}"></td>
                 </tr>
+                <tr>
+                  <td>วิ่งบน</td>
+                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payRunOn}"></td>
+                </tr>
+                <tr>
+                  <td>วิ่งล่าง</td>
+                  <td></td>
+                  <td><input type="number" class="form-control text-right" th:field="*{payRunDown}"></td>
+                </tr>
               </table>
             </div>
           </div>
@@ -122,6 +132,8 @@
       $('#payThreeDown3').val('100');
       $('#payThreeDown4').val('100');
       $('#payTwoDown').val('60');
+      $('#payRunOn').val('3');
+      $('#payRunDown').val('4');
     }
   });
 

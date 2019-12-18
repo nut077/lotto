@@ -53,6 +53,8 @@ public class Period extends Common {
   private int payThreeDown4;
   private int payTwoDown;
   private int payTote;
+  private int payRunOn;
+  private int payRunDown;
 
   private int buyTotal;
   private int buyPercentTotal;

@@ -169,9 +169,6 @@
       e.value = e.value.substr(0, 3);
       let jquery = jQuery(e);
       jquery.closest('tr').find("input[name^='buyTote']").prop('readonly', false);
-    } else if (e.value.length === 1) {
-      alert('ตัวเลขต้องมีมากกว่า 1 ตัว');
-      e.value = '';
     }
   }
 
