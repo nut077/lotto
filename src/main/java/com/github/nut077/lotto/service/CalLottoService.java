@@ -8,10 +8,9 @@ import com.github.nut077.lotto.utility.NumberUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +40,8 @@ public class CalLottoService {
     period.setPayThreeDown3(dto.getPayThreeDown3());
     period.setPayThreeDown4(dto.getPayThreeDown4());
     period.setPayTwoDown(dto.getPayTwoDown());
+    period.setPayRunOn(dto.getPayRunOn());
+    period.setPayRunDown(dto.getPayRunDown());
 
     String threeOn = period.getThreeOn();
     String twoOn = period.getTwoOn();
@@ -49,8 +50,16 @@ public class CalLottoService {
     String threeDown3 = period.getThreeDown3();
     String threeDown4 = period.getThreeDown4();
     String twoDown = period.getTwoDown();
-    ArrayList<String> toteList = getTote(threeOn);
-    ArrayList<String> numberOfWinner = new ArrayList<>(toteList);
+    List<String> toteList = getTote(threeOn);
+    List<String> runOn = getRun(threeOn);
+    List<String> runDown = getRun(twoDown);
+
+    Set<String> unionRun = new HashSet<>();
+    unionRun.addAll(runOn);
+    unionRun.addAll(runDown);
+    List<String> run = Arrays.asList(unionRun.toArray(new String[0]));
+
+    List<String> numberOfWinner = Stream.concat(toteList.stream(), run.stream()).collect(Collectors.toList());
     numberOfWinner.add(threeOn);
     numberOfWinner.add(twoOn);
     numberOfWinner.add(threeDown1);
@@ -70,29 +79,38 @@ public class CalLottoService {
           int buyTote = numberUtility.getInt(lotto.getBuyTote());
           String numberLotto = lotto.getNumberLotto();
 
-          if (numberLotto.equals(threeOn)) {
-            lotto.setPayOn(period.getPayThreeOn() * buyOn);
-          }
-          if (numberLotto.equals(twoOn)) {
-            lotto.setPayOn(period.getPayTwoOn() * buyOn);
-          }
-          if (numberLotto.equals(threeDown1)) {
-            lotto.setPayDown(period.getPayThreeDown1() * buyDown);
-          }
-          if (numberLotto.equals(threeDown2)) {
-            lotto.setPayDown(period.getPayThreeDown2() * buyDown);
-          }
-          if (numberLotto.equals(threeDown3)) {
-            lotto.setPayDown(period.getPayThreeDown3() * buyDown);
-          }
-          if (numberLotto.equals(threeDown4)) {
-            lotto.setPayDown(period.getPayThreeDown4() * buyDown);
-          }
-          if (numberLotto.equals(twoDown)) {
-            lotto.setPayDown(period.getPayTwoDown() * buyDown);
-          }
-          if (toteList.contains(numberLotto)) {
-            lotto.setPayTote(period.getPayTote() * buyTote);
+          if (numberLotto.length() == 1) {
+            if (threeOn.contains(numberLotto)) {
+              lotto.setPayOn(period.getPayRunOn() * buyOn);
+            }
+            if (twoDown.contains(numberLotto)) {
+              lotto.setPayDown(period.getPayRunDown() * buyDown);
+            }
+          } else {
+            if (numberLotto.equals(threeOn)) {
+              lotto.setPayOn(period.getPayThreeOn() * buyOn);
+            }
+            if (numberLotto.equals(twoOn)) {
+              lotto.setPayOn(period.getPayTwoOn() * buyOn);
+            }
+            if (numberLotto.equals(threeDown1)) {
+              lotto.setPayDown(period.getPayThreeDown1() * buyDown);
+            }
+            if (numberLotto.equals(threeDown2)) {
+              lotto.setPayDown(period.getPayThreeDown2() * buyDown);
+            }
+            if (numberLotto.equals(threeDown3)) {
+              lotto.setPayDown(period.getPayThreeDown3() * buyDown);
+            }
+            if (numberLotto.equals(threeDown4)) {
+              lotto.setPayDown(period.getPayThreeDown4() * buyDown);
+            }
+            if (numberLotto.equals(twoDown)) {
+              lotto.setPayDown(period.getPayTwoDown() * buyDown);
+            }
+            if (toteList.contains(numberLotto)) {
+              lotto.setPayTote(period.getPayTote() * buyTote);
+            }
           }
 
           buy += lotto.getBuyTotal();
@@ -124,21 +142,19 @@ public class CalLottoService {
     return periodService.update(period);
   }
 
-  private ArrayList<String> getTote(String tote) {
+  private List<String> getTote(String tote) {
     ArrayList<Byte[]> predicateTote = getPredicateTote();
-    HashMap<String, String> hmResult = new HashMap<>();
-    ArrayList<String> arrayTote = new ArrayList<>();
+    Set<String> set = new HashSet<>();
 
     predicateTote.forEach(bytes -> {
       StringBuilder result = new StringBuilder();
       for (Byte aByte : bytes) {
         result.append(tote.charAt(aByte));
       }
-      hmResult.put(result.toString(), result.toString());
+      set.add(result.toString());
     });
 
-    hmResult.forEach((s, s2) -> arrayTote.add(s));
-    return arrayTote;
+    return Arrays.asList(set.toArray(new String[0]));
   }
 
   private ArrayList<Byte[]> getPredicateTote() {
@@ -152,4 +168,11 @@ public class CalLottoService {
     return list;
   }
 
+  private List<String> getRun(String num) {
+    Set<String> set = new HashSet<>();
+    for (int i = 0; i < num.length(); i++) {
+      set.add(String.valueOf(num.charAt(i)));
+    }
+    return Arrays.asList(set.toArray(new String[0]));
+  }
 }

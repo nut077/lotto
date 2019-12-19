@@ -25,4 +25,6 @@ public class PeriodResultDto {
   private int payThreeDown4;
   private int payTwoDown;
   private int payTote;
+  private int payRunOn;
+  private int payRunDown;
 }
