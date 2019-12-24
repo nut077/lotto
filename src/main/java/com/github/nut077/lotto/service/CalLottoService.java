@@ -143,7 +143,7 @@ public class CalLottoService {
   }
 
   private List<String> getTote(String tote) {
-    ArrayList<Byte[]> predicateTote = getPredicateTote();
+    List<Byte[]> predicateTote = getPredicateTote();
     Set<String> set = new HashSet<>();
 
     predicateTote.forEach(bytes -> {
@@ -157,15 +157,15 @@ public class CalLottoService {
     return Arrays.asList(set.toArray(new String[0]));
   }
 
-  private ArrayList<Byte[]> getPredicateTote() {
-    ArrayList<Byte[]> list = new ArrayList<>();
-    list.add(new Byte[]{0, 1, 2});
-    list.add(new Byte[]{0, 2, 1});
-    list.add(new Byte[]{1, 0, 2});
-    list.add(new Byte[]{1, 2, 0});
-    list.add(new Byte[]{2, 1, 0});
-    list.add(new Byte[]{2, 0, 1});
-    return list;
+  private List<Byte[]> getPredicateTote() {
+    return List.of(
+      new Byte[]{0, 1, 2},
+      new Byte[]{0, 2, 1},
+      new Byte[]{1, 0, 2},
+      new Byte[]{1, 2, 0},
+      new Byte[]{2, 1, 0},
+      new Byte[]{2, 0, 1}
+    );
   }
 
   private List<String> getRun(String num) {
