@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,6 +65,18 @@ public class UserController {
   @PostMapping("/checkDuplicateName")
   public @ResponseBody String checkDuplicateName(@RequestParam Long periodId, @RequestParam String name) {
     return String.valueOf(userService.checkDuplicateName(periodId, name));
+  }
+
+  @GetMapping("/import-lotto")
+  public String showImportLotto(@RequestParam Long id, Model model) {
+    model.addAttribute("period", id);
+    return "import-lotto";
+  }
+
+  @PostMapping("/import-lotto/{periodId}")
+  public String importLotto(@PathVariable Long periodId, @RequestParam("lottoFile") MultipartFile multipartFile, @RequestParam String name) {
+    userService.importLotto(periodId, multipartFile, name);
+    return "redirect:/users-lotto?id=" + periodId;
   }
 
 }

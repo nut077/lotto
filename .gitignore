@@ -10,3 +10,4 @@ target/
 *.ipr
 /undertow-accesslog/
 /log/
+/excels/*

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.ResourceUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -43,6 +44,8 @@ class CalLottoServiceTest implements WithBDDMockito {
   private LottoRepository lottoRepository;
 
   private PeriodResultMapper periodResultMapper;
+
+  private ResourceUtils resourceUtils;
 
   @BeforeEach
   void setUp() {

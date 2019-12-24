@@ -3,6 +3,7 @@
 <body>
 <br>
 <a th:href="@{/create-user?id=} + ${period}" class="btn btn-primary">สร้างรายชื่อ</a>&nbsp;&nbsp;
+<a th:href="@{/import-lotto?id=} + ${period}" class="btn btn-success">นำเข้าข้อมูล</a>&nbsp;&nbsp;
 <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
 <br><br>
 <div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">

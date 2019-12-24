@@ -11,11 +11,19 @@ import com.github.nut077.lotto.repository.LottoRepository;
 import com.github.nut077.lotto.repository.UserRepository;
 import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +36,7 @@ public class UserService {
   private final LottoRepository lottoRepository;
   private final UserCreateMapper userCreateMapper;
   private final PeriodCreateMapper periodCreateMapper;
+  private String fileLocation;
 
   public List<User> findByPeriod(Long id) {
     return userRepository.findByPeriod(periodService.findById(id));
@@ -111,5 +120,70 @@ public class UserService {
     Period period = periodService.findById(periodId);
     Optional<User> user = period.getUsers().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst();
     return user.isPresent();
+  }
+
+  private void uploadExcelFile(MultipartFile file) {
+    try {
+      InputStream in = file.getInputStream();
+      File currDir = new File(".");
+      String path = currDir.getAbsolutePath();
+      fileLocation = path.substring(0, path.length() - 1) + "excels\\" + file.getOriginalFilename();
+      File directory = new File(path.substring(0, path.length() - 1) + "excels");
+      if (!directory.exists()) {
+        directory.mkdirs();
+      }
+      FileOutputStream f = new FileOutputStream(fileLocation);
+      int ch;
+      while ((ch = in.read()) != -1) {
+        f.write(ch);
+      }
+      f.flush();
+      f.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void readFileExcel() {
+    DecimalFormat numberFormat = new DecimalFormat("0");
+    try {
+      FileInputStream file = new FileInputStream(new File(fileLocation));
+      //Create Workbook instance holding reference to .xlsx file
+      XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+      //Get first/desired sheet from the workbook
+      XSSFSheet sheet = workbook.getSheetAt(0);
+
+      //Iterate through each rows one by one
+      Iterator<Row> rowIterator = sheet.iterator();
+      rowIterator.next();
+      while (rowIterator.hasNext()) {
+        Row row = rowIterator.next();
+        //For each row, iterate through all the columns
+        Iterator<Cell> cellIterator = row.cellIterator();
+
+        while (cellIterator.hasNext()) {
+          Cell cell = cellIterator.next();
+          switch (cell.getCellType()) {
+            case NUMERIC:
+              String number = numberFormat.format(cell.getNumericCellValue());
+              System.out.print(number + "  ");
+              break;
+            case STRING:
+              boolean isPercent = cell.getStringCellValue().equalsIgnoreCase("Y");
+              System.out.print(isPercent + "  ");
+              break;
+          }
+        }
+      }
+      file.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void importLotto(Long periodId, MultipartFile multipartFile, String name) {
+    uploadExcelFile(multipartFile);
+    readFileExcel();
   }
 }
