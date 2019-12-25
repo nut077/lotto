@@ -25,14 +25,26 @@
         </div>
       </div>
       <input type="hidden" id="periodId" name="periodId" th:value="${period}">
-      <button type="button" class="btn btn-primary" onclick="save()">บันทึก</button>
+      <button type="button" id="btn" class="btn btn-primary" onclick="save()">บันทึก</button>
+      <button id="btnLoad" class="btn btn-primary" type="button" disabled style="display: none;">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
       <button type="submit" class="btn btn-danger">ย้อนกลับ</button>
     </form>
   </div>
 </div>
 <script>
   function save() {
-    $('#formSubmit').submit();
+    let $name = $('#name');
+    if ($name.val() === '') {
+      $name.focus();
+      alert('กรุณาใส่ชื่อ');
+    } else {
+      $('#btn').hide();
+      $('#btnLoad').show();
+      $('#formSubmit').submit();
+    }
   }
 </script>
 </body>
