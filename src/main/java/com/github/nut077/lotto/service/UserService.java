@@ -4,28 +4,29 @@ import com.github.nut077.lotto.dto.UserCreateDto;
 import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
 import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
-import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.LottoRepository;
 import com.github.nut077.lotto.repository.UserRepository;
 import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import lombok.SneakyThrows;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -57,14 +58,14 @@ public class UserService {
   }
 
   @Transactional
-  public User createLotto(Long id, HttpServletRequest request) {
-    User user = findById(id);
-    lottoRepository.deleteLottoById(id);
-    String line = request.getParameter("line");
+  public User createLotto(Long userId, HttpServletRequest request) {
+    var user = findById(userId);
+    lottoRepository.deleteLottoByUserId(userId);
+    var line = request.getParameter("line");
     if (!StringUtils.isEmpty(line)) {
-      ParseNumberFreedom parse = new ParseNumberFreedom();
-      String[] spLine = line.split(",");
-      for (String i : spLine) {
+      var parse = new ParseNumberFreedom();
+      var spLine = line.split(",");
+      for (var i : spLine) {
         Lotto lotto = Lotto.builder()
           .numberLotto(request.getParameter("numberLotto" + i))
           .buyOn(parse.parseInt(request.getParameter("buyOn" + i)))
@@ -90,9 +91,9 @@ public class UserService {
   }
 
   private void updateBuyPeriod(Long periodId) {
-    Period period = periodService.findById(periodId);
-    int sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
-    int sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
+    var period = periodService.findById(periodId);
+    var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+    var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
     period.setBuyTotal(sumBuy);
     period.setBuyPercentTotal(sumBuyPercent);
     periodService.update(period);
@@ -100,39 +101,39 @@ public class UserService {
 
   public UserCreateDto create(Long periodId, UserCreateDto dto) {
     dto.setPeriod(periodCreateMapper.mapToDto(periodService.findById(periodId)));
-    User user = userRepository.save(userCreateMapper.mapToEntity(dto));
+    var user = userRepository.save(userCreateMapper.mapToEntity(dto));
     return userCreateMapper.mapToDto(user);
   }
 
   public void delete(Long id) {
-    User user = findById(id);
+    var user = findById(id);
     userRepository.deleteById(id);
     updateBuyPeriod(user.getPeriod().getId());
   }
 
   public void updateUpdateForm(Long id, UserCreateDto dto) {
-    User user = findById(id);
+    var user = findById(id);
     user.setName(dto.getName());
     userRepository.save(user);
   }
 
   public boolean checkDuplicateName(Long periodId, String name) {
-    Period period = periodService.findById(periodId);
-    Optional<User> user = period.getUsers().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst();
+    var period = periodService.findById(periodId);
+    var user = period.getUsers().stream().filter(u -> u.getName().equalsIgnoreCase(name)).findFirst();
     return user.isPresent();
   }
 
   private void uploadExcelFile(MultipartFile file) {
     try {
-      InputStream in = file.getInputStream();
-      File currDir = new File(".");
-      String path = currDir.getAbsolutePath();
+      var in = file.getInputStream();
+      var currDir = new File(".");
+      var path = currDir.getAbsolutePath();
       fileLocation = path.substring(0, path.length() - 1) + "excels\\" + file.getOriginalFilename();
-      File directory = new File(path.substring(0, path.length() - 1) + "excels");
+      var directory = new File(path.substring(0, path.length() - 1) + "excels");
       if (!directory.exists()) {
         directory.mkdirs();
       }
-      FileOutputStream f = new FileOutputStream(fileLocation);
+      var f = new FileOutputStream(fileLocation);
       int ch;
       while ((ch = in.read()) != -1) {
         f.write(ch);
@@ -144,46 +145,90 @@ public class UserService {
     }
   }
 
-  private void readFileExcel() {
-    DecimalFormat numberFormat = new DecimalFormat("0");
-    try {
-      FileInputStream file = new FileInputStream(new File(fileLocation));
-      //Create Workbook instance holding reference to .xlsx file
-      XSSFWorkbook workbook = new XSSFWorkbook(file);
+  @SneakyThrows
+  private void readFileExcelAndSaveToDatabase(User user) {
+    var parse = new ParseNumberFreedom();
+    var numberFormat = new DecimalFormat("0");
+    var file = new FileInputStream(new File(fileLocation));
+    var workbook = new XSSFWorkbook(file);
+    var sheet = workbook.getSheetAt(0);
 
-      //Get first/desired sheet from the workbook
-      XSSFSheet sheet = workbook.getSheetAt(0);
+    var rowIterator = sheet.iterator();
+    rowIterator.next();
 
-      //Iterate through each rows one by one
-      Iterator<Row> rowIterator = sheet.iterator();
-      rowIterator.next();
-      while (rowIterator.hasNext()) {
-        Row row = rowIterator.next();
-        //For each row, iterate through all the columns
-        Iterator<Cell> cellIterator = row.cellIterator();
+    List<Lotto> lottos = new ArrayList<>();
 
-        while (cellIterator.hasNext()) {
-          Cell cell = cellIterator.next();
-          switch (cell.getCellType()) {
-            case NUMERIC:
-              String number = numberFormat.format(cell.getNumericCellValue());
-              System.out.print(number + "  ");
-              break;
-            case STRING:
-              boolean isPercent = cell.getStringCellValue().equalsIgnoreCase("Y");
-              System.out.print(isPercent + "  ");
-              break;
-          }
-        }
+    while (rowIterator.hasNext()) {
+      var row = rowIterator.next();
+      var numberLotto = Stream.of(row.getCell(0).toString().split("\\.")).findFirst().orElse("");
+      var buyOn = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(1).toString())));
+      var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(2).toString())));
+      var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(3).toString())));
+
+      var codePercent = "Y";
+      if (Objects.nonNull(row.getCell(4))) {
+        codePercent = row.getCell(4).toString();
       }
-      file.close();
-    } catch (Exception e) {
-      e.printStackTrace();
+
+      var buyTotal = 0;
+      if (codePercent.equals("Y")) {
+        buyTotal = (buyOn * 100 / 120) + (buyDown * 100 / 120) + (buyTote * 100 / 120);
+      } else if (codePercent.equals("N")) {
+        buyTotal = buyOn + buyDown + buyTote;
+      }
+      lottos.add(Lotto
+        .builder()
+        .numberLotto(numberLotto)
+        .buyOn(buyOn)
+        .buyDown(buyDown)
+        .buyTote(buyTote)
+        .buyTotal(buyTotal)
+        .percent(Lotto.Percent.codeToPercent(codePercent))
+        .build());
+    }
+    var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();
+    var sumBuyTotalPercent = lottos.stream()
+      .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
+      .mapToInt(lotto -> lotto).sum();
+    if (Objects.nonNull(user.getLottos())) {
+      sumBuyTotal += user.getLottos().stream().mapToInt(Lotto::getBuyTotal).sum();
+      sumBuyTotalPercent += user.getLottos().stream()
+        .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
+        .mapToInt(lotto -> lotto).sum();
+    }
+
+    user.setLottos(lottos);
+    user.setBuy(sumBuyTotal);
+    user.setBuyPercent(sumBuyTotalPercent);
+
+    User userSaved = userRepository.saveAndFlush(user);
+    updateBuyPeriod(userSaved.getPeriod().getId());
+
+    file.close();
+    workbook.close();
+
+    new File(fileLocation).delete();
+  }
+
+  private User getUser(Long periodId, String name) {
+    var period = periodService.findById(periodId);
+    var user = period.getUsers()
+      .stream()
+      .filter(u -> u.getName().equals(name))
+      .findAny();
+    if (user.isPresent()) {
+      return user.get();
+    } else {
+      UserCreateDto createUser = new UserCreateDto();
+      createUser.setName(name);
+      return userCreateMapper.mapToEntity(create(periodId, createUser));
     }
   }
 
   public void importLotto(Long periodId, MultipartFile multipartFile, String name) {
     uploadExcelFile(multipartFile);
-    readFileExcel();
+    var user = getUser(periodId, name);
+    readFileExcelAndSaveToDatabase(user);
   }
+
 }

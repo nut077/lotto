@@ -17,11 +17,9 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.ResourceUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,18 +32,11 @@ class CalLottoServiceTest implements WithBDDMockito {
 
   private CalLottoService service;
 
-  @Mock
-  private PeriodRepository periodRepository;
-
-  @Mock
-  private UserRepository userRepository;
-
-  @Mock
-  private LottoRepository lottoRepository;
+  @Mock private PeriodRepository periodRepository;
+  @Mock private UserRepository userRepository;
+  @Mock private LottoRepository lottoRepository;
 
   private PeriodResultMapper periodResultMapper;
-
-  private ResourceUtils resourceUtils;
 
   @BeforeEach
   void setUp() {
@@ -61,7 +52,7 @@ class CalLottoServiceTest implements WithBDDMockito {
   @Test
   void should_success_when_valid_value_call_calLotto() {
     // given
-    Period period = Period.builder()
+    var period = Period.builder()
       .id(1L)
       .periodDate(LocalDate.now())
       .threeOn("364")
@@ -83,14 +74,14 @@ class CalLottoServiceTest implements WithBDDMockito {
       .payRunDown(4)
       .build();
 
-    User user = User.builder()
+    var user = User.builder()
       .id(1L)
       .name("freedom")
       //.buy(150)
       .period(period)
       .build();
 
-    User user2 = User.builder()
+    var user2 = User.builder()
       .id(2L)
       .name("eiei")
       .buy(300)
@@ -105,7 +96,7 @@ class CalLottoServiceTest implements WithBDDMockito {
       )
       .build();
 
-    List<Lotto> lottoList = Arrays.asList(
+    var lottoList = Arrays.asList(
       Lotto.builder().id(1L).numberLotto("364")
         .buyOn(10)
         .buyDown(10)
@@ -175,7 +166,7 @@ class CalLottoServiceTest implements WithBDDMockito {
     );
 
     user.setLottos(lottoList);
-    List<User> userList = Arrays.asList(user, user2);
+    var userList = Arrays.asList(user, user2);
     period.setUsers(userList);
 
     given(periodRepository.save(any(Period.class))).willReturn(period);
@@ -185,7 +176,7 @@ class CalLottoServiceTest implements WithBDDMockito {
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user2));
 
     // when
-    List<User> actual = service.calLotto(periodResultMapper.mapToDto(period));
+    var actual = service.calLotto(periodResultMapper.mapToDto(period));
 
     // then
     assertThat(actual, hasSize(2));

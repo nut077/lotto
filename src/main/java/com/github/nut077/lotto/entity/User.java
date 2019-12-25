@@ -29,7 +29,7 @@ public class User extends Common {
   @JsonIgnore
   private Period period;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Lotto> lottos = new ArrayList<>();
 
   public void setLottos(List<Lotto> lottos) {

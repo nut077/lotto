@@ -12,5 +12,5 @@ public interface LottoRepository extends JpaRepository<Lotto, Long> {
 
   @Modifying
   @Query(nativeQuery = true, value = "delete from lottos l where l.user_id=:userId")
-  void deleteLottoById(@Param("userId") Long userId);
+  void deleteLottoByUserId(@Param("userId") Long userId);
 }
