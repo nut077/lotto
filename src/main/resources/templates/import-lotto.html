@@ -18,7 +18,7 @@
             <br>
             <div class="row">
               <div class="col-sm-4">
-                <input type="file" name="lottoFile">
+                <input type="file" id="lottoFile" name="lottoFile">
               </div>
             </div>
           </div>
@@ -30,16 +30,20 @@
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         Loading...
       </button>
-      <button type="submit" class="btn btn-danger">ย้อนกลับ</button>
+      <a th:href="@{/users-lotto?id=} + ${period}" class="btn btn-danger">ย้อนกลับ</a>
     </form>
   </div>
 </div>
 <script>
   function save() {
     let $name = $('#name');
+    let $lottoFile = $('#lottoFile');
     if ($name.val() === '') {
       $name.focus();
       alert('กรุณาใส่ชื่อ');
+    } else if ($lottoFile.val() === '') {
+      $lottoFile.focus();
+      alert('กรุณาแบบไฟล์นำเข้าข้อมูลหวย');
     } else {
       $('#btn').hide();
       $('#btnLoad').show();

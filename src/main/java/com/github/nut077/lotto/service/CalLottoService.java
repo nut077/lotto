@@ -78,7 +78,10 @@ public class CalLottoService {
           int buyDown = numberUtility.getInt(lotto.getBuyOn());
           int buyTote = numberUtility.getInt(lotto.getBuyTote());
           String numberLotto = lotto.getNumberLotto();
-
+          lotto.setPayOn(0);
+          lotto.setPayDown(0);
+          lotto.setPayTote(0);
+          lotto.setPayTotal(0);
           if (numberLotto.length() == 1) {
             if (threeOn.contains(numberLotto)) {
               lotto.setPayOn(period.getPayRunOn() * buyOn);

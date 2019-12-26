@@ -1,14 +1,9 @@
 package com.github.nut077.lotto.config;
 
-import io.undertow.UndertowOptions;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
 public class UndertowConfig {
 
-  @Bean
+  /*@Bean
   UndertowServletWebServerFactory embeddedServletContainerFactory() {
     UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
     factory.addBuilderCustomizers(
@@ -23,6 +18,6 @@ public class UndertowConfig {
               - 20) // the 20 is to allow some space for protocol headers, see
     );
     return factory;
-  }
+  }*/
 
 }

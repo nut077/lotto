@@ -201,12 +201,21 @@ public class UserService {
     user.setBuy(sumBuyTotal);
     user.setBuyPercent(sumBuyTotalPercent);
 
-    User userSaved = userRepository.saveAndFlush(user);
-    updateBuyPeriod(userSaved.getPeriod().getId());
+    var userSaved = userRepository.saveAndFlush(user);
+    var period = periodService.findById(userSaved.getPeriod().getId());
+    var isFoundUserInPeriod = period.getUsers().stream().anyMatch(u -> u.getName().equals(userSaved.getName()));
+    var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+    var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
+    if (!isFoundUserInPeriod) {
+      sumBuy += userSaved.getBuy();
+      sumBuyPercent += userSaved.getBuyPercent();
+    }
+    period.setBuyTotal(sumBuy);
+    period.setBuyPercentTotal(sumBuyPercent);
+    periodService.update(period);
 
     file.close();
     workbook.close();
-
     new File(fileLocation).delete();
   }
 

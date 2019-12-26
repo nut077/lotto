@@ -62,6 +62,7 @@ public class Period extends Common {
   private int payBoss;
   private int payReal;
 
+  @Singular
   @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
   private List<User> users = new ArrayList<>();
 }
