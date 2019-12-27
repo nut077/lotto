@@ -1,7 +1,7 @@
 package com.github.nut077.lotto.service;
 
-import com.github.nut077.lotto.dto.PeriodCreateDto;
-import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
+import com.github.nut077.lotto.dto.PeriodDto;
+import com.github.nut077.lotto.dto.mapper.PeriodMapper;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.exception.NotFoundException;
 import com.github.nut077.lotto.repository.PeriodRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 public class PeriodService {
 
   private final PeriodRepository periodRepository;
-  private final PeriodCreateMapper mapper;
+  private final PeriodMapper mapper;
 
   public List<Period> findAll() {
     return periodRepository.findAll(Sort.by(Sort.Direction.DESC, "periodDate"));
@@ -26,14 +26,13 @@ public class PeriodService {
     return periodRepository.findById(id).orElseThrow(() -> new NotFoundException("Period id: " + id + " -->> Not Found"));
   }
 
-  public Period createForm(PeriodCreateDto dto) {
+  public Period createForm(PeriodDto dto) {
     return periodRepository.save(mapper.mapToEntity(dto));
   }
 
-  public void updateUpdateForm(Long id, PeriodCreateDto dto) {
+  public void updateUpdateForm(Long id, PeriodDto dto) {
     Period period = findById(id);
-    period.setPeriodDate(dto.getPeriodDate());
-    periodRepository.save(period);
+    periodRepository.save(mapper.mapToEntity(dto, period));
   }
 
   public Period update(Long id, Period period) {

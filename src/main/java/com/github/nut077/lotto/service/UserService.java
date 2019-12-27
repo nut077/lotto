@@ -1,7 +1,7 @@
 package com.github.nut077.lotto.service;
 
-import com.github.nut077.lotto.dto.UserCreateDto;
-import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
+import com.github.nut077.lotto.dto.UserDto;
+import com.github.nut077.lotto.dto.mapper.PeriodMapper;
 import com.github.nut077.lotto.dto.mapper.UserCreateMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.User;
@@ -36,7 +36,7 @@ public class UserService {
   private final PeriodService periodService;
   private final LottoRepository lottoRepository;
   private final UserCreateMapper userCreateMapper;
-  private final PeriodCreateMapper periodCreateMapper;
+  private final PeriodMapper mapper;
   private String fileLocation;
 
   public List<User> findByPeriod(Long id) {
@@ -99,8 +99,8 @@ public class UserService {
     periodService.update(period);
   }
 
-  public UserCreateDto create(Long periodId, UserCreateDto dto) {
-    dto.setPeriod(periodCreateMapper.mapToDto(periodService.findById(periodId)));
+  public UserDto create(Long periodId, UserDto dto) {
+    dto.setPeriod(mapper.mapToDto(periodService.findById(periodId)));
     var user = userRepository.save(userCreateMapper.mapToEntity(dto));
     return userCreateMapper.mapToDto(user);
   }
@@ -111,7 +111,7 @@ public class UserService {
     updateBuyPeriod(user.getPeriod().getId());
   }
 
-  public void updateUpdateForm(Long id, UserCreateDto dto) {
+  public void updateUpdateForm(Long id, UserDto dto) {
     var user = findById(id);
     user.setName(dto.getName());
     userRepository.save(user);
@@ -228,7 +228,7 @@ public class UserService {
     if (user.isPresent()) {
       return user.get();
     } else {
-      UserCreateDto createUser = new UserCreateDto();
+      UserDto createUser = new UserDto();
       createUser.setName(name);
       return userCreateMapper.mapToEntity(create(periodId, createUser));
     }

@@ -1,6 +1,6 @@
 package com.github.nut077.lotto.controller;
 
-import com.github.nut077.lotto.dto.UserCreateDto;
+import com.github.nut077.lotto.dto.UserDto;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class UserController {
   }
 
   @PostMapping("/update-user/{periodId}")
-  public String update(@PathVariable Long periodId, @RequestParam Long id, UserCreateDto dto) {
+  public String update(@PathVariable Long periodId, @RequestParam Long id, UserDto dto) {
     userService.updateUpdateForm(id, dto);
     return "redirect:/users-lotto?id=" + periodId;
   }
@@ -51,8 +51,8 @@ public class UserController {
   }
 
   @PostMapping("/create-user/{periodId}")
-  public String save(@PathVariable Long periodId, @ModelAttribute("user") UserCreateDto dto) {
-    UserCreateDto user = userService.create(periodId, dto);
+  public String save(@PathVariable Long periodId, @ModelAttribute("user") UserDto dto) {
+    UserDto user = userService.create(periodId, dto);
     return "redirect:/lotto-detail/" + user.getId();
   }
 

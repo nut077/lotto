@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreateDto {
+public class UserDto {
 
   private Long id;
   private String name;
-  private PeriodCreateDto period;
+  private PeriodDto period;
 }

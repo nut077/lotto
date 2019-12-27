@@ -1,6 +1,7 @@
 package com.github.nut077.lotto.service;
 
-import com.github.nut077.lotto.dto.PeriodResultDto;
+import com.github.nut077.lotto.dto.PeriodDto;
+import com.github.nut077.lotto.dto.mapper.PeriodMapper;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.entity.User;
@@ -19,29 +20,14 @@ public class CalLottoService {
   private final PeriodService periodService;
   private final UserService userService;
   private final NumberUtility numberUtility;
+  private final PeriodMapper mapper;
 
-  public List<User> calLotto(PeriodResultDto dto) {
+  public List<User> calLotto(PeriodDto dto) {
     Period period = periodService.findById(dto.getId());
     String threeOn1 = dto.getThreeOn();
     String twoOn1 = threeOn1.substring(1, 3);
-    period.setThreeOn(threeOn1);
+    period = mapper.mapToEntity(dto, period);
     period.setTwoOn(twoOn1);
-    period.setThreeDown1(dto.getThreeDown1());
-    period.setThreeDown2(dto.getThreeDown2());
-    period.setThreeDown3(dto.getThreeDown3());
-    period.setThreeDown4(dto.getThreeDown4());
-    period.setTwoDown(dto.getTwoDown());
-
-    period.setPayThreeOn(dto.getPayThreeOn());
-    period.setPayTote(dto.getPayTote());
-    period.setPayTwoOn(dto.getPayTwoOn());
-    period.setPayThreeDown1(dto.getPayThreeDown1());
-    period.setPayThreeDown2(dto.getPayThreeDown2());
-    period.setPayThreeDown3(dto.getPayThreeDown3());
-    period.setPayThreeDown4(dto.getPayThreeDown4());
-    period.setPayTwoDown(dto.getPayTwoDown());
-    period.setPayRunOn(dto.getPayRunOn());
-    period.setPayRunDown(dto.getPayRunDown());
 
     String threeOn = period.getThreeOn();
     String twoOn = period.getTwoOn();

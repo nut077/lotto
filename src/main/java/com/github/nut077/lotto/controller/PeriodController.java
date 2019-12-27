@@ -1,6 +1,6 @@
 package com.github.nut077.lotto.controller;
 
-import com.github.nut077.lotto.dto.PeriodCreateDto;
+import com.github.nut077.lotto.dto.PeriodDto;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.service.PeriodService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class PeriodController {
   }
 
   @PostMapping("/create-period")
-  public String save(@ModelAttribute("period") PeriodCreateDto dto) {
+  public String save(@ModelAttribute("period") PeriodDto dto) {
     Period period = periodService.createForm(dto);
     return "redirect:/users-lotto?id=" + period.getId();
   }
@@ -42,7 +42,7 @@ public class PeriodController {
   }
 
   @PostMapping("/update-period")
-  public String update(@RequestParam Long id, PeriodCreateDto dto) {
+  public String update(@RequestParam Long id, PeriodDto dto) {
     periodService.updateUpdateForm(id, dto);
     return "redirect:/";
   }

@@ -1,8 +1,8 @@
 package com.github.nut077.lotto.service;
 
-import com.github.nut077.lotto.dto.PeriodCreateDto;
-import com.github.nut077.lotto.dto.mapper.PeriodCreateMapper;
-import com.github.nut077.lotto.dto.mapper.PeriodCreateMapperImpl;
+import com.github.nut077.lotto.dto.PeriodDto;
+import com.github.nut077.lotto.dto.mapper.PeriodMapper;
+import com.github.nut077.lotto.dto.mapper.PeriodMapperImpl;
 import com.github.nut077.lotto.entity.Period;
 import com.github.nut077.lotto.repository.PeriodRepository;
 import info.solidsoft.mockito.java8.api.WithBDDMockito;
@@ -32,13 +32,13 @@ class PeriodServiceTest implements WithBDDMockito {
   @Mock
   private PeriodRepository periodRepository;
 
-  private PeriodCreateMapper mapper;
+  private PeriodMapper mapper;
 
   private PeriodService periodService;
 
   @BeforeEach
   void setUp() {
-    mapper = new PeriodCreateMapperImpl();
+    mapper = new PeriodMapperImpl();
     periodService = new PeriodService(periodRepository, mapper);
   }
 
@@ -78,7 +78,7 @@ class PeriodServiceTest implements WithBDDMockito {
   void should_success_when_createForm() {
     // given
     LocalDate now = LocalDate.now();
-    PeriodCreateDto dto = new PeriodCreateDto();
+    PeriodDto dto = new PeriodDto();
     dto.setId(1L);
     dto.setPeriodDate(now);
 
@@ -95,7 +95,7 @@ class PeriodServiceTest implements WithBDDMockito {
   void should_success_when_updateUpdateForm() {
     // given
     LocalDate now = LocalDate.now();
-    PeriodCreateDto dto = new PeriodCreateDto();
+    PeriodDto dto = new PeriodDto();
     dto.setId(1L);
     dto.setPeriodDate(now);
     given(periodRepository.findById(anyLong())).willReturn(Optional.of(mapper.mapToEntity(dto)));
@@ -112,7 +112,7 @@ class PeriodServiceTest implements WithBDDMockito {
     // given
     LocalDate now = LocalDate.now();
     LocalDate tomorrow = LocalDate.now().plusDays(1);
-    PeriodCreateDto dto = new PeriodCreateDto();
+    PeriodDto dto = new PeriodDto();
     dto.setId(1L);
     dto.setPeriodDate(now);
     Period periodSaved = Period.builder().id(1L).periodDate(tomorrow).build();

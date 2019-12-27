@@ -36,17 +36,17 @@ class CalLottoServiceTest implements WithBDDMockito {
   @Mock private UserRepository userRepository;
   @Mock private LottoRepository lottoRepository;
 
-  private PeriodResultMapper periodResultMapper;
+  private PeriodMapper mapper;
 
   @BeforeEach
   void setUp() {
-    PeriodCreateMapper periodCreateMapper = new PeriodCreateMapperImpl();
+    PeriodMapper periodMapper = new PeriodMapperImpl();
     UserCreateMapper userCreateMapper = new UserCreateMapperImpl();
-    periodResultMapper = new PeriodResultMapperImpl();
-    PeriodService periodService = new PeriodService(periodRepository, periodCreateMapper);
-    UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodCreateMapper);
+    mapper = new PeriodMapperImpl();
+    PeriodService periodService = new PeriodService(periodRepository, periodMapper);
+    UserService userService = new UserService(userRepository, periodService, lottoRepository, userCreateMapper, periodMapper);
     NumberUtility numberUtility = new NumberUtility();
-    service = new CalLottoService(periodService, userService, numberUtility);
+    service = new CalLottoService(periodService, userService, numberUtility, mapper);
   }
 
   @Test
@@ -176,7 +176,7 @@ class CalLottoServiceTest implements WithBDDMockito {
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user2));
 
     // when
-    var actual = service.calLotto(periodResultMapper.mapToDto(period));
+    var actual = service.calLotto(mapper.mapToDto(period));
 
     // then
     assertThat(actual, hasSize(2));

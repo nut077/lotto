@@ -1,6 +1,6 @@
 package com.github.nut077.lotto.controller;
 
-import com.github.nut077.lotto.dto.PeriodResultDto;
+import com.github.nut077.lotto.dto.PeriodDto;
 import com.github.nut077.lotto.entity.Lotto;
 import com.github.nut077.lotto.entity.User;
 import com.github.nut077.lotto.service.CalLottoService;
@@ -43,7 +43,7 @@ public class LottoController {
   }
 
   @PostMapping("/show-check-lotto")
-  public String showCheckLotto(@ModelAttribute PeriodResultDto dto, Model model) {
+  public String showCheckLotto(@ModelAttribute PeriodDto dto, Model model) {
     model.addAttribute("users", calLottoService.calLotto(dto));
     return "show-lotto";
   }
