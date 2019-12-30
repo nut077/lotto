@@ -7,11 +7,15 @@
 <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
 <br><br>
 <div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
-  <div class="card-header bg-info text-white" th:text="${user.name}"></div>
+  <div class="card-header bg-info text-white">
+    <span th:text="${user.name}"></span>
+    <i th:onclick="'javascript:hide(' + ${user.id} + ', this);'" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer"></i>
+    <i th:onclick="'javascript:show(' + ${user.id} + ', this);'" class="fas fa-angle-down" style="float: right; display: none; padding-top: 0.5rem; cursor: pointer"></i>
+  </div>
   <div class="card-body">
     <table class="table table-bordered">
       <thead>
-      <tr>
+      <tr th:class="${user.id}">
         <th scope="col" style="width: 20%; text-align: right">ตัวเลข</th>
         <th scope="col" style="width: 20%; text-align: right">บน</th>
         <th scope="col" style="width: 20%; text-align: right">ล่าง</th>
@@ -19,7 +23,7 @@
         <th scope="col" style="width: 20%; text-align: right">จำนวนเงิน</th>
       </tr>
       </thead>
-      <tr th:each="lotto : ${user.lottos}">
+      <tr th:each="lotto : ${user.lottos}" th:class="${user.id}">
         <td class="text-right" th:text="${lotto.numberLotto}"></td>
         <td class="text-right" th:text="${lotto.buyOn}"></td>
         <td class="text-right" th:text="${lotto.buyDown}"></td>
@@ -63,6 +67,20 @@
     if (confirm('คุณต้องการลบรายชื่อ ' + name + ' ใช่หรือไม่')) {
       jQuery(field).closest('form').submit();
     }
+  }
+
+  function show(id, field) {
+    $("tr[class='" + id + "']").show();
+    const j = jQuery(field);
+    j.hide();
+    j.closest('div').find("i[class='fas fa-angle-up']").show();
+  }
+
+  function hide(id, field) {
+    $("tr[class='" + id + "']").hide();
+    const j = jQuery(field);
+    j.hide();
+    j.closest('div').find("i[class='fas fa-angle-down']").show();
   }
 
 </script>
