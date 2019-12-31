@@ -8,6 +8,7 @@
     <hr/>
     <form action="#" id="formSubmit" th:action="@{/show-check-lotto}" th:object="${period}" method="post">
       <input type="hidden" th:field="*{id}"/>
+      <input type="hidden" th:field="*{periodDate}"/>
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">

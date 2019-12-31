@@ -32,7 +32,8 @@ public class PeriodService {
 
   public void updateUpdateForm(Long id, PeriodDto dto) {
     Period period = findById(id);
-    periodRepository.save(mapper.mapToEntity(dto, period));
+    period.setPeriodDate(dto.getPeriodDate());
+    periodRepository.save(period);
   }
 
   public Period update(Long id, Period period) {
