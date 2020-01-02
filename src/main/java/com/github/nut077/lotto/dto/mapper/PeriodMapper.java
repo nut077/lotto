@@ -4,11 +4,8 @@ import com.github.nut077.lotto.dto.PeriodDto;
 import com.github.nut077.lotto.entity.Period;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring",
   injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface PeriodMapper extends BaseMapper<Period, PeriodDto> {
-
-  Period mapToEntity(PeriodDto dto, @MappingTarget Period period);
 }
