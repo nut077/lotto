@@ -10,13 +10,6 @@ server:
     #บอก spring boot ให้ เปิด http2
     enabled: true
 
-  undertow:
-    accesslog:
-      enabled: true # เขียน log เมื่อมีการยิง request เข้ามา
-      dir: undertow-accesslog
-      #log pattern
-      pattern: '%t %I %r %s %b %D'
-
   servlet:
     context-path: /
 
