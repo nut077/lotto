@@ -7,7 +7,7 @@ import javax.persistence.Converter;
 import java.util.Objects;
 
 @Converter(autoApply = true)
-public class LottPercentConverter implements AttributeConverter<Lotto.Percent, String> {
+public class LottoPercentConverter implements AttributeConverter<Lotto.Percent, String> {
 
   // convert จาก enum ให้เปลี่ยนเป็นค่าที่จะ save ลงใน database
   @Override
