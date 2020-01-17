@@ -11,6 +11,7 @@ import com.github.nut077.lotto.repository.UserRepository;
 import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,13 +161,13 @@ public class UserService {
 
     while (rowIterator.hasNext()) {
       var row = rowIterator.next();
-      var numberLotto = Stream.of(row.getCell(0).toString().split("\\.")).findFirst().orElse("");
-      var buyOn = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(1).toString())));
-      var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(2).toString())));
-      var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(row.getCell(3).toString())));
+      var numberLotto = Stream.of(getString(row.getCell(0)).split("\\.")).findFirst().orElse("");
+      var buyOn = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(1)))));
+      var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(2)))));
+      var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(3)))));
 
       var codePercent = "Y";
-      if (Objects.nonNull(row.getCell(4))) {
+      if (row.getCell(4) != null) {
         codePercent = row.getCell(4).toString();
       }
 
@@ -238,6 +239,13 @@ public class UserService {
     uploadExcelFile(multipartFile);
     var user = getUser(periodId, name);
     readFileExcelAndSaveToDatabase(user);
+  }
+
+  private String getString(Cell val) {
+    if (val == null) {
+      return "";
+    }
+    return val.toString();
   }
 
 }
