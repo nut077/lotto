@@ -5,6 +5,7 @@ docker network create lotto-network<br>
 docker pull mysql:8.0<br>
 docker run --name lottodb --network lotto-network -e MYSQL_USER=freedom -e MYSQL_PASSWORD=123 -e MYSQL_ROOT_PASSWORD=123 -e MYSQL_DATABASE=lotto -e TZ=Asia/Bangkok -p 3306:3306 -d --restart=always mysql:8.0<br><br>
 docker run --name lotto --network lotto-network -p 8080:8080 -d --restart=always docker-lotto<br>
+docker run --name lotto --network lotto-network -p 8080:8080 -d -e jasypt.encryptor.password=secretkey --restart=always docker-lotto<br>
 docker pull phpmyadmin/phpmyadmin:4.8<br>
 docker run --name lottodb-admin -d --network lotto-network -p 8082:80 phpmyadmin/phpmyadmin:4.8<br><br>
 docker ps ดู containerid ของ container name = lottodb<br>
