@@ -9,8 +9,8 @@
 <div class="card" th:each="user : ${users}" style="margin-bottom: 1rem">
   <div class="card-header bg-info text-white">
     <span th:text="${user.name}"></span>
-    <i th:onclick="'javascript:hide(' + ${user.id} + ', this);'" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></i>
-    <i th:onclick="'javascript:show(' + ${user.id} + ', this);'" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></i>
+    <span th:onclick="'javascript:hide(' + ${user.id} + ', this);'" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>
+    <span th:onclick="'javascript:show(' + ${user.id} + ', this);'" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>
   </div>
   <div class="card-body">
     <table class="table table-bordered">
@@ -73,19 +73,15 @@
     $("tr[class='" + id + "']").show();
     const j = jQuery(field);
     j.hide();
-    j.closest('div').find("i[class='fas fa-angle-up']").show();
+    j.closest('div').find("span[class='fas fa-angle-up']").show();
   }
 
   function hide(id, field) {
     $("tr[class='" + id + "']").hide();
     const j = jQuery(field);
     j.hide();
-    j.closest('div').find("i[class='fas fa-angle-down']").show();
+    j.closest('div').find("span[class='fas fa-angle-down']").show();
   }
-
-  $(function () {
-
-  });
 
 </script>
 </body>
