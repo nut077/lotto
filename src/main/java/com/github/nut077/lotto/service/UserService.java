@@ -73,7 +73,9 @@ public class UserService {
           .buyDown(parse.parseInt(request.getParameter("buyDown" + i)))
           .buyTote(parse.parseInt(request.getParameter("buyTote" + i)))
           .buyTotal(parse.parseInt(request.getParameter("buyTotal" + i)))
-          .percent(Lotto.Percent.codeToPercent(request.getParameter("percent" + i)))
+          .percentOn(Lotto.Percent.codeToPercent(request.getParameter("percentOn" + i)))
+          .percentDown(Lotto.Percent.codeToPercent(request.getParameter("percentDown" + i)))
+          .percentTote(Lotto.Percent.codeToPercent(request.getParameter("percentTote" + i)))
           .build();
         user.addLotto(lotto);
       }
@@ -166,17 +168,41 @@ public class UserService {
       var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(2)))));
       var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(3)))));
 
-      var codePercent = "Y";
+      var codePercentOn = "Y";
       if (row.getCell(4) != null) {
-        codePercent = row.getCell(4).toString();
+        codePercentOn = row.getCell(4).toString();
+      }
+
+      var codePercentDown = "Y";
+      if (row.getCell(5) != null) {
+        codePercentDown = row.getCell(5).toString();
+      }
+
+      var codePercentTote = "Y";
+      if (row.getCell(6) != null) {
+        codePercentTote = row.getCell(6).toString();
       }
 
       var buyTotal = 0;
-      if (codePercent.equals("Y")) {
-        buyTotal = (buyOn * 100 / 120) + (buyDown * 100 / 120) + (buyTote * 100 / 120);
-      } else if (codePercent.equals("N")) {
-        buyTotal = buyOn + buyDown + buyTote;
+
+      if (codePercentOn.equals("Y")) {
+        buyTotal += (buyOn * 100 / 120);
+      } else {
+        buyTotal += buyOn;
       }
+
+      if (codePercentDown.equals("Y")) {
+        buyTotal += (buyDown * 100 / 120);
+      } else {
+        buyTotal += buyDown;
+      }
+
+      if (codePercentTote.equals("Y")) {
+        buyTotal += (buyTote * 100 / 120);
+      } else {
+        buyTotal += buyTote;
+      }
+
       lottos.add(Lotto
         .builder()
         .numberLotto(numberLotto)
@@ -184,7 +210,9 @@ public class UserService {
         .buyDown(buyDown)
         .buyTote(buyTote)
         .buyTotal(buyTotal)
-        .percent(Lotto.Percent.codeToPercent(codePercent))
+        .percentOn(Lotto.Percent.codeToPercent(codePercentOn))
+        .percentDown(Lotto.Percent.codeToPercent(codePercentDown))
+        .percentTote(Lotto.Percent.codeToPercent(codePercentTote))
         .build());
     }
     var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();

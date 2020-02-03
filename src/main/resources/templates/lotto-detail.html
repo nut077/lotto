@@ -13,7 +13,7 @@
           <th scope="col" class="text-right" style="width: 14.28%">บน</th>
           <th scope="col" class="text-right" style="width: 14.28%">ล่าง</th>
           <th scope="col" class="text-right" style="width: 14.28%">โต๊ด</th>
-          <th scope="col" class="text-right" style="width: 15%">บวกเปอร์เซ็นต์แล้ว</th>
+          <th scope="col" class="text-right" style="width: 15%" nowrap="">บวกเปอร์เซ็นต์แล้ว</th>
           <th scope="col" class="text-right" style="width: 14.28%">จำนวนเงิน</th>
           <th scope="col" class="text-right" style="width: 13.56%">ลบ</th>
         </tr>
@@ -32,13 +32,42 @@
             <span th:case="'3'"><input type="number" class="form-control text-right" th:name="buyTote + ${lotto.id}" th:value="${lotto.buyTote}" onblur="checkMinus(this);calRow(this);"></span>
             <span th:case="*"><input type="number" class="form-control text-right" th:name="buyTote + ${lotto.id}" th:value="${lotto.buyTote}" readonly onblur="checkMinus(this);calRow(this);"></span>
           </td>
-          <td>
-            <div class="form-check form-check-inline">
-              <input type="radio" th:id="percent + ${lotto.id} + 1" th:name="percent + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percent.YES.code}" th:checked="${lotto.percent.code == 'Y'}"/>
-              <label class="form-check-label" th:for="percent + ${lotto.id} + 1">ใช่</label>&nbsp;&nbsp;
-              <input type="radio" th:id="percent + ${lotto.id} + 2" th:name="percent + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percent.NO.code}" th:checked="${lotto.percent.code == 'N'}"/>
-              <label class="form-check-label" th:for="percent + ${lotto.id} + 2">ไม่ใช่</label>
-            </div>
+          <td nowrap="">
+            <table class="table table-borderless">
+              <tr>
+                <td>บน: </td>
+                <td>
+                  <input type="radio" th:id="percentOn + ${lotto.id} + 1" th:name="percentOn + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentOn.YES.code}" th:checked="${lotto.percentOn.code == 'Y'}"/>
+                  <label class="form-check-label" th:for="percentOn + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td>
+                  <input type="radio" th:id="percentOn + ${lotto.id} + 2" th:name="percentOn + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentOn.NO.code}" th:checked="${lotto.percentOn.code == 'N'}"/>
+                  <label class="form-check-label" th:for="percentOn + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+              <tr>
+                <td>ล่าง: </td>
+                <td>
+                  <input type="radio" th:id="percentDown + ${lotto.id} + 1" th:name="percentDown + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentDown.YES.code}" th:checked="${lotto.percentDown.code == 'Y'}"/>
+                  <label class="form-check-label" th:for="percentDown + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td>
+                  <input type="radio" th:id="percentDown + ${lotto.id} + 2" th:name="percentDown + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentDown.NO.code}" th:checked="${lotto.percentDown.code == 'N'}"/>
+                  <label class="form-check-label" th:for="percentDown + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+              <tr>
+                <td>โต๊ด: </td>
+                <td>
+                  <input type="radio" th:id="percentTote + ${lotto.id} + 1" th:name="percentTote + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentTote.YES.code}" th:checked="${lotto.percentTote.code == 'Y'}"/>
+                  <label class="form-check-label" th:for="percentTote + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td>
+                  <input type="radio" th:id="percentTote + ${lotto.id} + 2" th:name="percentTote + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentTote.NO.code}" th:checked="${lotto.percentTote.code == 'N'}"/>
+                  <label class="form-check-label" th:for="percentTote + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+            </table>
           </td>
           <td><input type="text" class="form-control text-right" th:name="buyTotal + ${lotto.id}" th:value="${lotto.buyTotal}" readonly></td>
           <td class="text-right"><button type="button" class="btn btn-danger btn-sm" onclick="deleteLotto(this)">-</button></td>
@@ -76,13 +105,42 @@
         '<td><input type="number" class="form-control text-right" name="buyOn' + num + '" value="" onblur="checkMinus(this);calRow(this);"></td>' +
         '<td><input type="number" class="form-control text-right" name="buyDown' + num + '" value="" onblur="checkMinus(this);calRow(this)"></td>' +
         '<td><input type="number" class="form-control text-right" name="buyTote' + num + '" value="" onblur="checkMinus(this);calRow(this)" readonly></td>' +
-        '<td>' +
-        '<div class="form-check form-check-inline">' +
-        '<input type="radio" name="percent' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
-        '<label class="form-check-label" for="percent' + num + '1">ใช่</label>&nbsp;&nbsp;' +
-        '<input type="radio" name="percent' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
-        '<label class="form-check-label" for="percent' + num + '1">ไม่ใช่</label>' +
-        '</div>' +
+        '<td nowrap>' +
+          '<table class="table table-borderless">' +
+            '<tr>' +
+              '<td>บน</td>' +
+              '<td>' +
+                '<input type="radio" name="percentOn' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentOn' + num + '1">ใช่</label>' +
+              '</td>' +
+              '<td>' +
+                '<input type="radio" name="percentOn' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentOn' + num + '1">ไม่ใช่</label>' +
+              '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td>ล่าง</td>' +
+              '<td>' +
+                '<input type="radio" name="percentDown' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentDown' + num + '1">ใช่</label>' +
+              '</td>' +
+              '<td>' +
+                '<input type="radio" name="percentDown' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentDown' + num + '1">ไม่ใช่</label>' +
+              '</td>' +
+            '</tr>' +
+            '<tr>' +
+              '<td>โต๊ด</td>' +
+              '<td>' +
+                '<input type="radio" name="percentTote' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentTote' + num + '1">ใช่</label>' +
+              '</td>' +
+              '<td>' +
+                '<input type="radio" name="percentTote' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+                '<label class="form-check-label" for="percentTote' + num + '1">ไม่ใช่</label>' +
+              '</td>' +
+            '</tr>' +
+          '</table>' +
         '</td>' +
         '<td class="text-right"><input type="text" class="form-control text-right" name="buyTotal' + num + '" value="0" readonly></td>' +
         '<td class="text-right"><button type="button" class="btn btn-danger btn-sm" onclick="deleteLotto(this);">-</button></td>' +
@@ -101,7 +159,9 @@
     $trCurrent.find("input[name^='buyOn']").val($trBefore.find("input[name^='buyOn']").val());
     $trCurrent.find("input[name^='buyDown']").val($trBefore.find("input[name^='buyDown']").val());
     $trCurrent.find("input[name^='buyTote']").val($trBefore.find("input[name^='buyTote']").val());
-    $trCurrent.find("input[name^='percent'][value='" + $trBefore.find("input[name^='percent']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='percentOn'][value='" + $trBefore.find("input[name^='percentOn']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='percentDown'][value='" + $trBefore.find("input[name^='percentDown']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='percentTote'][value='" + $trBefore.find("input[name^='percentTote']:checked").val() + "']").prop('checked', true);
     $trCurrent.find("input[name^='buyTotal']").val($trBefore.find("input[name^='buyTotal']").val());
     calAll();
     if (numberLotto.length === 3) {
@@ -182,16 +242,37 @@
 
   function calRow(e) {
     const $field = jQuery(e);
-    const $tr = $field.closest('tr');
+    const name = $field.attr('name');
+    let $tr;
+    if (name.includes('percent')) {
+      $tr = $field.closest('table').closest('tr');
+    } else {
+      $tr = $field.closest('tr');
+    }
     let buyOn = Number($tr.find("input[type='number'][name^='buyOn']").val());
     let buyDown = Number($tr.find("input[type='number'][name^='buyDown']").val());
     let buyTote = Number($tr.find("input[type='number'][name^='buyTote']").val());
-    let isPercent = $tr.find("input[type='radio'][name^='percent']:checked").val();
+    let isPercentOn = $tr.find("input[type='radio'][name^='percentOn']:checked").val();
+    let isPercentDown = $tr.find("input[type='radio'][name^='percentDown']:checked").val();
+    let isPercentTote = $tr.find("input[type='radio'][name^='percentTote']:checked").val();
     let buyTotal = 0;
-    if (isPercent === 'N') {
-      buyTotal = buyOn + buyDown + buyTote;
+    console.log(isPercentOn +','+ isPercentDown + ',' + isPercentTote);
+    if (isPercentOn === 'Y') {
+      buyTotal += (buyOn * 100 / 120);
     } else {
-      buyTotal = (buyOn * 100 / 120) + (buyDown * 100 / 120) + (buyTote * 100 / 120);
+      buyTotal += buyOn;
+    }
+
+    if (isPercentDown === 'Y') {
+      buyTotal += (buyDown * 100 / 120)
+    } else {
+      buyTotal += buyDown;
+    }
+
+    if (isPercentTote === 'Y') {
+      buyTotal += (buyTote * 100 / 120);
+    } else {
+      buyTotal += buyTote;
     }
 
     let $buyTotal = $tr.find("input[type='text'][name^='buyTotal']");
