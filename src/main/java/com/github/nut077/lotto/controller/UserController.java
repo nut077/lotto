@@ -15,13 +15,6 @@ public class UserController {
 
   private final UserService userService;
 
-  @PostMapping("/users-lotto")
-  public String usersLotto(@RequestParam Long id, Model model) {
-    model.addAttribute("users", userService.findByPeriod(id));
-    model.addAttribute("period", id);
-    return "users-lotto";
-  }
-
   @GetMapping("/users-lotto")
   public String usersLottoGet(@RequestParam Long id, Model model) {
     model.addAttribute("users", userService.findByPeriod(id));

@@ -13,13 +13,6 @@ public class SuccessResponse<T> {
   private OffsetDateTime timestamp;
   private T data;
 
-  private SuccessResponse(String code, String message, OffsetDateTime timestamp, T data) {
-    this.code = code;
-    this.message = message;
-    this.timestamp = timestamp;
-    this.data = data;
-  }
-
   public static <T> SuccessResponseBuilder builder(T data) {
     return SuccessResponseBuilder.builder().data(data)
             .code("xxx-200")

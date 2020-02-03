@@ -11,7 +11,9 @@ import com.github.nut077.lotto.repository.UserRepository;
 import com.nutfreedom.utilities.ParseNumberFreedom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +25,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -127,125 +133,139 @@ public class UserService {
   }
 
   private void uploadExcelFile(MultipartFile file) {
-    try {
+    var currDir = new File(".");
+    var path = currDir.getAbsolutePath();
+    fileLocation = path.substring(0, path.length() - 1) + "excels\\" + file.getOriginalFilename();
+    try (var f = new FileOutputStream(fileLocation)) {
       var in = file.getInputStream();
-      var currDir = new File(".");
-      var path = currDir.getAbsolutePath();
-      fileLocation = path.substring(0, path.length() - 1) + "excels\\" + file.getOriginalFilename();
       var directory = new File(path.substring(0, path.length() - 1) + "excels");
       if (!directory.exists()) {
         directory.mkdirs();
       }
-      var f = new FileOutputStream(fileLocation);
       int ch;
       while ((ch = in.read()) != -1) {
         f.write(ch);
       }
       f.flush();
-      f.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+
   @SneakyThrows
   private void readFileExcelAndSaveToDatabase(User user) {
-    var parse = new ParseNumberFreedom();
-    var numberFormat = new DecimalFormat("0");
-    var file = new FileInputStream(new File(fileLocation));
-    var workbook = new XSSFWorkbook(file);
-    var sheet = workbook.getSheetAt(0);
+      List<Lotto> lottos = getLottoList();
 
-    var rowIterator = sheet.iterator();
-    rowIterator.next();
-
-    List<Lotto> lottos = new ArrayList<>();
-
-    while (rowIterator.hasNext()) {
-      var row = rowIterator.next();
-      var numberLotto = Stream.of(getString(row.getCell(0)).split("\\.")).findFirst().orElse("");
-      var buyOn = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(1)))));
-      var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(2)))));
-      var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(3)))));
-
-      var codePercentOn = "Y";
-      if (row.getCell(4) != null) {
-        codePercentOn = row.getCell(4).toString();
-      }
-
-      var codePercentDown = "Y";
-      if (row.getCell(5) != null) {
-        codePercentDown = row.getCell(5).toString();
-      }
-
-      var codePercentTote = "Y";
-      if (row.getCell(6) != null) {
-        codePercentTote = row.getCell(6).toString();
-      }
-
-      var buyTotal = 0;
-
-      if (codePercentOn.equals("Y")) {
-        buyTotal += (buyOn * 100 / 120);
-      } else {
-        buyTotal += buyOn;
-      }
-
-      if (codePercentDown.equals("Y")) {
-        buyTotal += (buyDown * 100 / 120);
-      } else {
-        buyTotal += buyDown;
-      }
-
-      if (codePercentTote.equals("Y")) {
-        buyTotal += (buyTote * 100 / 120);
-      } else {
-        buyTotal += buyTote;
-      }
-
-      lottos.add(Lotto
-        .builder()
-        .numberLotto(numberLotto)
-        .buyOn(buyOn)
-        .buyDown(buyDown)
-        .buyTote(buyTote)
-        .buyTotal(buyTotal)
-        .percentOn(Lotto.Percent.codeToPercent(codePercentOn))
-        .percentDown(Lotto.Percent.codeToPercent(codePercentDown))
-        .percentTote(Lotto.Percent.codeToPercent(codePercentTote))
-        .build());
-    }
-    var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();
-    var sumBuyTotalPercent = lottos.stream()
-      .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
-      .mapToInt(lotto -> lotto).sum();
-    if (Objects.nonNull(user.getLottos())) {
-      sumBuyTotal += user.getLottos().stream().mapToInt(Lotto::getBuyTotal).sum();
-      sumBuyTotalPercent += user.getLottos().stream()
+      var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();
+      var sumBuyTotalPercent = lottos.stream()
         .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
         .mapToInt(lotto -> lotto).sum();
+      if (Objects.nonNull(user.getLottos())) {
+        sumBuyTotal += user.getLottos().stream().mapToInt(Lotto::getBuyTotal).sum();
+        sumBuyTotalPercent += user.getLottos().stream()
+          .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
+          .mapToInt(lotto -> lotto).sum();
+      }
+
+      user.setLottos(lottos);
+      user.setBuy(sumBuyTotal);
+      user.setBuyPercent(sumBuyTotalPercent);
+
+      var userSaved = userRepository.saveAndFlush(user);
+      var period = periodService.findById(userSaved.getPeriod().getId());
+      var isFoundUserInPeriod = period.getUsers().stream().anyMatch(u -> u.getName().equals(userSaved.getName()));
+      var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+      var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
+      if (!isFoundUserInPeriod) {
+        sumBuy += userSaved.getBuy();
+        sumBuyPercent += userSaved.getBuyPercent();
+      }
+      period.setBuyTotal(sumBuy);
+      period.setBuyPercentTotal(sumBuyPercent);
+      periodService.update(period);
+
+
+      Path path = Paths.get(fileLocation);
+      Files.delete(path);
+
+  }
+
+  @SneakyThrows
+  private List<Lotto> getLottoList() {
+
+    var file = new FileInputStream(new File(fileLocation));
+    List<Lotto> lottos = new ArrayList<>();
+    try (var workbook = new XSSFWorkbook(file)) {
+      var sheet = workbook.getSheetAt(0);
+
+      var rowIterator = sheet.iterator();
+      rowIterator.next();
+
+      while (rowIterator.hasNext()) {
+        var row = rowIterator.next();
+        setDetailLotto(row, lottos);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return lottos;
+  }
+
+  private void setDetailLotto(Row row, List<Lotto> lottos) {
+    var parse = new ParseNumberFreedom();
+    var numberFormat = new DecimalFormat("0");
+    var numberLotto = Stream.of(getString(row.getCell(0)).split("\\.")).findFirst().orElse("");
+    var buyOn = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(1)))));
+    var buyDown = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(2)))));
+    var buyTote = parse.parseInt(numberFormat.format(parse.parseDouble(getString(row.getCell(3)))));
+
+    var codePercentOn = "Y";
+    if (row.getCell(4) != null) {
+      codePercentOn = row.getCell(4).toString();
     }
 
-    user.setLottos(lottos);
-    user.setBuy(sumBuyTotal);
-    user.setBuyPercent(sumBuyTotalPercent);
-
-    var userSaved = userRepository.saveAndFlush(user);
-    var period = periodService.findById(userSaved.getPeriod().getId());
-    var isFoundUserInPeriod = period.getUsers().stream().anyMatch(u -> u.getName().equals(userSaved.getName()));
-    var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
-    var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
-    if (!isFoundUserInPeriod) {
-      sumBuy += userSaved.getBuy();
-      sumBuyPercent += userSaved.getBuyPercent();
+    var codePercentDown = "Y";
+    if (row.getCell(5) != null) {
+      codePercentDown = row.getCell(5).toString();
     }
-    period.setBuyTotal(sumBuy);
-    period.setBuyPercentTotal(sumBuyPercent);
-    periodService.update(period);
 
-    file.close();
-    workbook.close();
-    new File(fileLocation).delete();
+    var codePercentTote = "Y";
+    if (row.getCell(6) != null) {
+      codePercentTote = row.getCell(6).toString();
+    }
+
+    var buyTotal = 0;
+
+    if (codePercentOn.equals("Y")) {
+      buyTotal += (buyOn * 100 / 120);
+    } else {
+      buyTotal += buyOn;
+    }
+
+    if (codePercentDown.equals("Y")) {
+      buyTotal += (buyDown * 100 / 120);
+    } else {
+      buyTotal += buyDown;
+    }
+
+    if (codePercentTote.equals("Y")) {
+      buyTotal += (buyTote * 100 / 120);
+    } else {
+      buyTotal += buyTote;
+    }
+
+    lottos.add(Lotto
+      .builder()
+      .numberLotto(numberLotto)
+      .buyOn(buyOn)
+      .buyDown(buyDown)
+      .buyTote(buyTote)
+      .buyTotal(buyTotal)
+      .percentOn(Lotto.Percent.codeToPercent(codePercentOn))
+      .percentDown(Lotto.Percent.codeToPercent(codePercentDown))
+      .percentTote(Lotto.Percent.codeToPercent(codePercentTote))
+      .build());
   }
 
   private User getUser(Long periodId, String name) {
