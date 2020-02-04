@@ -35,6 +35,13 @@
           <td nowrap="">
             <table class="table table-borderless">
               <tr>
+                <td colspan="2" class="text-right">ตั้งค่า</td>
+                <td>
+                  <span th:onclick="'javascript:hide(' + ${lotto.id} + ', this);'" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>
+                  <span th:onclick="'javascript:show(' + ${lotto.id} + ', this);'" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>
+                </td>
+              </tr>
+              <tr th:class="${lotto.id}" style="display: none">
                 <td>บน: </td>
                 <td>
                   <input type="radio" th:id="percentOn + ${lotto.id} + 1" th:name="percentOn + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentOn.YES.code}" th:checked="${lotto.percentOn.code == 'Y'}"/>
@@ -44,10 +51,6 @@
                   <input type="radio" th:id="percentOn + ${lotto.id} + 2" th:name="percentOn + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentOn.NO.code}" th:checked="${lotto.percentOn.code == 'N'}"/>
                   <label class="form-check-label" th:for="percentOn + ${lotto.id} + 2">ไม่ใช่</label>
                 </td>
-                <td>
-                  <span th:onclick="'javascript:hide(' + ${lotto.id} + ', this);'" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>
-                  <span th:onclick="'javascript:show(' + ${lotto.id} + ', this);'" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>
-                </td>
               </tr>
               <tr th:class="${lotto.id}" style="display: none">
                 <td>ล่าง: </td>
@@ -55,7 +58,7 @@
                   <input type="radio" th:id="percentDown + ${lotto.id} + 1" th:name="percentDown + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentDown.YES.code}" th:checked="${lotto.percentDown.code == 'Y'}"/>
                   <label class="form-check-label" th:for="percentDown + ${lotto.id} + 1">ใช่</label>
                 </td>
-                <td colspan="2">
+                <td>
                   <input type="radio" th:id="percentDown + ${lotto.id} + 2" th:name="percentDown + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentDown.NO.code}" th:checked="${lotto.percentDown.code == 'N'}"/>
                   <label class="form-check-label" th:for="percentDown + ${lotto.id} + 2">ไม่ใช่</label>
                 </td>
@@ -66,7 +69,7 @@
                   <input type="radio" th:id="percentTote + ${lotto.id} + 1" th:name="percentTote + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentTote.YES.code}" th:checked="${lotto.percentTote.code == 'Y'}"/>
                   <label class="form-check-label" th:for="percentTote + ${lotto.id} + 1">ใช่</label>
                 </td>
-                <td colspan="2">
+                <td>
                   <input type="radio" th:id="percentTote + ${lotto.id} + 2" th:name="percentTote + ${lotto.id}" class="form-check-input" onchange="calRow(this)" th:value="${lotto.percentTote.NO.code}" th:checked="${lotto.percentTote.code == 'N'}"/>
                   <label class="form-check-label" th:for="percentTote + ${lotto.id} + 2">ไม่ใช่</label>
                 </td>
@@ -112,6 +115,13 @@
         '<td nowrap>' +
           '<table class="table table-borderless">' +
             '<tr>' +
+              '<td colspan="2" class="text-right">ตั้งค่า</td>' +
+              '<td>' +
+                '<span onclick="hide(' + num + ', this);" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>' +
+                '<span onclick="show(' + num + ', this);" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>' +
+              '</td>' +
+            '</tr>' +
+            '<tr>' +
               '<td>บน</td>' +
               '<td>' +
                 '<input type="radio" name="percentOn' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
@@ -121,10 +131,6 @@
                 '<input type="radio" name="percentOn' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
                 '<label class="form-check-label" for="percentOn' + num + '1">ไม่ใช่</label>' +
               '</td>' +
-              '<td>' +
-                '<span onclick="hide(' + num + ', this);" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>' +
-                '<span onclick="show(' + num + ', this);" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>' +
-              '</td>' +
             '</tr>' +
             '<tr class="' + num + '" style="display: none">' +
               '<td>ล่าง</td>' +
@@ -132,7 +138,7 @@
                 '<input type="radio" name="percentDown' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
                 '<label class="form-check-label" for="percentDown' + num + '1">ใช่</label>' +
               '</td>' +
-              '<td colspan="2">' +
+              '<td>' +
                 '<input type="radio" name="percentDown' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
                 '<label class="form-check-label" for="percentDown' + num + '1">ไม่ใช่</label>' +
               '</td>' +
@@ -143,7 +149,7 @@
                 '<input type="radio" name="percentTote' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
                 '<label class="form-check-label" for="percentTote' + num + '1">ใช่</label>' +
               '</td>' +
-              '<td colspan="2">' +
+              '<td>' +
                 '<input type="radio" name="percentTote' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
                 '<label class="form-check-label" for="percentTote' + num + '1">ไม่ใช่</label>' +
               '</td>' +

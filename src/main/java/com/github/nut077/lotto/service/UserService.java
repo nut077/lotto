@@ -293,7 +293,9 @@ public class UserService {
     if (val == null) {
       return "";
     }
-    return val.toString();
+    return val.toString().trim()
+      .replaceAll("\u00A0","")
+      .replaceAll("\u0020","");
   }
 
 }
