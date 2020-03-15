@@ -61,7 +61,7 @@ public class CalLottoService {
       if (lottoList != null) {
         for (Lotto lotto : lottoList) {
           int buyOn = numberUtility.getInt(lotto.getBuyOn());
-          int buyDown = numberUtility.getInt(lotto.getBuyOn());
+          int buyDown = numberUtility.getInt(lotto.getBuyDown());
           int buyTote = numberUtility.getInt(lotto.getBuyTote());
           String numberLotto = lotto.getNumberLotto();
           lotto.setPayOn(0);
