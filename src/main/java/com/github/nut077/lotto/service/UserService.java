@@ -82,6 +82,9 @@ public class UserService {
           .percentOn(Lotto.Percent.codeToPercent(request.getParameter("percentOn" + i)))
           .percentDown(Lotto.Percent.codeToPercent(request.getParameter("percentDown" + i)))
           .percentTote(Lotto.Percent.codeToPercent(request.getParameter("percentTote" + i)))
+          .chargeOn(Lotto.Percent.codeToPercent(request.getParameter("chargeOn" + i)))
+          .chargeDown(Lotto.Percent.codeToPercent(request.getParameter("chargeDown" + i)))
+          .chargeTote(Lotto.Percent.codeToPercent(request.getParameter("chargeTote" + i)))
           .build();
         user.addLotto(lotto);
       }
@@ -155,39 +158,52 @@ public class UserService {
 
   @SneakyThrows
   private void readFileExcelAndSaveToDatabase(User user) {
-      List<Lotto> lottos = getLottoList();
+    List<Lotto> lottos = getLottoList();
 
-      var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();
-      var sumBuyTotalPercent = lottos.stream()
+    var sumBuyTotal = lottos.stream().mapToInt(Lotto::getBuyTotal).sum();
+
+    int sumBuyTotalPercent = 0;
+    for (Lotto lotto : lottos) {
+      var chargeOn = lotto.getChargeOn().getCode();
+      if (chargeOn.equals("Y")) {
+        sumBuyTotalPercent += lotto.getBuyOn();
+      }
+      var chargeDown = lotto.getChargeDown().getCode();
+      if (chargeDown.equals("Y")) {
+        sumBuyTotalPercent += lotto.getBuyDown();
+      }
+      var chargeTote = lotto.getChargeTote().getCode();
+      if (chargeTote.equals("Y")) {
+        sumBuyTotalPercent += lotto.getBuyTote();
+      }
+    }
+    if (Objects.nonNull(user.getLottos())) {
+      sumBuyTotal += user.getLottos().stream().mapToInt(Lotto::getBuyTotal).sum();
+      sumBuyTotalPercent += user.getLottos().stream()
         .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
         .mapToInt(lotto -> lotto).sum();
-      if (Objects.nonNull(user.getLottos())) {
-        sumBuyTotal += user.getLottos().stream().mapToInt(Lotto::getBuyTotal).sum();
-        sumBuyTotalPercent += user.getLottos().stream()
-          .map(lotto -> lotto.getBuyOn() + lotto.getBuyDown() + lotto.getBuyTote())
-          .mapToInt(lotto -> lotto).sum();
-      }
+    }
 
-      user.setLottos(lottos);
-      user.setBuy(sumBuyTotal);
-      user.setBuyPercent(sumBuyTotalPercent);
+    user.setLottos(lottos);
+    user.setBuy(sumBuyTotal);
+    user.setBuyPercent(sumBuyTotalPercent);
 
-      var userSaved = userRepository.saveAndFlush(user);
-      var period = periodService.findById(userSaved.getPeriod().getId());
-      var isFoundUserInPeriod = period.getUsers().stream().anyMatch(u -> u.getName().equals(userSaved.getName()));
-      var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
-      var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
-      if (!isFoundUserInPeriod) {
-        sumBuy += userSaved.getBuy();
-        sumBuyPercent += userSaved.getBuyPercent();
-      }
-      period.setBuyTotal(sumBuy);
-      period.setBuyPercentTotal(sumBuyPercent);
-      periodService.update(period);
+    var userSaved = userRepository.saveAndFlush(user);
+    var period = periodService.findById(userSaved.getPeriod().getId());
+    var isFoundUserInPeriod = period.getUsers().stream().anyMatch(u -> u.getName().equals(userSaved.getName()));
+    var sumBuy = period.getUsers().stream().mapToInt(User::getBuy).sum();
+    var sumBuyPercent = period.getUsers().stream().mapToInt(User::getBuyPercent).sum();
+    if (!isFoundUserInPeriod) {
+      sumBuy += userSaved.getBuy();
+      sumBuyPercent += userSaved.getBuyPercent();
+    }
+    period.setBuyTotal(sumBuy);
+    period.setBuyPercentTotal(sumBuyPercent);
+    periodService.update(period);
 
 
-      Path path = Paths.get(fileLocation);
-      Files.delete(path);
+    Path path = Paths.get(fileLocation);
+    Files.delete(path);
 
   }
 
@@ -235,24 +251,45 @@ public class UserService {
       codePercentTote = row.getCell(6).toString();
     }
 
+    var codeChargeOn = "Y";
+    if (row.getCell(7) != null) {
+      codeChargeOn = row.getCell(7).toString();
+    }
+
+    var codeChargeDown = "Y";
+    if (row.getCell(8) != null) {
+      codeChargeDown = row.getCell(8).toString();
+    }
+
+    var codeChargeTote = "Y";
+    if (row.getCell(9) != null) {
+      codeChargeTote = row.getCell(9).toString();
+    }
+
     var buyTotal = 0;
 
-    if (codePercentOn.equals("Y")) {
-      buyTotal += (buyOn * 100 / 120);
-    } else {
-      buyTotal += buyOn;
+    if (codeChargeOn.equals("Y")) {
+      if (codePercentOn.equals("Y")) {
+        buyTotal += (buyOn * 100 / 120);
+      } else {
+        buyTotal += buyOn;
+      }
     }
 
-    if (codePercentDown.equals("Y")) {
-      buyTotal += (buyDown * 100 / 120);
-    } else {
-      buyTotal += buyDown;
+    if (codeChargeDown.equals("Y")) {
+      if (codePercentDown.equals("Y")) {
+        buyTotal += (buyDown * 100 / 120);
+      } else {
+        buyTotal += buyDown;
+      }
     }
 
-    if (codePercentTote.equals("Y")) {
-      buyTotal += (buyTote * 100 / 120);
-    } else {
-      buyTotal += buyTote;
+    if (codeChargeTote.equals("Y")) {
+      if (codePercentTote.equals("Y")) {
+        buyTotal += (buyTote * 100 / 120);
+      } else {
+        buyTotal += buyTote;
+      }
     }
 
     lottos.add(Lotto
@@ -265,6 +302,9 @@ public class UserService {
       .percentOn(Lotto.Percent.codeToPercent(codePercentOn))
       .percentDown(Lotto.Percent.codeToPercent(codePercentDown))
       .percentTote(Lotto.Percent.codeToPercent(codePercentTote))
+      .chargeOn(Lotto.Percent.codeToPercent(codeChargeOn))
+      .chargeDown(Lotto.Percent.codeToPercent(codeChargeDown))
+      .chargeTote(Lotto.Percent.codeToPercent(codeChargeTote))
       .build());
   }
 
@@ -294,8 +334,8 @@ public class UserService {
       return "";
     }
     return val.toString().trim()
-      .replaceAll("\u00A0","")
-      .replaceAll("\u0020","");
+      .replaceAll("\u00A0", "")
+      .replaceAll("\u0020", "");
   }
 
 }

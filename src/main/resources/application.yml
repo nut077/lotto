@@ -23,7 +23,7 @@ spring:
     lazy-initialization: true
   datasource:
     url: jdbc:mysql://lottodb:3306/lotto?serverTimezone=UTC
-    #url: jdbc:mysql://localhost:3306/lotto?serverTimezone=Asia/Bangkok
+    #url: jdbc:mysql://${RDS_HOSTNAME:localhost}:${RDS_PORT:3306}/${RDS_DB_NAME:lotto}?serverTimezone=Asia/Bangkok
     username: freedom
     password: ENC(j2Dr5jtMPE89o3mizMJOzA==)
     #password: 123

@@ -45,6 +45,15 @@ public class Lotto extends Common {
   @Column(length = 1, columnDefinition = "varchar(1) default 'Y'")
   private Percent percentTote;
 
+  @Column(length = 1, columnDefinition = "varchar(1) default 'Y'")
+  private Percent chargeOn;
+
+  @Column(length = 1, columnDefinition = "varchar(1) default 'Y'")
+  private Percent chargeDown;
+
+  @Column(length = 1, columnDefinition = "varchar(1) default 'Y'")
+  private Percent chargeTote;
+
   @RequiredArgsConstructor
   public enum Percent {
     YES("Y"),

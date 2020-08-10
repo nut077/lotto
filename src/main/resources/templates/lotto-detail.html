@@ -9,12 +9,13 @@
       <table class="table table-bordered table-responsive-sm" id="tbDetail">
         <thead>
         <tr>
-          <th class="text-right" scope="col" style="width: 14.28%">ตัวเลข</th>
-          <th class="text-right" scope="col" style="width: 14.28%">บน</th>
-          <th class="text-right" scope="col" style="width: 14.28%">ล่าง</th>
-          <th class="text-right" scope="col" style="width: 14.28%">โต๊ด</th>
+          <th class="text-right" scope="col" style="width: 13.28%">ตัวเลข</th>
+          <th class="text-right" scope="col" style="width: 13.28%">บน</th>
+          <th class="text-right" scope="col" style="width: 13.28%">ล่าง</th>
+          <th class="text-right" scope="col" style="width: 13.28%">โต๊ด</th>
           <th class="text-right" nowrap="" scope="col" style="width: 15%">บวกเปอร์เซ็นต์แล้ว</th>
-          <th class="text-right" scope="col" style="width: 14.28%">จำนวนเงิน</th>
+          <th class="text-right" nowrap="" scope="col" style="width: 13%">คิดเงิน</th>
+          <th class="text-right" scope="col" style="width: 13.28%">จำนวนเงิน</th>
           <th class="text-right" scope="col" style="width: 13.56%">ลบ</th>
         </tr>
         </thead>
@@ -48,21 +49,19 @@
               <tr>
                 <td class="text-right" colspan="2">ตั้งค่า</td>
                 <td>
-                                    <span class="fas fa-angle-up"
-                                          style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"
-                                          th:onclick="'javascript:hide(' + ${lotto.id} + ', this);'"></span>
-                  <span class="fas fa-angle-down"
-                        style="float: right; padding-top: 0.5rem; cursor: pointer"
+                  <span class="fas fa-angle-up"
+                        style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"
+                        th:onclick="'javascript:hide(' + ${lotto.id} + ', this);'"></span>
+                  <span class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"
                         th:onclick="'javascript:show(' + ${lotto.id} + ', this);'"></span>
                 </td>
               </tr>
               <tr style="display: none" th:class="${lotto.id}">
                 <td>บน:</td>
                 <td>
-                  <input class="form-check-input" onchange="calRow(this)"
-                         th:checked="${lotto.percentOn.code == 'Y'}" th:id="percentOn + ${lotto.id} + 1"
-                         th:name="percentOn + ${lotto.id}" th:value="${lotto.percentOn.YES.code}"
-                         type="radio"/>
+                  <input class="form-check-input" onchange="calRow(this)" th:checked="${lotto.percentOn.code == 'Y'}"
+                         th:id="percentOn + ${lotto.id} + 1" th:name="percentOn + ${lotto.id}"
+                         th:value="${lotto.percentOn.YES.code}" type="radio"/>
                   <label class="form-check-label" th:for="percentOn + ${lotto.id} + 1">ใช่</label>
                 </td>
                 <td nowrap="">
@@ -111,6 +110,72 @@
               </tr>
             </table>
           </td>
+          <td nowrap="">
+            <table class="table table-borderless">
+              <tr>
+                <td class="text-right" colspan="2">ตั้งค่า</td>
+                <td>
+                  <span class="fas fa-angle-up"
+                        style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"
+                        th:onclick="'javascript:hide(\'charge' + ${lotto.id} + '\', this);'"></span>
+                  <span class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"
+                        th:onclick="'javascript:show(\'charge' + ${lotto.id} + '\', this);'"></span>
+                </td>
+              </tr>
+              <tr style="display: none" th:class="'charge' +${lotto.id}">
+                <td>บน:</td>
+                <td>
+                  <input class="form-check-input" onchange="calRow(this)" th:checked="${lotto.chargeOn.code == 'Y'}"
+                         th:id="chargeOn + ${lotto.id} + 1" th:name="chargeOn + ${lotto.id}"
+                         th:value="${lotto.chargeOn.YES.code}" type="radio"/>
+                  <label class="form-check-label" th:for="chargeOn + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td nowrap="">
+                  <input class="form-check-input" onchange="calRow(this)"
+                         th:checked="${lotto.chargeOn.code == 'N'}" th:id="chargeOn + ${lotto.id} + 2"
+                         th:name="chargeOn + ${lotto.id}" th:value="${lotto.chargeOn.NO.code}"
+                         type="radio"/>
+                  <label class="form-check-label" th:for="chargeOn + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+              <tr style="display: none" th:class="'charge' +${lotto.id}">
+                <td>ล่าง:</td>
+                <td>
+                  <input class="form-check-input" onchange="calRow(this)"
+                         th:checked="${lotto.chargeDown.code == 'Y'}" th:id="chargeDown + ${lotto.id} + 1"
+                         th:name="chargeDown + ${lotto.id}" th:value="${lotto.chargeDown.YES.code}"
+                         type="radio"/>
+                  <label class="form-check-label" th:for="chargeDown + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td>
+                  <input class="form-check-input" onchange="calRow(this)"
+                         th:checked="${lotto.chargeDown.code == 'N'}" th:id="chargeDown + ${lotto.id} + 2"
+                         th:name="chargeDown + ${lotto.id}" th:value="${lotto.chargeDown.NO.code}"
+                         type="radio"/>
+                  <label class="form-check-label"
+                         th:for="chargeDown + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+              <tr style="display: none" th:class="'charge' +${lotto.id}">
+                <td>โต๊ด:</td>
+                <td>
+                  <input class="form-check-input" onchange="calRow(this)"
+                         th:checked="${lotto.chargeTote.code == 'Y'}" th:id="chargeTote + ${lotto.id} + 1"
+                         th:name="chargeTote + ${lotto.id}" th:value="${lotto.chargeTote.YES.code}"
+                         type="radio"/>
+                  <label class="form-check-label" th:for="chargeTote + ${lotto.id} + 1">ใช่</label>
+                </td>
+                <td>
+                  <input class="form-check-input" onchange="calRow(this)"
+                         th:checked="${lotto.chargeTote.code == 'N'}" th:id="chargeTote + ${lotto.id} + 2"
+                         th:name="chargeTote + ${lotto.id}" th:value="${lotto.chargeTote.NO.code}"
+                         type="radio"/>
+                  <label class="form-check-label"
+                         th:for="chargeTote + ${lotto.id} + 2">ไม่ใช่</label>
+                </td>
+              </tr>
+            </table>
+          </td>
           <td><input class="form-control text-right" readonly th:name="buyTotal + ${lotto.id}"
                      th:value="${lotto.buyTotal}" type="text"></td>
           <td class="text-right">
@@ -118,13 +183,13 @@
           </td>
         </tr>
         <tr>
-          <td class="text-right font-weight-bold" colspan="5">รวม</td>
+          <td class="text-right font-weight-bold" colspan="6">รวม</td>
           <td><input class="form-control font-weight-bold text-right" id="buyAll" name="buyAll" readonly
                      th:value="${user.buy}" type="text"></td>
           <td></td>
         </tr>
         <tr>
-          <td class="text-right font-weight-bold" colspan="5">รวมเปอร์เซ็นต์</td>
+          <td class="text-right font-weight-bold" colspan="6">รวมเปอร์เซ็นต์</td>
           <td><input class="form-control font-weight-bold text-right" id="buyAllPercent" name="buyAllPercent"
                      readonly th:value="${user.buyPercent}" type="text"></td>
           <td></td>
@@ -197,6 +262,50 @@
         '</tr>' +
         '</table>' +
         '</td>' +
+        '<td nowrap>' +
+        '<table class="table table-borderless">' +
+        '<tr>' +
+        '<td colspan="2" class="text-right">ตั้งค่า</td>' +
+        '<td>' +
+        '<span onclick="hide(\'charge' + num + '\', this);" class="fas fa-angle-up" style="float: right; padding-top: 0.5rem; cursor: pointer; display: none;"></span>' +
+        '<span onclick="show(\'charge' + num + '\', this);" class="fas fa-angle-down" style="float: right; padding-top: 0.5rem; cursor: pointer"></span>' +
+        '</td>' +
+        '</tr>' +
+        '<tr class="charge' + num + '" style="display: none">' +
+        '<td>บน</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeOn' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeOn' + num + '1">ใช่</label>' +
+        '</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeOn' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeOn' + num + '1">ไม่ใช่</label>' +
+        '</td>' +
+        '</tr>' +
+        '<tr class="charge' + num + '" style="display: none">' +
+        '<td>ล่าง</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeDown' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeDown' + num + '1">ใช่</label>' +
+        '</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeDown' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeDown' + num + '1">ไม่ใช่</label>' +
+        '</td>' +
+        '</tr>' +
+        '<tr class="charge' + num + '" style="display: none">' +
+        '<td>โต๊ด</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeTote' + num + '" class="form-check-input" value="Y" checked onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeTote' + num + '1">ใช่</label>' +
+        '</td>' +
+        '<td>' +
+        '<input type="radio" name="chargeTote' + num + '" class="form-check-input" value="N" onchange="calRow(this)">' +
+        '<label class="form-check-label" for="chargeTote' + num + '1">ไม่ใช่</label>' +
+        '</td>' +
+        '</tr>' +
+        '</table>' +
+        '</td>' +
         '<td class="text-right"><input type="text" class="form-control text-right" name="buyTotal' + num + '" value="0" readonly></td>' +
         '<td class="text-right"><button type="button" class="btn btn-danger btn-sm" onclick="deleteLotto(this);">-</button></td>' +
         '</tr>');
@@ -217,6 +326,9 @@
     $trCurrent.find("input[name^='percentOn'][value='" + $trBefore.find("input[name^='percentOn']:checked").val() + "']").prop('checked', true);
     $trCurrent.find("input[name^='percentDown'][value='" + $trBefore.find("input[name^='percentDown']:checked").val() + "']").prop('checked', true);
     $trCurrent.find("input[name^='percentTote'][value='" + $trBefore.find("input[name^='percentTote']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='chargeOn'][value='" + $trBefore.find("input[name^='chargeOn']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='chargeDown'][value='" + $trBefore.find("input[name^='chargeDown']:checked").val() + "']").prop('checked', true);
+    $trCurrent.find("input[name^='chargeTote'][value='" + $trBefore.find("input[name^='chargeTote']:checked").val() + "']").prop('checked', true);
     $trCurrent.find("input[name^='buyTotal']").val($trBefore.find("input[name^='buyTotal']").val());
     calAll();
     if (numberLotto.length === 3) {
@@ -296,11 +408,17 @@
     });
     if (result) {
       $("input[type='text'][name^='buyTotal']").each(function () {
+        let $tr = $(this).closest('tr');
         if (Number($(this).val()) === 0) {
-          result = false;
-          $(this).closest('tr').find("input[type='number'][name^='buyOn']").focus();
-          alert('จำนวนเงินต้องมากว่า 0');
-          return false;
+          let buyOn = Number($tr.find("input[type='number'][name^='buyOn']").val());
+          let buyDown = Number($tr.find("input[type='number'][name^='buyDown']").val());
+          let buyTote = Number($tr.find("input[type='number'][name^='buyTote']").val());
+          if (buyOn <= 0 && buyDown <= 0 && buyTote <= 0) {
+            result = false;
+            $tr.find("input[type='number'][name^='buyOn']").focus();
+            alert('จำนวนเงินต้องมากว่า 0');
+            return false;
+          }
         }
       });
     }
@@ -346,7 +464,7 @@
     const $field = jQuery(e);
     const name = $field.attr('name');
     let $tr;
-    if (name.includes('percent')) {
+    if (name.includes('percent') || name.includes('charge')) {
       $tr = $field.closest('table').closest('tr');
     } else {
       $tr = $field.closest('tr');
@@ -357,24 +475,33 @@
     let isPercentOn = $tr.find("input[type='radio'][name^='percentOn']:checked").val();
     let isPercentDown = $tr.find("input[type='radio'][name^='percentDown']:checked").val();
     let isPercentTote = $tr.find("input[type='radio'][name^='percentTote']:checked").val();
+    let isChargeOn = $tr.find("input[type='radio'][name^='chargeOn']:checked").val();
+    let isChargeDown = $tr.find("input[type='radio'][name^='chargeDown']:checked").val();
+    let isChargeTote = $tr.find("input[type='radio'][name^='chargeTote']:checked").val();
     let buyTotal = 0;
-    console.log(isPercentOn + ',' + isPercentDown + ',' + isPercentTote);
-    if (isPercentOn === 'Y') {
-      buyTotal += (buyOn * 100 / 120);
-    } else {
-      buyTotal += buyOn;
+
+    if (isChargeOn === 'Y') {
+      if (isPercentOn === 'Y') {
+        buyTotal += (buyOn * 100 / 120);
+      } else {
+        buyTotal += buyOn;
+      }
     }
 
-    if (isPercentDown === 'Y') {
-      buyTotal += (buyDown * 100 / 120)
-    } else {
-      buyTotal += buyDown;
+    if (isChargeDown === 'Y') {
+      if (isPercentDown === 'Y') {
+        buyTotal += (buyDown * 100 / 120)
+      } else {
+        buyTotal += buyDown;
+      }
     }
 
-    if (isPercentTote === 'Y') {
-      buyTotal += (buyTote * 100 / 120);
-    } else {
-      buyTotal += buyTote;
+    if (isChargeTote === 'Y') {
+      if (isPercentTote === 'Y') {
+        buyTotal += (buyTote * 100 / 120);
+      } else {
+        buyTotal += buyTote;
+      }
     }
 
     let $buyTotal = $tr.find("input[type='text'][name^='buyTotal']");
@@ -403,17 +530,29 @@
   function calAllPercent() {
     let buyOn = 0;
     $("input[type='number'][name^='buyOn']").each(function () {
-      buyOn += Number($(this).val());
+      let $tr = $(this).closest('tr');
+      let isChargeOn = $tr.find("input[type='radio'][name^='chargeOn']:checked").val();
+      if (isChargeOn === 'Y') {
+        buyOn += Number($(this).val());
+      }
     });
 
     let buyDown = 0;
     $("input[type='number'][name^='buyDown']").each(function () {
-      buyDown += Number($(this).val());
+      let $tr = $(this).closest('tr');
+      let isChargeDown = $tr.find("input[type='radio'][name^='chargeDown']:checked").val();
+      if (isChargeDown === 'Y') {
+        buyDown += Number($(this).val());
+      }
     });
 
     let buyTote = 0;
     $("input[type='number'][name^='buyTote']").each(function () {
-      buyTote += Number($(this).val());
+      let $tr = $(this).closest('tr');
+      let isChargeTote = $tr.find("input[type='radio'][name^='chargeTote']:checked").val();
+      if (isChargeTote === 'Y') {
+        buyTote += Number($(this).val());
+      }
     });
 
     $('#buyAllPercent').val(buyOn + buyDown + buyTote);
