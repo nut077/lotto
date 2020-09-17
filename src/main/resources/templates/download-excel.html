@@ -1,30 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{ :: body}, 'Download')}">
+<html th:replace="~{fragments/layout :: layout(~{ :: body}, 'Download')}" xmlns:th="http://www.thymeleaf.org">
 <body>
 <br>
 <div class="row justify-content-md-center">
   <div class="col-sm-12">
-    <form action="#" th:action="@{/}" method="post">
-      <input type="hidden" id="periodId" name="periodId" th:value="${periodId}"/>
+    <form action="#" method="post" th:action="@{/}">
+      <input id="periodId" name="periodId" th:value="${periodId}" type="hidden"/>
       <table class="table table-responsive-sm table-bordered">
         <thead class="thead-dark">
         <tr>
-          <th class="text-center" style="width: 50%">ทั้งหมด</th>
-          <th class="text-center" style="width: 50%">ทั้งหมด รวมเลขซ้ำ</th>
+          <th class="text-center" style="width: 33%">ทั้งหมด</th>
+          <th class="text-center" style="width: 33%">ทั้งหมด รวมเลขซ้ำ</th>
+          <th class="text-center" style="width: 34%">เลขที่เกินขั้นต่ำ</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td class="text-center"><a th:href="@{download/full/} + ${periodId}" class="btn btn-success">ดาวน์โหลด</a><br></td>
-          <td class="text-center"><a th:href="@{download/fullsum/} + ${periodId}" class="btn btn-success">ดาวน์โหลด</a><br></td>
+          <td class="text-center"><a class="btn btn-success" th:href="@{download/full/} + ${periodId}">ดาวน์โหลด</a><br>
+          </td>
+          <td class="text-center"><a class="btn btn-success"
+                                     th:href="@{download/fullsum/} + ${periodId}">ดาวน์โหลด</a><br></td>
+          <td class="text-center">
+            <table class="table table-borderless">
+              <tr>
+                <td><label for="overOn">บน</label></td>
+                <td><input class="form-control text-right" id="overOn" name="overOn" type="number"/></td>
+              </tr>
+              <tr>
+                <td><label for="overDown">ล่าง</label></td>
+                <td><input class="form-control text-right" id="overDown" name="overDown" type="number"/></td>
+              </tr>
+              <tr>
+                <td><label for="overTote">โต๊ด</label></td>
+                <td><input class="form-control text-right" id="overTote" name="overTote" type="number"/></td>
+              </tr>
+            </table>
+            <button class="btn btn-success" th:onclick="'javascript:overLimit(' + ${periodId} + ');'"
+                    type="button">ดาวน์โหลด
+            </button>
+            <br>
+          </td>
         </tr>
         </tbody>
       </table>
       <br>
-      <a th:href="@{/}" class="btn btn-danger">ย้อนกลับ</a>
+      <a class="btn btn-danger" th:href="@{/}">ย้อนกลับ</a>
       <br><br>
     </form>
   </div>
 </div>
+<script>
+  function overLimit(periodId) {
+    let overOn = checkBlank($('#overOn').val(), 0);
+    let overDown = checkBlank($('#overDown').val(), 0);
+    let overTote = checkBlank($('#overTote').val(), 0);
+    window.open(`/download/overlimit/${periodId}?overOn=${overOn}&overDown=${overDown}&overTote=${overTote}`);
+  }
+</script>
 </body>
 </html>

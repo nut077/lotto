@@ -6,3 +6,10 @@ function chkInteger() {
     }
   });
 }
+
+function checkBlank(val, defaultValue) {
+  if (val === '') {
+    val = defaultValue;
+  }
+  return val;
+}

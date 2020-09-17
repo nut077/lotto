@@ -201,10 +201,8 @@ public class UserService {
     period.setBuyPercentTotal(sumBuyPercent);
     periodService.update(period);
 
-
     Path path = Paths.get(fileLocation);
     Files.delete(path);
-
   }
 
   @SneakyThrows
