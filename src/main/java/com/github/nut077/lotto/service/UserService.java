@@ -149,6 +149,7 @@ public class UserService {
       while ((ch = in.read()) != -1) {
         f.write(ch);
       }
+      f.close();
       f.flush();
     } catch (IOException e) {
       e.printStackTrace();

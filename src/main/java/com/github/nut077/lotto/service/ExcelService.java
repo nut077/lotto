@@ -72,7 +72,8 @@ public class ExcelService {
     excelFreedom.write();
   }
 
-  public void getOverLimitLotto(Long id, int overOn, int overDown, int overTote, HttpServletResponse response) {
+  public void getOverLimitLotto(Long id, int overThreeOn, int overThreeDown, int overTwoOn, int overTwoDown,
+                                int overTote, HttpServletResponse response) {
     Period period = periodService.findById(id);
 
     List<Lotto> lottoTwo = new ArrayList<>();
@@ -87,13 +88,13 @@ public class ExcelService {
     setSumLotto(lottoTwo, mapTwo);
 
     Map<String, Lotto> mapOverTwo = new LinkedHashMap<>();
-    setOverLimit(mapTwo, mapOverTwo, overOn, overDown, overTote);
+    setOverLimit(mapTwo, mapOverTwo, overTwoOn, overTwoDown, overTote);
 
     Map<String, Lotto> mapThree = new LinkedHashMap<>();
     setSumLotto(lottoThree, mapThree);
 
     Map<String, Lotto> mapOverThree = new LinkedHashMap<>();
-    setOverLimit(mapThree, mapOverThree, overOn, overDown, overTote);
+    setOverLimit(mapThree, mapOverThree, overThreeOn, overThreeDown, overTote);
 
     mapOverTwo.values().forEach(value -> appendTableDetail(table, value));
     mapOverThree.values().forEach(value -> appendTableDetail(table, value));

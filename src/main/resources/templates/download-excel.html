@@ -23,12 +23,20 @@
           <td class="text-center">
             <table class="table table-borderless">
               <tr>
-                <td><label for="overOn">บน</label></td>
-                <td><input class="form-control text-right" id="overOn" name="overOn" type="number"/></td>
+                <td><label for="overThreeOn">3 ตัวบน</label></td>
+                <td><input class="form-control text-right" id="overThreeOn" name="overThreeOn" type="number"/></td>
               </tr>
               <tr>
-                <td><label for="overDown">ล่าง</label></td>
-                <td><input class="form-control text-right" id="overDown" name="overDown" type="number"/></td>
+                <td><label for="overThreeDown">3 ตัวล่าง</label></td>
+                <td><input class="form-control text-right" id="overThreeDown" name="overThreeDown" type="number"/></td>
+              </tr>
+              <tr>
+                <td><label for="overTwoOn">2 ตัวบน</label></td>
+                <td><input class="form-control text-right" id="overTwoOn" name="overTwoOn" type="number"/></td>
+              </tr>
+              <tr>
+                <td><label for="overTwoDown">2 ตัวล่าง</label></td>
+                <td><input class="form-control text-right" id="overTwoDown" name="overTwoDown" type="number"/></td>
               </tr>
               <tr>
                 <td><label for="overTote">โต๊ด</label></td>
@@ -51,10 +59,13 @@
 </div>
 <script>
   function overLimit(periodId) {
-    let overOn = checkBlank($('#overOn').val(), 0);
-    let overDown = checkBlank($('#overDown').val(), 0);
+    let overThreeOn = checkBlank($('#overThreeOn').val(), 0);
+    let overThreeDown = checkBlank($('#overThreeDown').val(), 0);
+    let overTwoOn = checkBlank($('#overTwoOn').val(), 0);
+    let overTwoDown = checkBlank($('#overTwoDown').val(), 0);
     let overTote = checkBlank($('#overTote').val(), 0);
-    window.open(`/download/overlimit/${periodId}?overOn=${overOn}&overDown=${overDown}&overTote=${overTote}`);
+    window.open(`/download/overlimit/${periodId}?overThreeOn=${overThreeOn}
+    &overThreeDown=${overThreeDown}&overTwoOn=${overTwoOn}&overTwoDown=${overTwoDown}&overTote=${overTote}`);
   }
 </script>
 </body>

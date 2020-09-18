@@ -37,10 +37,12 @@ public class ExcelController {
 
   @GetMapping("/download/overlimit/{id}")
   public String downloadOverLimit(@PathVariable Long id,
-                                  @RequestParam int overOn,
-                                  @RequestParam int overDown,
+                                  @RequestParam int overThreeOn,
+                                  @RequestParam int overThreeDown,
+                                  @RequestParam int overTwoOn,
+                                  @RequestParam int overTwoDown,
                                   @RequestParam int overTote, HttpServletResponse response) {
-    excelService.getOverLimitLotto(id, overOn, overDown, overTote, response);
+    excelService.getOverLimitLotto(id, overThreeOn, overThreeDown, overTwoOn, overTwoDown, overTote, response);
     return "redirect:/download-excel?id=" + id;
   }
 }
