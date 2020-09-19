@@ -96,7 +96,12 @@ public class ExcelService {
     Map<String, Lotto> mapOverThree = new LinkedHashMap<>();
     setOverLimit(mapThree, mapOverThree, overThreeOn, overThreeDown, overTote);
 
-    mapOverTwo.values().forEach(value -> appendTableDetail(table, value));
+    mapOverTwo.values().forEach(value -> {
+        if (value.getBuyOn() + value.getBuyDown() + value.getBuyTote() != 0) {
+          appendTableDetail(table, value);
+        }
+      }
+    );
     mapOverThree.values().forEach(value -> appendTableDetail(table, value));
 
     table.append("</table>");
