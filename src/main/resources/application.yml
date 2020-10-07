@@ -13,10 +13,6 @@ server:
   servlet:
     context-path: /
 
-java:
-  runtime:
-    version: 11
-
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
