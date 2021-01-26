@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Entity(name = "lottos")
@@ -53,6 +54,9 @@ public class Lotto extends Common {
 
   @Column(length = 1, columnDefinition = "varchar(1) default 'Y'")
   private Percent chargeTote;
+
+  @Transient
+  private List<String> users;
 
   @RequiredArgsConstructor
   public enum Percent {
