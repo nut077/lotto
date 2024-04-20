@@ -42,6 +42,14 @@
                 <td><label for="overTote">โต๊ด</label></td>
                 <td><input class="form-control text-right" id="overTote" name="overTote" type="number"/></td>
               </tr>
+              <tr>
+                <td><label for="overTwoOn">1 วิ่งบน</label></td>
+                <td><input class="form-control text-right" id="overOneOn" name="overOneOn" type="number"/></td>
+              </tr>
+              <tr>
+                <td><label for="overTwoDown">1 วิ่งล่าง</label></td>
+                <td><input class="form-control text-right" id="overOneDown" name="overOneDown" type="number"/></td>
+              </tr>
             </table>
             <button class="btn btn-success" th:onclick="'javascript:overLimit(' + ${periodId} + ');'"
                     type="button">ดาวน์โหลด
@@ -64,8 +72,10 @@
     let overTwoOn = checkBlank($('#overTwoOn').val(), 0);
     let overTwoDown = checkBlank($('#overTwoDown').val(), 0);
     let overTote = checkBlank($('#overTote').val(), 0);
+    let overOneOn = checkBlank($('#overOneOn').val(), 0);
+    let overOneDown = checkBlank($('#overOneDown').val(), 0);
     window.open(`/download/overlimit/${periodId}?overThreeOn=${overThreeOn}
-    &overThreeDown=${overThreeDown}&overTwoOn=${overTwoOn}&overTwoDown=${overTwoDown}&overTote=${overTote}`);
+    &overThreeDown=${overThreeDown}&overTwoOn=${overTwoOn}&overTwoDown=${overTwoDown}&overTote=${overTote}&overOneOn=${overOneOn}&overOneDown=${overOneDown}`);
   }
 </script>
 </body>

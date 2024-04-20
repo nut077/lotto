@@ -21,13 +21,20 @@ public class ExcelService {
   public void getFullLotto(Long id, HttpServletResponse response) {
     Period period = periodService.findById(id);
 
+    List<Lotto> lottoOne = new ArrayList<>();
     List<Lotto> lottoTwo = new ArrayList<>();
     List<Lotto> lottoThree = new ArrayList<>();
-    setLotto(period, lottoTwo, lottoThree);
+    setLotto(period, lottoOne, lottoTwo, lottoThree);
 
     StringBuilder table = new StringBuilder();
     table.append("<table>");
     appendTableHeader(table);
+
+    lottoOne
+      .stream()
+      .sorted(Comparator.comparing(Lotto::getNumberLotto))
+      .collect(Collectors.toList())
+      .forEach(lotto -> appendTableDetail(table, lotto));
 
     lottoTwo
       .stream()
@@ -50,13 +57,17 @@ public class ExcelService {
   public void getFullSumLotto(Long id, HttpServletResponse response) {
     Period period = periodService.findById(id);
 
+    List<Lotto> lottoOne = new ArrayList<>();
     List<Lotto> lottoTwo = new ArrayList<>();
     List<Lotto> lottoThree = new ArrayList<>();
-    setLotto(period, lottoTwo, lottoThree);
+    setLotto(period, lottoOne, lottoTwo, lottoThree);
 
     StringBuilder table = new StringBuilder();
     table.append("<table>");
     appendTableHeader(table);
+
+    Map<String, Lotto> mapOne = new LinkedHashMap<>();
+    setSumLotto(lottoOne, mapOne);
 
     Map<String, Lotto> mapTwo = new LinkedHashMap<>();
     setSumLotto(lottoTwo, mapTwo);
@@ -64,6 +75,7 @@ public class ExcelService {
     Map<String, Lotto> mapThree = new LinkedHashMap<>();
     setSumLotto(lottoThree, mapThree);
 
+    mapOne.values().forEach(value -> appendTableDetail(table, value));
     mapTwo.values().forEach(value -> appendTableDetail(table, value));
     mapThree.values().forEach(value -> appendTableDetail(table, value));
 
@@ -74,16 +86,23 @@ public class ExcelService {
   }
 
   public void getOverLimitLotto(Long id, int overThreeOn, int overThreeDown, int overTwoOn, int overTwoDown,
-                                int overTote, HttpServletResponse response) {
+                                int overTote, int overOneOn, int overOneDown, HttpServletResponse response) {
     Period period = periodService.findById(id);
 
+    List<Lotto> lottoOne = new ArrayList<>();
     List<Lotto> lottoTwo = new ArrayList<>();
     List<Lotto> lottoThree = new ArrayList<>();
-    setLotto(period, lottoTwo, lottoThree);
+    setLotto(period, lottoOne, lottoTwo, lottoThree);
 
     StringBuilder table = new StringBuilder();
     table.append("<table>");
     appendTableHeader(table);
+
+    Map<String, Lotto> mapOne = new LinkedHashMap<>();
+    setSumLotto(lottoOne, mapOne);
+
+    Map<String, Lotto> mapOverOne = new LinkedHashMap<>();
+    setOverLimit(mapOne, mapOverOne, overOneOn, overOneDown, overTote);
 
     Map<String, Lotto> mapTwo = new LinkedHashMap<>();
     setSumLotto(lottoTwo, mapTwo);
@@ -96,6 +115,13 @@ public class ExcelService {
 
     Map<String, Lotto> mapOverThree = new LinkedHashMap<>();
     setOverLimit(mapThree, mapOverThree, overThreeOn, overThreeDown, overTote);
+
+    mapOverOne.values().forEach(value -> {
+        if (value.getBuyOn() + value.getBuyDown() + value.getBuyTote() != 0) {
+          appendTableDetail(table, value);
+        }
+      }
+    );
 
     mapOverTwo.values().forEach(value -> {
         if (value.getBuyOn() + value.getBuyDown() + value.getBuyTote() != 0) {
@@ -111,12 +137,14 @@ public class ExcelService {
     excelFreedom.write();
   }
 
-  private void setLotto(Period period, List<Lotto> lottoTwo, List<Lotto> lottoThree) {
+  private void setLotto(Period period, List<Lotto> lottoOne, List<Lotto> lottoTwo, List<Lotto> lottoThree) {
     for (User user : period.getUsers()) {
       for (Lotto lotto : user.getLottos()) {
         lotto.setUsers(Collections.singletonList(lotto.getUser().getName()));
         String numberLotto = lotto.getNumberLotto();
-        if (numberLotto.length() == 2) {
+        if (numberLotto.length() == 1) {
+          lottoOne.add(lotto);
+        } else if (numberLotto.length() == 2) {
           lottoTwo.add(lotto);
         } else if (numberLotto.length() == 3) {
           lottoThree.add(lotto);

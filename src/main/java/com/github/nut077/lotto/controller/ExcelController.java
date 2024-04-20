@@ -41,8 +41,11 @@ public class ExcelController {
                                   @RequestParam int overThreeDown,
                                   @RequestParam int overTwoOn,
                                   @RequestParam int overTwoDown,
-                                  @RequestParam int overTote, HttpServletResponse response) {
-    excelService.getOverLimitLotto(id, overThreeOn, overThreeDown, overTwoOn, overTwoDown, overTote, response);
+                                  @RequestParam int overTote,
+                                  @RequestParam int overOneOn,
+                                  @RequestParam int overOneDown,
+                                  HttpServletResponse response) {
+    excelService.getOverLimitLotto(id, overThreeOn, overThreeDown, overTwoOn, overTwoDown, overTote, overOneOn, overOneDown, response);
     return "redirect:/download-excel?id=" + id;
   }
 }
